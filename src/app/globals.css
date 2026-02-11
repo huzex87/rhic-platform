@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #001F3F;
+  --color-gold: #D4AF37;
+  --color-ivory: #FFFFF0;
+  --color-accent: #008080;
+  
+  --font-display: "Outfit", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+:root {
+  --background: var(--color-ivory);
+  --foreground: var(--color-navy);
+  
+  --card: rgba(255, 255, 240, 0.7);
+  --card-foreground: var(--color-navy);
+  
+  --primary: var(--color-navy);
+  --primary-foreground: var(--color-ivory);
+  
+  --secondary: var(--color-gold);
+  --secondary-foreground: var(--color-navy);
+  
+  --border: rgba(0, 31, 63, 0.1);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.1) 0, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(0, 31, 63, 0.05) 0, transparent 50%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+  
+  .premium-card {
+    @apply glass rounded-2xl p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1;
+  }
+
+  .gold-gradient {
+    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
+  }
+
+  .navy-gradient {
+    background: linear-gradient(135deg, #001F3F 0%, #003366 100%);
+  }
+}
