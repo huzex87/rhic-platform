@@ -1,15 +1,23 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, memo } from "react";
+import {
+    ComposableMap,
+    Geographies,
+    Geography,
+    Marker,
+    ZoomableGroup,
+} from "react-simple-maps";
 
-// All 36 states + FCT with approximate SVG coordinates mapped onto the accurate Nigeria outline
-// Coordinates are projected onto a 500×520 viewBox matching the real SVG path below
+// TopoJSON from world-atlas – only Nigeria (country code 566) will be highlighted
+const GEO_URL = "/world-110m.json";
+
+// All 36 states + FCT with real geographic coordinates [lng, lat]
 export interface StateData {
     id: string;
     name: string;
-    cx: number;
-    cy: number;
+    coordinates: [number, number]; // [longitude, latitude]
     supporters: number;
     growth: string;
     zone: string;
@@ -17,78 +25,54 @@ export interface StateData {
 
 export const NIGERIA_STATES: StateData[] = [
     // North-West
-    { id: "SK", name: "Sokoto", cx: 128, cy: 62, supporters: 4200, growth: "+8%", zone: "NW" },
-    { id: "ZM", name: "Zamfara", cx: 155, cy: 100, supporters: 3100, growth: "+5%", zone: "NW" },
-    { id: "KT", name: "Katsina", cx: 210, cy: 58, supporters: 5300, growth: "+11%", zone: "NW" },
-    { id: "KN", name: "Kano", cx: 248, cy: 100, supporters: 12400, growth: "+15%", zone: "NW" },
-    { id: "JG", name: "Jigawa", cx: 298, cy: 78, supporters: 3800, growth: "+7%", zone: "NW" },
-    { id: "KD", name: "Kaduna", cx: 218, cy: 158, supporters: 9600, growth: "+12%", zone: "NW" },
-    { id: "KEB", name: "Kebbi", cx: 112, cy: 125, supporters: 2800, growth: "+4%", zone: "NW" },
+    { id: "SK", name: "Sokoto", coordinates: [5.24, 13.06], supporters: 4200, growth: "+8%", zone: "NW" },
+    { id: "ZM", name: "Zamfara", coordinates: [6.25, 12.17], supporters: 3100, growth: "+5%", zone: "NW" },
+    { id: "KT", name: "Katsina", coordinates: [7.60, 13.00], supporters: 5300, growth: "+11%", zone: "NW" },
+    { id: "KN", name: "Kano", coordinates: [8.52, 12.00], supporters: 12400, growth: "+15%", zone: "NW" },
+    { id: "JG", name: "Jigawa", coordinates: [9.35, 12.23], supporters: 3800, growth: "+7%", zone: "NW" },
+    { id: "KD", name: "Kaduna", coordinates: [7.43, 10.52], supporters: 9600, growth: "+12%", zone: "NW" },
+    { id: "KEB", name: "Kebbi", coordinates: [4.20, 12.45], supporters: 2800, growth: "+4%", zone: "NW" },
 
     // North-East
-    { id: "BO", name: "Borno", cx: 400, cy: 95, supporters: 4500, growth: "+6%", zone: "NE" },
-    { id: "YB", name: "Yobe", cx: 352, cy: 92, supporters: 3200, growth: "+5%", zone: "NE" },
-    { id: "BA", name: "Bauchi", cx: 300, cy: 150, supporters: 5100, growth: "+9%", zone: "NE" },
-    { id: "GM", name: "Gombe", cx: 340, cy: 148, supporters: 3400, growth: "+7%", zone: "NE" },
-    { id: "AD", name: "Adamawa", cx: 390, cy: 200, supporters: 4100, growth: "+8%", zone: "NE" },
-    { id: "TR", name: "Taraba", cx: 345, cy: 230, supporters: 2900, growth: "+3%", zone: "NE" },
+    { id: "BO", name: "Borno", coordinates: [13.15, 11.85], supporters: 4500, growth: "+6%", zone: "NE" },
+    { id: "YB", name: "Yobe", coordinates: [11.75, 12.29], supporters: 3200, growth: "+5%", zone: "NE" },
+    { id: "BA", name: "Bauchi", coordinates: [9.84, 10.31], supporters: 5100, growth: "+9%", zone: "NE" },
+    { id: "GM", name: "Gombe", coordinates: [11.17, 10.29], supporters: 3400, growth: "+7%", zone: "NE" },
+    { id: "AD", name: "Adamawa", coordinates: [12.50, 9.33], supporters: 4100, growth: "+8%", zone: "NE" },
+    { id: "TR", name: "Taraba", coordinates: [10.99, 7.87], supporters: 2900, growth: "+3%", zone: "NE" },
 
     // North-Central
-    { id: "NG", name: "Niger", cx: 160, cy: 195, supporters: 5800, growth: "+10%", zone: "NC" },
-    { id: "KW", name: "Kwara", cx: 120, cy: 265, supporters: 5400, growth: "+9%", zone: "NC" },
-    { id: "PL", name: "Plateau", cx: 278, cy: 210, supporters: 6200, growth: "+11%", zone: "NC" },
-    { id: "NS", name: "Nasarawa", cx: 262, cy: 248, supporters: 4000, growth: "+6%", zone: "NC" },
-    { id: "BN", name: "Benue", cx: 280, cy: 290, supporters: 5500, growth: "+8%", zone: "NC" },
-    { id: "KG", name: "Kogi", cx: 195, cy: 290, supporters: 4300, growth: "+7%", zone: "NC" },
-    { id: "FCT", name: "FCT Abuja", cx: 228, cy: 242, supporters: 18500, growth: "+22%", zone: "NC" },
+    { id: "NG", name: "Niger", coordinates: [5.98, 9.93], supporters: 5800, growth: "+10%", zone: "NC" },
+    { id: "KW", name: "Kwara", coordinates: [4.55, 8.49], supporters: 5400, growth: "+9%", zone: "NC" },
+    { id: "PL", name: "Plateau", coordinates: [8.89, 9.22], supporters: 6200, growth: "+11%", zone: "NC" },
+    { id: "NS", name: "Nasarawa", coordinates: [8.50, 8.49], supporters: 4000, growth: "+6%", zone: "NC" },
+    { id: "BN", name: "Benue", coordinates: [8.80, 7.34], supporters: 5500, growth: "+8%", zone: "NC" },
+    { id: "KG", name: "Kogi", coordinates: [6.74, 7.73], supporters: 4300, growth: "+7%", zone: "NC" },
+    { id: "FCT", name: "FCT Abuja", coordinates: [7.49, 9.06], supporters: 18500, growth: "+22%", zone: "NC" },
 
     // South-West
-    { id: "OY", name: "Oyo", cx: 105, cy: 310, supporters: 8200, growth: "+13%", zone: "SW" },
-    { id: "OS", name: "Osun", cx: 128, cy: 332, supporters: 5900, growth: "+10%", zone: "SW" },
-    { id: "OG", name: "Ogun", cx: 90, cy: 360, supporters: 7100, growth: "+11%", zone: "SW" },
-    { id: "LA", name: "Lagos", cx: 70, cy: 388, supporters: 25600, growth: "+18%", zone: "SW" },
-    { id: "ON", name: "Ondo", cx: 142, cy: 365, supporters: 4800, growth: "+9%", zone: "SW" },
-    { id: "EK", name: "Ekiti", cx: 148, cy: 335, supporters: 3700, growth: "+6%", zone: "SW" },
+    { id: "OY", name: "Oyo", coordinates: [3.93, 7.84], supporters: 8200, growth: "+13%", zone: "SW" },
+    { id: "OS", name: "Osun", coordinates: [4.55, 7.56], supporters: 5900, growth: "+10%", zone: "SW" },
+    { id: "OG", name: "Ogun", coordinates: [3.35, 7.00], supporters: 7100, growth: "+11%", zone: "SW" },
+    { id: "LA", name: "Lagos", coordinates: [3.39, 6.52], supporters: 25600, growth: "+18%", zone: "SW" },
+    { id: "ON", name: "Ondo", coordinates: [4.83, 7.10], supporters: 4800, growth: "+9%", zone: "SW" },
+    { id: "EK", name: "Ekiti", coordinates: [5.31, 7.72], supporters: 3700, growth: "+6%", zone: "SW" },
 
     // South-East
-    { id: "AN", name: "Anambra", cx: 210, cy: 355, supporters: 7800, growth: "+14%", zone: "SE" },
-    { id: "EN", name: "Enugu", cx: 240, cy: 330, supporters: 6900, growth: "+12%", zone: "SE" },
-    { id: "EB", name: "Ebonyi", cx: 262, cy: 345, supporters: 3600, growth: "+5%", zone: "SE" },
-    { id: "IM", name: "Imo", cx: 215, cy: 388, supporters: 5200, growth: "+8%", zone: "SE" },
-    { id: "AB", name: "Abia", cx: 245, cy: 378, supporters: 4500, growth: "+7%", zone: "SE" },
+    { id: "AN", name: "Anambra", coordinates: [6.93, 6.22], supporters: 7800, growth: "+14%", zone: "SE" },
+    { id: "EN", name: "Enugu", coordinates: [7.51, 6.44], supporters: 6900, growth: "+12%", zone: "SE" },
+    { id: "EB", name: "Ebonyi", coordinates: [8.08, 6.26], supporters: 3600, growth: "+5%", zone: "SE" },
+    { id: "IM", name: "Imo", coordinates: [7.03, 5.57], supporters: 5200, growth: "+8%", zone: "SE" },
+    { id: "AB", name: "Abia", coordinates: [7.49, 5.45], supporters: 4500, growth: "+7%", zone: "SE" },
 
     // South-South
-    { id: "ED", name: "Edo", cx: 170, cy: 350, supporters: 6100, growth: "+10%", zone: "SS" },
-    { id: "DL", name: "Delta", cx: 175, cy: 390, supporters: 5700, growth: "+9%", zone: "SS" },
-    { id: "BY", name: "Bayelsa", cx: 188, cy: 425, supporters: 3300, growth: "+4%", zone: "SS" },
-    { id: "RV", name: "Rivers", cx: 225, cy: 420, supporters: 8900, growth: "+16%", zone: "SS" },
-    { id: "AK", name: "Akwa Ibom", cx: 270, cy: 412, supporters: 5000, growth: "+7%", zone: "SS" },
-    { id: "CR", name: "Cross River", cx: 295, cy: 370, supporters: 4200, growth: "+6%", zone: "SS" },
+    { id: "ED", name: "Edo", coordinates: [5.63, 6.63], supporters: 6100, growth: "+10%", zone: "SS" },
+    { id: "DL", name: "Delta", coordinates: [5.69, 5.70], supporters: 5700, growth: "+9%", zone: "SS" },
+    { id: "BY", name: "Bayelsa", coordinates: [5.90, 4.92], supporters: 3300, growth: "+4%", zone: "SS" },
+    { id: "RV", name: "Rivers", coordinates: [6.92, 4.84], supporters: 8900, growth: "+16%", zone: "SS" },
+    { id: "AK", name: "Akwa Ibom", coordinates: [7.85, 5.01], supporters: 5000, growth: "+7%", zone: "SS" },
+    { id: "CR", name: "Cross River", coordinates: [8.33, 5.87], supporters: 4200, growth: "+6%", zone: "SS" },
 ];
-
-// Accurate Nigeria outline path derived from geographic coordinates
-// Projected onto a 500×520 viewBox (longitude 2.6°E–14.7°E → x 0–500, latitude 4.2°N–13.9°N → y 520–0)
-const NIGERIA_PATH = `
-M 0,28 L 6,25 L 14,30 L 22,22 L 36,18 L 50,10 L 62,8 L 72,0 L 82,2
-L 100,10 L 108,5 L 120,0 L 138,2 L 152,0 L 168,5 L 182,2
-L 200,8 L 218,5 L 232,10 L 248,8 L 260,12 L 272,10 L 285,15
-L 298,12 L 310,20 L 322,18 L 338,25 L 350,22 L 362,28 L 375,30
-L 385,35 L 395,40 L 408,48 L 418,55 L 425,62 L 432,70 L 438,82
-L 442,95 L 445,108 L 448,118 L 450,130 L 448,142 L 445,155
-L 435,168 L 428,178 L 420,188 L 412,198 L 408,210 L 405,220
-L 400,235 L 395,248 L 388,258 L 380,268 L 370,278 L 362,288
-L 350,298 L 340,310 L 332,318 L 322,328 L 315,338 L 308,348
-L 300,358 L 295,365 L 288,375 L 282,382 L 278,390 L 272,398
-L 268,408 L 262,415 L 255,425 L 248,432 L 240,438 L 232,442
-L 222,448 L 212,452 L 200,455 L 192,458 L 180,460 L 168,462
-L 158,465 L 148,468 L 138,472 L 128,475 L 118,478 L 108,480
-L 95,478 L 85,475 L 78,470 L 70,465 L 62,458 L 55,452
-L 48,445 L 42,438 L 38,430 L 35,418 L 32,408 L 28,395
-L 26,385 L 25,375 L 22,362 L 20,350 L 18,338 L 16,325
-L 15,312 L 14,298 L 12,285 L 10,270 L 8,258 L 6,245
-L 5,235 L 4,222 L 2,210 L 1,198 L 0,185 L 0,170 L 0,155
-L 0,140 L 0,125 L 0,110 L 0,95 L 0,80 L 0,65 L 0,50 L 0,28 Z
-`;
 
 export const ZONE_LABELS: Record<string, string> = {
     NW: "North-West",
@@ -99,36 +83,29 @@ export const ZONE_LABELS: Record<string, string> = {
     SS: "South-South",
 };
 
-// Red accent color for all dots
 const DOT_COLOR = "#D32F2F";
-const DOT_COLOR_LIGHT = "#EF5350";
-const DOT_PULSE_COLOR = "#D32F2F";
+const DOT_HOVER = "#EF5350";
 
 interface NigeriaMapProps {
     variant?: "landing" | "dashboard";
 }
 
-export default function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
+function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
     const [hoveredState, setHoveredState] = useState<StateData | null>(null);
     const [selectedZone, setSelectedZone] = useState<string | null>(null);
 
     const totalSupporters = NIGERIA_STATES.reduce((a, s) => a + s.supporters, 0);
 
     const getRadius = (supporters: number) => {
-        if (variant === "dashboard") {
-            const min = 5, max = 16;
-            const maxS = 25600;
-            return min + (supporters / maxS) * (max - min);
-        }
-        const min = 4, max = 12;
-        const maxS = 25600;
-        return min + (supporters / maxS) * (max - min);
+        const min = variant === "dashboard" ? 4 : 3;
+        const max = variant === "dashboard" ? 10 : 8;
+        return min + (supporters / 25600) * (max - min);
     };
 
     return (
         <div className="relative w-full">
             {/* Zone Filter Pills */}
-            <div className="flex flex-wrap gap-2 mb-6 justify-center">
+            <div className="flex flex-wrap gap-2 mb-4 justify-center">
                 <button
                     onClick={() => setSelectedZone(null)}
                     className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${!selectedZone
@@ -152,134 +129,131 @@ export default function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
                 ))}
             </div>
 
-            {/* Map SVG */}
+            {/* react-simple-maps — zoomed to Nigeria */}
             <div className="relative">
-                <svg
-                    viewBox="0 0 500 520"
-                    className="w-full h-auto"
-                    style={{ maxHeight: variant === "dashboard" ? "420px" : "500px" }}
+                <ComposableMap
+                    projection="geoMercator"
+                    projectionConfig={{
+                        center: [8.5, 9.1],
+                        scale: 2800,
+                    }}
+                    width={500}
+                    height={480}
+                    style={{ width: "100%", height: "auto", maxHeight: variant === "dashboard" ? "420px" : "500px" }}
                 >
-                    {/* Accurate Nigeria outline — filled subtly */}
-                    <path
-                        d={NIGERIA_PATH}
-                        fill="rgba(8,72,36,0.04)"
-                        stroke="rgba(8,72,36,0.18)"
-                        strokeWidth="1.5"
-                        strokeLinejoin="round"
-                    />
+                    <ZoomableGroup center={[8.5, 9.1]} zoom={1} minZoom={1} maxZoom={1}>
+                        {/* Render world geography — highlight Nigeria */}
+                        <Geographies geography={GEO_URL}>
+                            {({ geographies }) =>
+                                geographies.map((geo) => {
+                                    const isNigeria = geo.id === "566";
+                                    if (!isNigeria) return null;
+                                    return (
+                                        <Geography
+                                            key={geo.rsmKey}
+                                            geography={geo}
+                                            fill="rgba(8,72,36,0.06)"
+                                            stroke="rgba(8,72,36,0.25)"
+                                            strokeWidth={1}
+                                            style={{
+                                                default: { outline: "none" },
+                                                hover: { outline: "none", fill: "rgba(8,72,36,0.09)" },
+                                                pressed: { outline: "none" },
+                                            }}
+                                        />
+                                    );
+                                })
+                            }
+                        </Geographies>
 
-                    {/* Connection lines from FCT to major cities (dashboard only) */}
-                    {variant === "dashboard" && (
-                        <g opacity="0.10">
-                            {NIGERIA_STATES.filter((s) => ["LA", "KN", "RV", "BO", "EN", "KD"].includes(s.id)).map((s) => (
-                                <line
-                                    key={`line-${s.id}`}
-                                    x1={228}
-                                    y1={242}
-                                    x2={s.cx}
-                                    y2={s.cy}
-                                    stroke={DOT_COLOR}
-                                    strokeWidth="1"
-                                    strokeDasharray="4 4"
-                                />
-                            ))}
-                        </g>
-                    )}
+                        {/* State Markers — RED */}
+                        {NIGERIA_STATES.map((state, idx) => {
+                            const isFiltered = selectedZone && state.zone !== selectedZone;
+                            const isHovered = hoveredState?.id === state.id;
+                            const r = getRadius(state.supporters);
 
-                    {/* State Dots — RED */}
-                    {NIGERIA_STATES.map((state, idx) => {
-                        const isFiltered = selectedZone && state.zone !== selectedZone;
-                        const isHovered = hoveredState?.id === state.id;
-                        const r = getRadius(state.supporters);
-
-                        return (
-                            <g key={state.id}>
-                                {/* Pulse ring for large chapters */}
-                                {state.supporters > 8000 && !isFiltered && (
-                                    <motion.circle
-                                        cx={state.cx}
-                                        cy={state.cy}
-                                        r={r + 6}
-                                        fill="none"
-                                        stroke={DOT_PULSE_COLOR}
-                                        strokeWidth="1"
-                                        initial={{ opacity: 0.6, r: r + 2 }}
-                                        animate={{ opacity: 0, r: r + 14 }}
-                                        transition={{
-                                            duration: 2,
-                                            repeat: Infinity,
-                                            delay: idx * 0.15,
-                                        }}
-                                    />
-                                )}
-
-                                {/* Main dot */}
-                                <motion.circle
-                                    cx={state.cx}
-                                    cy={state.cy}
-                                    r={isHovered ? r + 3 : r}
-                                    fill={isHovered ? DOT_COLOR_LIGHT : DOT_COLOR}
-                                    opacity={isFiltered ? 0.1 : isHovered ? 1 : 0.75}
-                                    className="cursor-pointer transition-all duration-300"
+                            return (
+                                <Marker
+                                    key={state.id}
+                                    coordinates={state.coordinates}
                                     onMouseEnter={() => setHoveredState(state)}
                                     onMouseLeave={() => setHoveredState(null)}
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    transition={{ delay: idx * 0.02 + 0.2, type: "spring", stiffness: 200, damping: 15 }}
-                                    style={{ filter: isHovered ? `drop-shadow(0 0 8px ${DOT_COLOR}80)` : "none" }}
-                                />
+                                >
+                                    {/* Pulse for big chapters */}
+                                    {state.supporters > 8000 && !isFiltered && (
+                                        <motion.circle
+                                            r={r + 4}
+                                            fill="none"
+                                            stroke={DOT_COLOR}
+                                            strokeWidth={0.8}
+                                            initial={{ opacity: 0.5, r: r + 1 }}
+                                            animate={{ opacity: 0, r: r + 10 }}
+                                            transition={{ duration: 2.2, repeat: Infinity, delay: idx * 0.12 }}
+                                        />
+                                    )}
+                                    {/* Main dot */}
+                                    <motion.circle
+                                        r={isHovered ? r + 2 : r}
+                                        fill={isHovered ? DOT_HOVER : DOT_COLOR}
+                                        opacity={isFiltered ? 0.1 : isHovered ? 1 : 0.75}
+                                        className="cursor-pointer"
+                                        initial={{ r: 0 }}
+                                        animate={{ r: isHovered ? r + 2 : r }}
+                                        transition={{ type: "spring", stiffness: 250, damping: 15 }}
+                                        style={{ filter: isHovered ? `drop-shadow(0 0 6px ${DOT_COLOR}90)` : "none" }}
+                                    />
+                                    {/* Label */}
+                                    {(variant === "dashboard" || isHovered) && !isFiltered && (
+                                        <text
+                                            textAnchor="middle"
+                                            y={-r - 4}
+                                            style={{
+                                                fontSize: isHovered ? 9 : 6,
+                                                fontWeight: isHovered ? 900 : 700,
+                                                fill: "#084824",
+                                                opacity: isHovered ? 1 : 0.5,
+                                                fontFamily: "var(--font-display), sans-serif",
+                                                pointerEvents: "none",
+                                            }}
+                                        >
+                                            {state.id}
+                                        </text>
+                                    )}
+                                </Marker>
+                            );
+                        })}
 
-                                {/* State label for dashboard only or hovered */}
-                                {(variant === "dashboard" || isHovered) && !isFiltered && (
-                                    <motion.text
-                                        x={state.cx}
-                                        y={state.cy - r - 5}
-                                        textAnchor="middle"
-                                        className="fill-forest font-display pointer-events-none select-none"
-                                        fontSize={isHovered ? 11 : 8}
-                                        fontWeight={isHovered ? 900 : 700}
-                                        opacity={isHovered ? 1 : 0.5}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: isHovered ? 1 : (variant === "dashboard" ? 0.5 : 0) }}
-                                    >
-                                        {state.id}
-                                    </motion.text>
-                                )}
-                            </g>
-                        );
-                    })}
+                        {/* FCT hub marker */}
+                        <Marker coordinates={[7.49, 9.06]}>
+                            <circle r={variant === "dashboard" ? 13 : 10} fill={DOT_COLOR} opacity={0.15} />
+                            <circle r={variant === "dashboard" ? 8 : 6} fill={DOT_COLOR} />
+                            <text
+                                textAnchor="middle"
+                                y={3}
+                                style={{
+                                    fontSize: 5,
+                                    fontWeight: 900,
+                                    fill: "#FEFAE0",
+                                    fontFamily: "var(--font-display), sans-serif",
+                                    pointerEvents: "none",
+                                }}
+                            >
+                                FCT
+                            </text>
+                        </Marker>
+                    </ZoomableGroup>
+                </ComposableMap>
 
-                    {/* FCT Abuja — central hub marker */}
-                    <motion.g
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.8, type: "spring" }}
-                    >
-                        <circle cx={228} cy={242} r={variant === "dashboard" ? 18 : 14} fill={DOT_COLOR} opacity="0.15" />
-                        <circle cx={228} cy={242} r={variant === "dashboard" ? 12 : 9} fill={DOT_COLOR} />
-                        <text
-                            x={228}
-                            y={245}
-                            textAnchor="middle"
-                            className="fill-ivory font-display pointer-events-none select-none"
-                            fontSize={variant === "dashboard" ? 8 : 7}
-                            fontWeight={900}
-                        >
-                            FCT
-                        </text>
-                    </motion.g>
-                </svg>
-
-                {/* Tooltip */}
+                {/* HTML Tooltip */}
                 {hoveredState && (
                     <motion.div
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="absolute z-30 pointer-events-none"
                         style={{
-                            left: `${(hoveredState.cx / 500) * 100}%`,
-                            top: `${(hoveredState.cy / 520) * 100 - 10}%`,
-                            transform: "translate(-50%, -100%)",
+                            left: "50%",
+                            top: "10%",
+                            transform: "translate(-50%, 0)",
                         }}
                     >
                         <div className="bg-forest text-ivory px-4 py-3 rounded-xl shadow-2xl min-w-[160px]">
@@ -297,13 +271,12 @@ export default function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
                                     <div className="font-black text-base text-leaf">{hoveredState.growth}</div>
                                 </div>
                             </div>
-                            <div className="absolute left-1/2 -bottom-1.5 w-3 h-3 bg-forest transform -translate-x-1/2 rotate-45" />
                         </div>
                     </motion.div>
                 )}
             </div>
 
-            {/* Summary Stats Bar */}
+            {/* Summary Stats */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-center">
                 <div>
                     <div className="text-2xl md:text-3xl font-display font-black text-forest">
@@ -325,3 +298,5 @@ export default function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
         </div>
     );
 }
+
+export default memo(NigeriaMap);
