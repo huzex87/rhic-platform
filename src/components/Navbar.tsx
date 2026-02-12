@@ -28,13 +28,13 @@ export default function Navbar() {
         <nav className={`fixed top-0 left-0 right-0 z-50 px-4 py-4 transition-all duration-300 ${scrolled ? 'pt-2' : 'pt-4'}`}>
             <div className="max-w-7xl mx-auto">
                 <div className={`rounded-2xl px-6 py-3 flex items-center justify-between transition-all duration-300 ${scrolled ? 'glass shadow-2xl border-white/20' : 'bg-transparent'}`}>
-                    <Link href="/" className="flex items-center gap-2">
-                        <div className="w-10 h-10 bg-forest rounded-xl flex items-center justify-center shadow-lg">
-                            <Shield className="text-leaf w-6 h-6" />
-                        </div>
-                        <div>
-                            <span className="text-xl font-display font-bold text-forest tracking-tight block leading-none">RHIC</span>
-                            <span className="text-[10px] text-forest/60 font-medium tracking-widest uppercase">Mobilize Hub</span>
+                    <Link href="/" className="flex items-center gap-4 group">
+                        <div className="relative">
+                            <img
+                                src="/logo.png"
+                                alt="RHIC Logo"
+                                className="h-12 w-auto object-contain transition-transform group-hover:scale-110"
+                            />
                         </div>
                     </Link>
 

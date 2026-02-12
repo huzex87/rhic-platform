@@ -170,7 +170,7 @@ export default function Dashboard() {
                                             <div className="text-[10px] font-bold text-forest/30 uppercase tracking-widest">{item.points} Points</div>
                                         </div>
                                     </div>
-                                    <div className={`w-2 h-2 rounded-full ${item.trend === 'up' ? 'bg-leaf' : 'bg-red-500'} shadow-sm`} />
+                                    <div className={`w-2 h-2 rounded-full ${item.trend === 'up' ? 'bg-leaf' : 'bg-accent-red'} shadow-sm`} />
                                 </div>
                             ))}
                         </div>
