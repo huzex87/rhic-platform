@@ -24,6 +24,8 @@ CREATE TABLE public.profiles (
     full_name TEXT,
     phone TEXT,
     state TEXT,
+    lga TEXT,
+    ward TEXT,
     zone TEXT,
     chapter_id UUID REFERENCES public.chapters(id),
     role TEXT DEFAULT 'supporter' CHECK (role IN ('supporter', 'coordinator', 'admin', 'super_admin')),
