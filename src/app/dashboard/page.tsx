@@ -9,19 +9,44 @@ import {
     Plus,
     Rocket,
     MessageSquare,
-    Shield
+    Shield,
+    Zap,
 } from "lucide-react";
+import NigeriaMap, { NIGERIA_STATES, ZONE_LABELS } from "@/components/NigeriaMap";
+import { useState, useMemo } from "react";
 
 export default function Dashboard() {
+    const [activeTab, setActiveTab] = useState<"map" | "zones">("map");
+
+    // Compute zone-level stats
+    const zoneStats = useMemo(() => {
+        const zones: Record<string, { supporters: number; states: number; topState: string }> = {};
+        NIGERIA_STATES.forEach((s) => {
+            if (!zones[s.zone]) zones[s.zone] = { supporters: 0, states: 0, topState: "" };
+            zones[s.zone].supporters += s.supporters;
+            zones[s.zone].states += 1;
+            if (!zones[s.zone].topState || s.supporters > (NIGERIA_STATES.find(x => x.name === zones[s.zone].topState)?.supporters || 0)) {
+                zones[s.zone].topState = s.name;
+            }
+        });
+        return zones;
+    }, []);
+
+    // Top 5 states by members
+    const topStates = useMemo(
+        () => [...NIGERIA_STATES].sort((a, b) => b.supporters - a.supporters).slice(0, 5),
+        []
+    );
+
     return (
         <div className="max-w-7xl mx-auto px-4 space-y-8">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                     <h1 className="text-4xl font-display font-black text-forest leading-tight">
-                        Mobilization <span className="text-leaf italic">Situation Room</span>
+                        Campaign <span className="text-leaf italic">Headquarters</span>
                     </h1>
-                    <p className="text-forest/60 font-medium">Real-time national momentum and chapter performance metrics.</p>
+                    <p className="text-forest/60 font-medium">See how the movement is growing across Nigeria.</p>
                 </div>
                 <div className="flex gap-4">
                     <button className="glass px-6 py-3 rounded-xl font-bold text-forest hover:bg-white transition-all flex items-center gap-2">
@@ -37,10 +62,10 @@ export default function Dashboard() {
             {/* Main Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                {/* Left Col: Nigeria Map & State Stats */}
+                {/* Left Col: Interactive Nigeria Map */}
                 <div className="lg:col-span-2 space-y-8">
-                    <div className="premium-card min-h-[500px] flex flex-col justify-between overflow-hidden relative">
-                        <div className="flex justify-between items-start z-10">
+                    <div className="premium-card overflow-hidden relative">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                             <div>
                                 <h2 className="text-xl font-display font-bold text-forest">National Reach</h2>
                                 <div className="flex items-center gap-2 text-xs font-bold text-forest/40 uppercase tracking-widest mt-1">
@@ -48,48 +73,95 @@ export default function Dashboard() {
                                     Live Activity Mapping
                                 </div>
                             </div>
-                            <div className="forest-glass px-3 py-1 rounded-lg text-xs font-black text-forest">
-                                36 STATES + FCT ACTIVE
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setActiveTab("map")}
+                                    className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${activeTab === "map"
+                                        ? "forest-gradient text-ivory shadow-lg"
+                                        : "bg-forest/5 text-forest/60 hover:bg-forest/10"
+                                        }`}
+                                >
+                                    Map View
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab("zones")}
+                                    className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${activeTab === "zones"
+                                        ? "forest-gradient text-ivory shadow-lg"
+                                        : "bg-forest/5 text-forest/60 hover:bg-forest/10"
+                                        }`}
+                                >
+                                    Zone Breakdown
+                                </button>
                             </div>
                         </div>
 
-                        {/* Stylized Nigeria Map SVG representation */}
-                        <div className="flex-1 flex items-center justify-center p-4 md:p-8 relative">
-                            <svg viewBox="0 0 800 600" className="w-full h-full max-h-[400px] text-forest/5 fill-current">
-                                <path d="M150,150 L200,100 L300,80 L450,100 L600,150 L700,300 L650,450 L500,550 L300,580 L150,500 L100,350 Z" className="animate-pulse" />
-                                {/* State markers */}
-                                <circle cx="200" cy="200" r="8" className="fill-leaf" />
-                                <circle cx="400" cy="300" r="12" className="fill-leaf/60" />
-                                <circle cx="550" cy="400" r="10" className="fill-leaf" />
-                                <circle cx="300" cy="450" r="6" className="fill-leaf/40" />
-                            </svg>
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div className="text-forest/10 font-display text-4xl md:text-7xl font-black tracking-widest opacity-20">MOBILIZE</div>
+                        {activeTab === "map" ? (
+                            <NigeriaMap variant="dashboard" />
+                        ) : (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="space-y-3 pt-4"
+                            >
+                                {Object.entries(zoneStats).map(([zone, data]) => (
+                                    <div
+                                        key={zone}
+                                        className="flex items-center gap-4 p-4 rounded-xl bg-forest/[0.02] hover:bg-forest/[0.05] transition-all cursor-default"
+                                    >
+                                        <div className="w-10 h-10 rounded-xl forest-gradient flex items-center justify-center text-ivory text-xs font-black shrink-0">
+                                            {zone}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center justify-between">
+                                                <span className="font-display font-bold text-forest text-sm">{ZONE_LABELS[zone]}</span>
+                                                <span className="text-leaf font-black text-sm">{data.supporters.toLocaleString()}</span>
+                                            </div>
+                                            <div className="mt-2 h-2 bg-forest/5 rounded-full overflow-hidden">
+                                                <motion.div
+                                                    initial={{ width: 0 }}
+                                                    animate={{ width: `${(data.supporters / 50000) * 100}%` }}
+                                                    transition={{ duration: 0.8, delay: 0.2 }}
+                                                    className="h-full leaf-gradient rounded-full"
+                                                />
+                                            </div>
+                                            <div className="flex justify-between mt-1">
+                                                <span className="text-[10px] font-bold text-forest/30 uppercase">{data.states} States</span>
+                                                <span className="text-[10px] font-bold text-leaf/60">Top: {data.topState}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </motion.div>
+                        )}
+
+                        {/* Top States Ticker */}
+                        <div className="mt-6 pt-4 border-t border-forest/5">
+                            <div className="flex items-center gap-2 mb-3">
+                                <Zap className="w-3 h-3 text-leaf" />
+                                <span className="text-[10px] font-black text-forest/40 uppercase tracking-widest">Strongest Chapters</span>
+                            </div>
+                            <div className="flex gap-3 overflow-x-auto pb-2">
+                                {topStates.map((s, i) => (
+                                    <div
+                                        key={s.id}
+                                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-forest/[0.03] border border-forest/5 shrink-0 hover:border-leaf/30 transition-all"
+                                    >
+                                        <span className="text-xs font-black text-forest/30">#{i + 1}</span>
+                                        <div>
+                                            <div className="text-sm font-bold text-forest whitespace-nowrap">{s.name}</div>
+                                            <div className="text-[10px] font-bold text-leaf">{s.supporters.toLocaleString()} supporters</div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 z-10 p-2">
-                            {[
-                                { state: "Lagos", trend: "+12%", color: "text-leaf" },
-                                { state: "Kano", trend: "+8%", color: "text-leaf" },
-                                { state: "Rivers", trend: "+15%", color: "text-leaf" },
-                            ].map((s) => (
-                                <div key={s.state} className="glass p-3 rounded-xl flex sm:block items-center justify-between">
-                                    <div className="text-[10px] font-bold text-forest/40 uppercase">{s.state}</div>
-                                    <div className={`text-base md:text-lg font-black ${s.color}`}>{s.trend}</div>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Background Glow */}
-                        <div className="absolute inset-0 bg-radial-gradient from-leaf/5 via-transparent to-transparent pointer-events-none" />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="premium-card">
                             <h3 className="text-sm font-bold text-forest/40 uppercase tracking-widest mb-6 flex items-center gap-2">
                                 <TrendingUp className="w-4 h-4 text-leaf" />
-                                Growth Velocity
+                                Weekly Momentum
                             </h3>
                             <div className="h-40 flex items-end gap-2 px-2">
                                 {[40, 70, 45, 90, 65, 80, 55].map((h, i) => (
@@ -100,7 +172,7 @@ export default function Dashboard() {
                                         className="flex-1 bg-forest/10 rounded-t-md hover:bg-leaf/40 transition-colors relative group"
                                     >
                                         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-forest text-ivory text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                            {h}k new members
+                                            {h}k new supporters
                                         </div>
                                     </motion.div>
                                 ))}
@@ -112,7 +184,7 @@ export default function Dashboard() {
                         </div>
 
                         <div className="premium-card">
-                            <h3 className="text-sm font-bold text-forest/40 uppercase tracking-widest mb-6">Recent Deployments</h3>
+                            <h3 className="text-sm font-bold text-forest/40 uppercase tracking-widest mb-6">Latest Activities</h3>
                             <div className="space-y-4">
                                 {[
                                     { title: "Campus Meetup", state: "Oyo", date: "2h ago" },
@@ -139,7 +211,7 @@ export default function Dashboard() {
                 <div className="space-y-8">
                     <div className="premium-card forest-gradient text-ivory relative overflow-hidden">
                         <div className="relative z-10">
-                            <h3 className="text-xs font-bold text-leaf uppercase tracking-[0.2em] mb-4">Active Campaign</h3>
+                            <h3 className="text-xs font-bold text-leaf uppercase tracking-[0.2em] mb-4">Ongoing Campaign</h3>
                             <div className="text-2xl font-display font-black mb-2">Build for Renewed Hope</div>
                             <p className="text-ivory/60 text-sm font-medium mb-6">3,450 Innovators building solutions right now.</p>
                             <button className="leaf-gradient text-ivory w-full py-4 rounded-xl font-black shadow-xl hover:scale-[1.02] transition-all">

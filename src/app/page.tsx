@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Rocket, Users, Globe, MapPin, Handshake, Star, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import NigeriaMap from "@/components/NigeriaMap";
 
 export default function Home() {
   return (
@@ -133,7 +134,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Nationwide Presence — Map Section */}
+      {/* Nationwide Presence — Interactive Map */}
       <section className="px-4">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -141,7 +142,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-leaf/20 mb-6">
               <MapPin className="w-4 h-4 text-leaf" />
@@ -151,7 +152,7 @@ export default function Home() {
               Across Every <span className="text-leaf">State</span>
             </h2>
             <p className="max-w-2xl mx-auto text-lg text-forest/60 font-medium">
-              The Renewed Hope Innovators Coalition is active in all 36 states and the FCT, driving grassroots technology adoption and innovation.
+              Our movement is alive in all 36 states and the FCT — building communities, launching innovations, and changing lives from every corner of Nigeria.
             </p>
           </motion.div>
 
@@ -160,40 +161,9 @@ export default function Home() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative rounded-[2rem] overflow-hidden border border-forest/10 shadow-2xl bg-white/60 backdrop-blur-xl"
+            className="premium-card"
           >
-            {/* Map Container */}
-            <div className="relative aspect-[16/9] md:aspect-[21/9]">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d16319028.443!2d1.3847893!3d9.0820163!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e0baf7da48d0d%3A0x99a8fe4f20b9bec!2sNigeria!5e0!3m2!1sen!2sng!4v1707753600000!5m2!1sen!2sng"
-                className="absolute inset-0 w-full h-full border-0"
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="RHIC chapters across Nigeria"
-              />
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-white/40 via-transparent to-transparent" />
-            </div>
-
-            {/* Map Legend Bar */}
-            <div className="px-6 py-5 md:px-10 md:py-6 bg-white/80 backdrop-blur-md border-t border-forest/5 flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-8 flex-wrap justify-center">
-                {[
-                  { color: "bg-forest", label: "HQ — Abuja FCT" },
-                  { color: "bg-leaf", label: "Active State Chapters" },
-                  { color: "bg-accent-red", label: "Innovation Hubs" },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-center gap-2">
-                    <span className={`w-3 h-3 rounded-full ${item.color}`} />
-                    <span className="text-xs font-bold text-forest/60 uppercase tracking-wider">{item.label}</span>
-                  </div>
-                ))}
-              </div>
-              <span className="text-sm font-display font-bold text-forest/80">
-                37 Active Zones
-              </span>
-            </div>
+            <NigeriaMap variant="landing" />
           </motion.div>
         </div>
       </section>
