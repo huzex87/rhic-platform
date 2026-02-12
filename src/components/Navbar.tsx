@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, BarChart3, Rocket, MessageSquare, BookOpen } from "lucide-react";
+import { Menu, X, BarChart3, Rocket, MessageSquare, BookOpen, LogOut, UserCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "./AuthProvider";
 
 const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
@@ -16,6 +17,7 @@ const navItems = [
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const { user, loading, signOut } = useAuth();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -25,10 +27,15 @@ export default function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    const handleSignOut = async () => {
+        await signOut();
+        window.location.href = "/";
+    };
+
     return (
         <nav className={`fixed top-0 left-0 right-0 z-50 px-4 py-4 transition-all duration-300 ${scrolled ? 'pt-2' : 'pt-4'}`}>
             <div className="max-w-7xl mx-auto">
-                <div className={`rounded-2xl px-6 py-3 flex items-center justify-between transition-all duration-300 ${scrolled ? 'glass shadow-2xl border-white/20' : 'bg-transparent'}`}>
+                <div className={`rounded-2xl px-6 py-3 flex items-center justify-between transition-all duration-300 ${scrolled ? 'glass shadow-2xl border-accent-red/15' : 'bg-transparent'}`}>
                     <Link href="/" className="flex items-center gap-4 group">
                         <div className="relative">
                             <Image
@@ -54,12 +61,33 @@ export default function Navbar() {
                                 <span>{item.name}</span>
                             </Link>
                         ))}
-                        <Link
-                            href="/auth"
-                            className="forest-gradient text-ivory px-6 py-2 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
-                        >
-                            Join Movement
-                        </Link>
+
+                        {/* Auth Button */}
+                        {loading ? (
+                            <div className="w-28 h-10 rounded-xl bg-forest/10 animate-pulse" />
+                        ) : user ? (
+                            <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-forest/5 border border-accent-red/15">
+                                    <UserCircle className="w-5 h-5 text-leaf" />
+                                    <span className="text-sm font-bold text-forest max-w-[100px] truncate">
+                                        {user.user_metadata?.full_name || user.email?.split("@")[0]}
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={handleSignOut}
+                                    className="flex items-center gap-1 px-3 py-2 rounded-xl text-forest/50 hover:text-accent-red hover:bg-accent-red/5 transition-all text-sm font-bold"
+                                >
+                                    <LogOut className="w-4 h-4" />
+                                </button>
+                            </div>
+                        ) : (
+                            <Link
+                                href="/auth"
+                                className="forest-gradient text-ivory px-6 py-2 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all border border-accent-red/20"
+                            >
+                                Join Movement
+                            </Link>
+                        )}
                     </div>
 
                     {/* Mobile Toggle */}
@@ -75,7 +103,7 @@ export default function Navbar() {
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="md:hidden mt-2 glass rounded-2xl overflow-hidden"
+                            className="md:hidden mt-2 glass rounded-2xl overflow-hidden border border-accent-red/15"
                         >
                             <div className="flex flex-col p-4 gap-4">
                                 {navItems.map((item) => (
@@ -89,12 +117,30 @@ export default function Navbar() {
                                         <span>{item.name}</span>
                                     </Link>
                                 ))}
-                                <Link
-                                    href="/auth"
-                                    className="forest-gradient text-ivory p-3 rounded-xl font-bold text-center shadow-lg"
-                                >
-                                    Join Movement
-                                </Link>
+                                {user ? (
+                                    <>
+                                        <div className="flex items-center gap-2 p-2 border-t border-accent-red/10 pt-4">
+                                            <UserCircle className="w-5 h-5 text-leaf" />
+                                            <span className="text-sm font-bold text-forest">
+                                                {user.user_metadata?.full_name || user.email?.split("@")[0]}
+                                            </span>
+                                        </div>
+                                        <button
+                                            onClick={handleSignOut}
+                                            className="flex items-center gap-2 p-3 rounded-xl text-accent-red font-bold"
+                                        >
+                                            <LogOut className="w-5 h-5" />
+                                            Sign Out
+                                        </button>
+                                    </>
+                                ) : (
+                                    <Link
+                                        href="/auth"
+                                        className="forest-gradient text-ivory p-3 rounded-xl font-bold text-center shadow-lg border border-accent-red/20"
+                                    >
+                                        Join Movement
+                                    </Link>
+                                )}
                             </div>
                         </motion.div>
                     )}
