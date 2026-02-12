@@ -29,12 +29,12 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto">
                 <div className={`rounded-2xl px-6 py-3 flex items-center justify-between transition-all duration-300 ${scrolled ? 'glass shadow-2xl border-white/20' : 'bg-transparent'}`}>
                     <Link href="/" className="flex items-center gap-2">
-                        <div className="w-10 h-10 bg-navy rounded-xl flex items-center justify-center shadow-lg">
-                            <Shield className="text-gold w-6 h-6" />
+                        <div className="w-10 h-10 bg-forest rounded-xl flex items-center justify-center shadow-lg">
+                            <Shield className="text-leaf w-6 h-6" />
                         </div>
                         <div>
-                            <span className="text-xl font-display font-bold text-navy tracking-tight block leading-none">RHIC</span>
-                            <span className="text-[10px] text-navy/60 font-medium tracking-widest uppercase">Mobilize Hub</span>
+                            <span className="text-xl font-display font-bold text-forest tracking-tight block leading-none">RHIC</span>
+                            <span className="text-[10px] text-forest/60 font-medium tracking-widest uppercase">Mobilize Hub</span>
                         </div>
                     </Link>
 
@@ -44,7 +44,7 @@ export default function Navbar() {
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className="flex items-center gap-2 text-navy/70 hover:text-navy font-medium transition-colors group"
+                                className="flex items-center gap-2 text-forest/70 hover:text-forest font-medium transition-colors group"
                             >
                                 <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
                                 <span>{item.name}</span>
@@ -52,14 +52,14 @@ export default function Navbar() {
                         ))}
                         <Link
                             href="/auth"
-                            className="navy-gradient text-ivory px-6 py-2 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
+                            className="forest-gradient text-ivory px-6 py-2 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
                         >
                             Join Movement
                         </Link>
                     </div>
 
                     {/* Mobile Toggle */}
-                    <button className="md:hidden text-navy p-2" onClick={() => setIsOpen(!isOpen)}>
+                    <button className="md:hidden text-forest p-2" onClick={() => setIsOpen(!isOpen)}>
                         {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                     </button>
                 </div>
@@ -79,15 +79,15 @@ export default function Navbar() {
                                         key={item.name}
                                         href={item.href}
                                         onClick={() => setIsOpen(false)}
-                                        className="flex items-center gap-3 text-navy font-medium p-2 rounded-lg hover:bg-navy/5"
+                                        className="flex items-center gap-3 text-forest font-medium p-2 rounded-lg hover:bg-forest/5"
                                     >
-                                        <item.icon className="w-5 h-5 text-gold" />
+                                        <item.icon className="w-5 h-5 text-leaf" />
                                         <span>{item.name}</span>
                                     </Link>
                                 ))}
                                 <Link
                                     href="/auth"
-                                    className="navy-gradient text-ivory p-3 rounded-xl font-bold text-center shadow-lg"
+                                    className="forest-gradient text-ivory p-3 rounded-xl font-bold text-center shadow-lg"
                                 >
                                     Join Movement
                                 </Link>

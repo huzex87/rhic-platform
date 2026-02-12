@@ -16,8 +16,8 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 px-3 md:px-4 py-2 rounded-full glass mb-8 max-w-full"
           >
-            <span className="w-2 h-2 rounded-full bg-gold animate-pulse shrink-0" />
-            <span className="text-[10px] md:text-sm font-bold text-navy/80 tracking-wide uppercase truncate">
+            <span className="w-2 h-2 rounded-full bg-leaf animate-pulse shrink-0" />
+            <span className="text-[10px] md:text-sm font-bold text-forest/80 tracking-wide uppercase truncate">
               Building the Digital Movement for 2027
             </span>
           </motion.div>
@@ -26,17 +26,17 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-black text-navy leading-[1.1] tracking-tight mb-8 px-2"
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-black text-forest leading-[1.1] tracking-tight mb-8 px-2"
           >
             Renewed Hope <br />
-            <span className="text-gold italic">Innovators</span> Coalition
+            <span className="text-leaf italic">Innovators</span> Coalition
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="max-w-3xl mx-auto text-xl text-navy/60 font-medium leading-relaxed mb-12"
+            className="max-w-3xl mx-auto text-xl text-forest/60 font-medium leading-relaxed mb-12"
           >
             A national digital mobilization engine transforming youth-tech support
             into a structured, measurable, and high-energy innovation ecosystem.
@@ -50,14 +50,14 @@ export default function Home() {
           >
             <Link
               href="/auth"
-              className="navy-gradient text-ivory px-10 py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-105 transition-all flex items-center gap-3"
+              className="forest-gradient text-ivory px-10 py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-105 transition-all flex items-center gap-3"
             >
               Initialize Membership
               <ArrowRight className="w-6 h-6" />
             </Link>
             <Link
               href="/innovation"
-              className="bg-navy/5 text-navy px-10 py-5 rounded-2xl font-bold text-lg hover:bg-navy/10 transition-all border border-navy/10"
+              className="bg-forest/5 text-forest px-10 py-5 rounded-2xl font-bold text-lg hover:bg-forest/10 transition-all border border-forest/10"
             >
               Explore Innovation Arena
             </Link>
@@ -65,8 +65,8 @@ export default function Home() {
         </div>
 
         {/* Decorative elements */}
-        <div className="absolute top-1/2 left-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl -z-10 animate-pulse" />
-        <div className="absolute top-1/2 right-0 w-96 h-96 bg-navy/5 rounded-full blur-3xl -z-10 animate-pulse" />
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-leaf/10 rounded-full blur-3xl -z-10 animate-pulse" />
+        <div className="absolute top-1/2 right-0 w-96 h-96 bg-forest/5 rounded-full blur-3xl -z-10 animate-pulse" />
       </section>
 
       {/* Stats Quick View */}
@@ -85,12 +85,12 @@ export default function Home() {
               transition={{ delay: 0.4 + idx * 0.1 }}
               className="premium-card text-center flex flex-col items-center gap-4"
             >
-              <div className="w-12 h-12 bg-navy/5 rounded-2xl flex items-center justify-center">
-                <stat.icon className="text-gold w-6 h-6" />
+              <div className="w-12 h-12 bg-forest/5 rounded-2xl flex items-center justify-center">
+                <stat.icon className="text-leaf w-6 h-6" />
               </div>
               <div>
-                <div className="text-3xl font-display font-black text-navy">{stat.value}</div>
-                <div className="text-xs font-bold text-navy/40 uppercase tracking-widest">{stat.label}</div>
+                <div className="text-3xl font-display font-black text-forest">{stat.value}</div>
+                <div className="text-xs font-bold text-forest/40 uppercase tracking-widest">{stat.label}</div>
               </div>
             </motion.div>
           ))}

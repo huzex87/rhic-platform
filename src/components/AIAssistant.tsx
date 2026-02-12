@@ -37,9 +37,9 @@ export default function AIAssistant() {
             {/* Toggle Button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-8 right-8 w-16 h-16 navy-gradient text-ivory rounded-2xl shadow-2xl flex items-center justify-center group hover:scale-110 transition-all z-50"
+                className="fixed bottom-8 right-8 w-16 h-16 forest-gradient text-ivory rounded-2xl shadow-2xl flex items-center justify-center group hover:scale-110 transition-all z-50"
             >
-                <Sparkles className="w-8 h-8 text-gold group-hover:rotate-12 transition-transform" />
+                <Sparkles className="w-8 h-8 text-leaf group-hover:rotate-12 transition-transform" />
             </button>
 
             {/* Chat Window */}
@@ -49,17 +49,17 @@ export default function AIAssistant() {
                         initial={{ opacity: 0, y: 100, scale: 0.9 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 100, scale: 0.9 }}
-                        className="fixed bottom-28 right-8 w-[400px] h-[600px] glass rounded-3xl shadow-2xl z-50 flex flex-col overflow-hidden border-gold/20"
+                        className="fixed bottom-28 right-8 w-[400px] h-[600px] glass rounded-3xl shadow-2xl z-50 flex flex-col overflow-hidden border-leaf/20"
                     >
                         {/* Header */}
-                        <div className="navy-gradient p-6 flex items-center justify-between text-ivory">
+                        <div className="forest-gradient p-6 flex items-center justify-between text-ivory">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-gold/20 rounded-xl flex items-center justify-center">
-                                    <Bot className="text-gold w-6 h-6" />
+                                <div className="w-10 h-10 bg-leaf/20 rounded-xl flex items-center justify-center">
+                                    <Bot className="text-leaf w-6 h-6" />
                                 </div>
                                 <div>
                                     <div className="font-display font-black text-sm tracking-tight">RHIC AI ASSISTANT</div>
-                                    <div className="flex items-center gap-1 text-[10px] font-bold text-gold/60 uppercase">
+                                    <div className="flex items-center gap-1 text-[10px] font-bold text-leaf/60 uppercase">
                                         <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                                         Active Mobilization
                                     </div>
@@ -73,18 +73,18 @@ export default function AIAssistant() {
                         <div className="flex-1 p-6 overflow-y-auto space-y-4">
                             {messages.map((m, i) => (
                                 <div key={i} className={`flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-gold' : 'bg-navy'}`}>
-                                        {m.role === 'user' ? <User className="w-4 h-4 text-navy" /> : <Shield className="w-4 h-4 text-gold" />}
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${m.role === 'user' ? 'bg-leaf' : 'bg-forest'}`}>
+                                        {m.role === 'user' ? <User className="w-4 h-4 text-forest" /> : <Shield className="w-4 h-4 text-leaf" />}
                                     </div>
-                                    <div className={`p-4 rounded-2xl text-sm font-medium leading-relaxed max-w-[80%] ${m.role === 'user' ? 'bg-navy text-ivory rounded-tr-none' : 'bg-navy/5 text-navy rounded-tl-none'
+                                    <div className={`p-4 rounded-2xl text-sm font-medium leading-relaxed max-w-[80%] ${m.role === 'user' ? 'bg-forest text-ivory rounded-tr-none' : 'bg-forest/5 text-forest rounded-tl-none'
                                         }`}>
                                         {m.text}
                                         {m.role === 'assistant' && i === messages.length - 1 && (
                                             <div className="mt-4 flex gap-2">
-                                                <button className="bg-gold/20 hover:bg-gold/30 text-gold text-[10px] font-black px-3 py-1.5 rounded-lg border border-gold/30 transition-all uppercase">
+                                                <button className="bg-accent-red/10 hover:bg-accent-red/20 text-accent-red text-[10px] font-black px-3 py-1.5 rounded-lg border border-accent-red/20 transition-all uppercase">
                                                     Start Mission
                                                 </button>
-                                                <button className="bg-navy/10 hover:bg-navy/20 text-navy text-[10px] font-black px-3 py-1.5 rounded-lg border border-navy/10 transition-all uppercase">
+                                                <button className="bg-forest/10 hover:bg-forest/20 text-forest text-[10px] font-black px-3 py-1.5 rounded-lg border border-forest/10 transition-all uppercase">
                                                     Details
                                                 </button>
                                             </div>
@@ -95,7 +95,7 @@ export default function AIAssistant() {
                         </div>
 
                         {/* Input */}
-                        <div className="p-6 border-t border-navy/5 bg-white/50">
+                        <div className="p-6 border-t border-forest/5 bg-white/50">
                             <div className="relative">
                                 <input
                                     type="text"
@@ -103,13 +103,13 @@ export default function AIAssistant() {
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                                     placeholder="Ask about your next mission..."
-                                    className="w-full pl-4 pr-12 py-4 rounded-2xl glass border-none focus:ring-2 focus:ring-gold outline-none text-sm font-medium text-navy"
+                                    className="w-full pl-4 pr-12 py-4 rounded-2xl glass border-none focus:ring-2 focus:ring-leaf outline-none text-sm font-medium text-forest"
                                 />
                                 <button
                                     onClick={handleSend}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 navy-gradient rounded-xl flex items-center justify-center text-gold shadow-lg hover:scale-105 transition-all"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 forest-gradient rounded-xl flex items-center justify-center text-leaf shadow-lg hover:scale-105 transition-all"
                                 >
-                                    <Send className="w-5 h-5" />
+                                    <Send className="w-5 h-5 text-ivory" />
                                 </button>
                             </div>
                         </div>

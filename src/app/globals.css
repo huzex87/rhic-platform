@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy: #001F3F;
-  --color-gold: #D4AF37;
+  --color-forest: #084824;
+  --color-leaf: #388E3C;
+  --color-accent-red: #E53935;
   --color-ivory: #FFFFF0;
-  --color-accent: #008080;
-  --color-border: rgba(0, 31, 63, 0.1);
+  --color-border: rgba(8, 72, 36, 0.1);
 
   --font-display: "Outfit", sans-serif;
   --font-body: "Inter", sans-serif;
 
   --color-background: var(--color-ivory);
-  --color-foreground: var(--color-navy);
+  --color-foreground: var(--color-forest);
 }
 
 @layer base {
@@ -26,8 +26,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-image:
-      radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.1) 0, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(0, 31, 63, 0.05) 0, transparent 50%);
+      radial-gradient(at 0% 0%, rgba(56, 142, 60, 0.1) 0, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(8, 72, 36, 0.05) 0, transparent 50%);
     min-height: 100vh;
   }
 }
@@ -39,39 +39,53 @@
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
+@utility forest-glass {
+  background-color: rgba(8, 72, 36, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(8, 72, 36, 0.1);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
 @layer components {
   .premium-card {
     background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    border-radius: 1rem;
+    border: 1px solid rgba(8, 72, 36, 0.1);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    border-radius: 1.5rem;
     padding: 1.5rem;
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .premium-card:hover {
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     transform: translateY(-0.25rem);
+    border-color: rgba(56, 142, 60, 0.3);
   }
 
-  .gold-gradient {
-    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
+  .leaf-gradient {
+    background: linear-gradient(135deg, #388E3C 0%, #4caf50 100%);
   }
 
-  .navy-gradient {
-    background: linear-gradient(135deg, #001F3F 0%, #003366 100%);
+  .forest-gradient {
+    background: linear-gradient(135deg, #084824 0%, #0c6a35 100%);
+  }
+
+  .accent-gradient {
+    background: linear-gradient(135deg, #E53935 0%, #ef5350 100%);
   }
 }
 
-@utility gold-gradient {
-  background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
+@utility leaf-gradient {
+  background: linear-gradient(135deg, #388E3C 0%, #4caf50 100%);
 }
 
-@utility navy-gradient {
-  background: linear-gradient(135deg, #001F3F 0%, #003366 100%);
+@utility forest-gradient {
+  background: linear-gradient(135deg, #084824 0%, #0c6a35 100%);
+}
+
+@utility accent-gradient {
+  background: linear-gradient(135deg, #E53935 0%, #ef5350 100%);
 }
 
 @layer base {
