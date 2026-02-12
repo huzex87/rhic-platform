@@ -2,14 +2,22 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 // Routes that require authentication
-const PROTECTED_ROUTES = ['/dashboard', '/missions', '/innovation', '/pipeline', '/chapter']
+const PROTECTED_ROUTES = ['/dashboard', '/missions', '/innovation', '/pipeline', '/chapter', '/onboarding']
 
 export async function middleware(request: NextRequest) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    // If Supabase env vars aren't configured, skip auth middleware entirely
+    if (!supabaseUrl || !supabaseAnonKey) {
+        return NextResponse.next()
+    }
+
     let supabaseResponse = NextResponse.next({ request })
 
     const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        supabaseUrl,
+        supabaseAnonKey,
         {
             cookies: {
                 getAll() {
@@ -42,7 +50,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Redirect authenticated users away from auth page
-    if (request.nextUrl.pathname.startsWith('/auth') && user) {
+    if (request.nextUrl.pathname.startsWith('/auth') && !request.nextUrl.pathname.startsWith('/auth/callback') && user) {
         const url = request.nextUrl.clone()
         url.pathname = '/dashboard'
         return NextResponse.redirect(url)
