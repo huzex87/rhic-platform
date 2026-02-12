@@ -3,11 +3,13 @@
 import { motion } from "framer-motion";
 import {
     Users,
-    MapPin,
     TrendingUp,
     Activity,
     ChevronRight,
-    Plus
+    Plus,
+    Rocket,
+    MessageSquare,
+    Shield
 } from "lucide-react";
 
 export default function Dashboard() {
@@ -51,21 +53,30 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        {/* Placeholder for Nigeria Map visualization */}
-                        <div className="flex-1 flex items-center justify-center p-8 opacity-20 grayscale scale-125 select-none">
-                            {/* I'll use a better visual representation here later, for now illustrative text */}
-                            <div className="text-navy font-display text-9xl font-black">NIGERIA</div>
+                        {/* Stylized Nigeria Map SVG representation */}
+                        <div className="flex-1 flex items-center justify-center p-4 md:p-8 relative">
+                            <svg viewBox="0 0 800 600" className="w-full h-full max-h-[400px] text-navy/5 fill-current">
+                                <path d="M150,150 L200,100 L300,80 L450,100 L600,150 L700,300 L650,450 L500,550 L300,580 L150,500 L100,350 Z" className="animate-pulse" />
+                                {/* State markers */}
+                                <circle cx="200" cy="200" r="8" className="fill-gold" />
+                                <circle cx="400" cy="300" r="12" className="fill-gold/60" />
+                                <circle cx="550" cy="400" r="10" className="fill-gold" />
+                                <circle cx="300" cy="450" r="6" className="fill-gold/40" />
+                            </svg>
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div className="text-navy/10 font-display text-4xl md:text-7xl font-black tracking-widest opacity-20">MOBILIZE</div>
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-4 z-10">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 z-10 p-2">
                             {[
                                 { state: "Lagos", trend: "+12%", color: "text-green-600" },
                                 { state: "Kano", trend: "+8%", color: "text-green-600" },
                                 { state: "Rivers", trend: "+15%", color: "text-green-600" },
                             ].map((s) => (
-                                <div key={s.state} className="glass p-3 rounded-xl">
-                                    <div className="text-xs font-bold text-navy/40 uppercase">{s.state}</div>
-                                    <div className={`text-lg font-black ${s.color}`}>{s.trend}</div>
+                                <div key={s.state} className="glass p-3 rounded-xl flex sm:block items-center justify-between">
+                                    <div className="text-[10px] font-bold text-navy/40 uppercase">{s.state}</div>
+                                    <div className={`text-base md:text-lg font-black ${s.color}`}>{s.trend}</div>
                                 </div>
                             ))}
                         </div>

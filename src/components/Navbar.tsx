@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Menu, X, Shield, BarChart3, Rocket, MessageSquare, BookOpen } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
@@ -14,11 +14,20 @@ const navItems = [
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-4">
+        <nav className={`fixed top-0 left-0 right-0 z-50 px-4 py-4 transition-all duration-300 ${scrolled ? 'pt-2' : 'pt-4'}`}>
             <div className="max-w-7xl mx-auto">
-                <div className="glass rounded-2xl px-6 py-3 flex items-center justify-between">
+                <div className={`rounded-2xl px-6 py-3 flex items-center justify-between transition-all duration-300 ${scrolled ? 'glass shadow-2xl border-white/20' : 'bg-transparent'}`}>
                     <Link href="/" className="flex items-center gap-2">
                         <div className="w-10 h-10 bg-navy rounded-xl flex items-center justify-center shadow-lg">
                             <Shield className="text-gold w-6 h-6" />

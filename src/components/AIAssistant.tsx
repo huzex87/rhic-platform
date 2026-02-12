@@ -16,11 +16,18 @@ export default function AIAssistant() {
         setMessages([...messages, { role: 'user', text: input }]);
         setInput("");
 
-        // Simulate AI response
+        // Simulate AI response with state-specific context
         setTimeout(() => {
+            const responses = [
+                "Innovator, Lagos Chapter is currently leading the Growth Velocity! Your contributions could push them even further.",
+                "I've analyzed the mission queue. There's a high-priority 'Digital Advocacy' mission in Abuja ready for initialization.",
+                "Your mobilization rank is nearing 'Silver'. Completing one more innovation mission should trigger the promotion!",
+            ];
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+
             setMessages(prev => [...prev, {
                 role: 'assistant',
-                text: "I'm currently in deployment mode. Once the backend is fully initialized, I'll be able to recommend missions and provide Renewed Hope achievement summaries tailored to your state!"
+                text: randomResponse
             }]);
         }, 1000);
     };
@@ -63,7 +70,6 @@ export default function AIAssistant() {
                             </button>
                         </div>
 
-                        {/* Messages */}
                         <div className="flex-1 p-6 overflow-y-auto space-y-4">
                             {messages.map((m, i) => (
                                 <div key={i} className={`flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
@@ -73,6 +79,16 @@ export default function AIAssistant() {
                                     <div className={`p-4 rounded-2xl text-sm font-medium leading-relaxed max-w-[80%] ${m.role === 'user' ? 'bg-navy text-ivory rounded-tr-none' : 'bg-navy/5 text-navy rounded-tl-none'
                                         }`}>
                                         {m.text}
+                                        {m.role === 'assistant' && i === messages.length - 1 && (
+                                            <div className="mt-4 flex gap-2">
+                                                <button className="bg-gold/20 hover:bg-gold/30 text-gold text-[10px] font-black px-3 py-1.5 rounded-lg border border-gold/30 transition-all uppercase">
+                                                    Start Mission
+                                                </button>
+                                                <button className="bg-navy/10 hover:bg-navy/20 text-navy text-[10px] font-black px-3 py-1.5 rounded-lg border border-navy/10 transition-all uppercase">
+                                                    Details
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}

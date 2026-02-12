@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import {
     Rocket,
-    Shield,
     Target,
     Users,
     MessageSquare,
@@ -144,7 +143,7 @@ export default function MissionsPage() {
                                         {mission.category}
                                     </span>
                                     <span className={`px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest ${mission.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
-                                            mission.difficulty === 'Medium' ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'
+                                        mission.difficulty === 'Medium' ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'
                                         }`}>
                                         {mission.difficulty}
                                     </span>

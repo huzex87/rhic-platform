@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Shield, ArrowRight, Github, Mail, Phone, Lock } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
 export default function AuthPage() {
@@ -25,7 +24,7 @@ export default function AuthPage() {
                         Join the <span className="text-gold italic">Elite</span> Movement
                     </h1>
                     <p className="text-xl text-navy/60 font-medium leading-relaxed max-w-md">
-                        The national digital operating system for Nigeria's brightest innovators.
+                        The national digital operating system for Nigeria&apos;s brightest innovators.
                         Structured mobilization for a renewed national momentum.
                     </p>
                     <div className="flex gap-8 pt-4">

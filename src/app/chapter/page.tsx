@@ -1,13 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
-    Users,
     UserPlus,
     BarChart3,
     MapPin,
     FileText,
-    Settings,
     AlertCircle,
     MoreVertical
 } from "lucide-react";

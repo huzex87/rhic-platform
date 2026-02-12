@@ -56,7 +56,7 @@ export default function InnovationArena() {
                         The <span className="text-gold italic">Arena</span> of Ideas
                     </h1>
                     <p className="text-ivory/60 text-lg font-medium">
-                        Where Nigeria's brightest young minds build solutions that power
+                        Where Nigeria&apos;s brightest young minds build solutions that power
                         the Renewed Hope Agenda. Competitive innovation at a national scale.
                     </p>
                     <div className="flex gap-4 pt-4">

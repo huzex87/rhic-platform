@@ -14,10 +14,10 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8"
+            className="inline-flex items-center gap-2 px-3 md:px-4 py-2 rounded-full glass mb-8 max-w-full"
           >
-            <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-            <span className="text-sm font-bold text-navy/80 tracking-wide uppercase">
+            <span className="w-2 h-2 rounded-full bg-gold animate-pulse shrink-0" />
+            <span className="text-[10px] md:text-sm font-bold text-navy/80 tracking-wide uppercase truncate">
               Building the Digital Movement for 2027
             </span>
           </motion.div>
@@ -26,7 +26,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-display font-black text-navy leading-[1.1] tracking-tight mb-8"
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-black text-navy leading-[1.1] tracking-tight mb-8 px-2"
           >
             Renewed Hope <br />
             <span className="text-gold italic">Innovators</span> Coalition

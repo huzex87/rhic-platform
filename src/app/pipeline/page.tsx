@@ -7,9 +7,9 @@ import {
     MessageSquare,
     Globe,
     FileCheck,
-    Search,
-    ChevronRight,
-    Target
+    Target,
+    Download,
+    Rocket
 } from "lucide-react";
 
 const ideas = [
@@ -117,7 +117,7 @@ export default function IdeasPipeline() {
                                                 </div>
                                             </div>
                                             <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${idea.status === 'Reviewing' ? 'bg-orange-50 text-orange-600' :
-                                                    idea.status === 'Shortlisted' ? 'bg-green-50 text-green-600' : 'bg-navy/5 text-navy/40'
+                                                idea.status === 'Shortlisted' ? 'bg-green-50 text-green-600' : 'bg-navy/5 text-navy/40'
                                                 }`}>
                                                 {idea.status}
                                             </div>

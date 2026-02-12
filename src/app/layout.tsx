@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${outfit.variable} font-body bg-ivory text-navy antialiased`}>
         <Navbar />
-        <main className="pt-24 pb-12 min-h-screen">
+        <main className="pt-28 md:pt-32 pb-12 min-h-screen">
           {children}
         </main>
         <AIAssistant />

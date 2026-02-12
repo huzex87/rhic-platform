@@ -9,7 +9,8 @@ import {
     FileText,
     Sparkles,
     Search,
-    ExternalLink
+    ExternalLink,
+    ChevronRight
 } from "lucide-react";
 
 const assets = [
