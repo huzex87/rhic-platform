@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X, Shield, BarChart3, Rocket, MessageSquare, BookOpen } from "lucide-react";
+import Image from "next/image";
+import { Menu, X, BarChart3, Rocket, MessageSquare, BookOpen } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -30,10 +31,13 @@ export default function Navbar() {
                 <div className={`rounded-2xl px-6 py-3 flex items-center justify-between transition-all duration-300 ${scrolled ? 'glass shadow-2xl border-white/20' : 'bg-transparent'}`}>
                     <Link href="/" className="flex items-center gap-4 group">
                         <div className="relative">
-                            <img
+                            <Image
                                 src="/logo.png"
                                 alt="RHIC Logo"
+                                width={120}
+                                height={48}
                                 className="h-12 w-auto object-contain transition-transform group-hover:scale-110"
+                                priority
                             />
                         </div>
                     </Link>
