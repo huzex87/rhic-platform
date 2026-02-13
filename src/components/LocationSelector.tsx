@@ -91,7 +91,6 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
         setLga("");
         setWard("");
         setPollingUnit("");
-        setPollingUnitId("");
     }, []);
 
     const handleStateChange = useCallback((val: string) => {
@@ -99,14 +98,12 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
         setLga("");
         setWard("");
         setPollingUnit("");
-        setPollingUnitId("");
     }, []);
 
     const handleLgaChange = useCallback((val: string) => {
         setLga(val);
         setWard("");
         setPollingUnit("");
-        setPollingUnitId("");
     }, []);
 
     const handleWardChange = useCallback((val: string) => {
