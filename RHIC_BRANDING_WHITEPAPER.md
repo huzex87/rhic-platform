@@ -50,5 +50,65 @@ Every major entry point was individually standardized:
 - **Consistency Audit**: Confirmed the removal of all legacy `navy` and `gold` color tokens across all major entry points.
 - **UI/UX & Performance**: Animations (via `framer-motion`) and layouts were optimized for a premium feel, while addressing dependency conflicts and server routing issues for maximum production reliability.
 
+---
+
+## Backend Architecture & Data Layer
+
+### 5. Supabase Integration
+The platform uses **Supabase** (PostgreSQL + Auth + Realtime) as its backend-as-a-service:
+- **Project**: `ehthkntdxnnulchhjblv.supabase.co`
+- **Client Architecture**: Split into browser (`supabase.ts`) and server (`supabase-server.ts`) clients for SSR compatibility via `@supabase/ssr`.
+- **Environment**: `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` configured on both local (`.env.local`) and Vercel.
+
+### 6. Database Schema
+Three core tables with Row Level Security (RLS) enabled:
+
+| Table | Purpose | Key Fields |
+|-------|---------|-----------|
+| `profiles` | User identity & location | `id`, `full_name`, `phone`, `state`, `lga`, `ward`, `zone`, `chapter_id`, `role` |
+| `chapters` | State-level organizational units | `id`, `name`, `state`, `zone`, `supporter_count` |
+| `activities` | Audit trail of user actions | `id`, `user_id`, `chapter_id`, `type`, `title`, `metadata` |
+
+- **Auto-Profile Trigger**: `handle_new_user()` function automatically creates a profile row on signup.
+- **RLS Policies**: Users can read all chapters/activities but can only update their own profile.
+- **Seeded Data**: 37 chapters (all 36 states + FCT Abuja) pre-loaded.
+
+### 7. Authentication Infrastructure
+- **Middleware** (`middleware.ts`): Refreshes auth tokens on every request, redirects unauthenticated users from protected routes to `/auth`, and gracefully skips auth when env vars are missing (prevents Vercel 500s).
+- **AuthProvider** (`AuthProvider.tsx`): React context providing global `user`, `session`, and `signOut()` across the app.
+- **OAuth Callback** (`auth/callback/route.ts`): Handles the auth code exchange for Supabase OAuth flows.
+- **Protected Routes**: `/dashboard`, `/missions`, `/innovation`, `/pipeline`, `/chapter`, `/onboarding`.
+
+### 8. Nigerian Political Geography System
+A comprehensive cascading location selection system covering Nigeria's full administrative hierarchy:
+
+| Level | Count | Source |
+|-------|-------|--------|
+| Geopolitical Zones | 6 | Mapped in-code |
+| States | 37 | 36 states + FCT |
+| Local Government Areas | 774 | INEC-sourced data |
+| Wards | 8,813 | INEC-sourced data |
+
+**Implementation**:
+- **Data Source**: `public/data/nigeria-geo.json` (117KB) — structured as `Zone → State → LGA → Wards[]`.
+- **LocationSelector Component**: Cascading dropdown with animated reveal (Zone → State → LGA → Ward), built-in search filtering for long lists, progress indicator, and RHIC branding.
+- **Onboarding Flow** (`/onboarding`): Post-signup page where users select their location through the cascading dropdowns, automatically assigning them to their state chapter.
+
+### 9. Real-Time Dashboard
+The dashboard fetches live data from Supabase via the `useDashboardData` hook:
+- **Stats Row**: Total supporters, active chapters, recent signups (last 7 days).
+- **Zone Breakdown**: Aggregated supporter counts per geopolitical zone.
+- **Top Chapters Leaderboard**: Ranked by supporter count with visual indicators.
+- **Real-Time Subscriptions**: Supabase `channel` subscriptions for live dashboard updates on chapter/profile changes.
+- **Personalized Greeting**: Displays logged-in user's name.
+
+### 10. Deployment & Infrastructure
+- **Hosting**: Vercel (auto-deploys from `origin/main`).
+- **Build Tool**: Next.js 15.5 with Turbopack.
+- **CI/CD**: Git push → Vercel build → production deployment.
+- **Environment Variables**: Managed via Vercel project settings for production and `.env.local` for development.
+
+---
+
 ## Future Outlook
-The RHIC platform is now visually optimized for high-scale national mobilization. The Forest Green identity provides a scalable foundation for future feature modules, maintaining a world-class standard for Nigeria's digital future.
+The RHIC platform is now a full-stack, production-grade national mobilization platform. The Forest Green identity, combined with Supabase-powered authentication, real-time dashboards, and Nigeria's complete 8,813-ward political geography, provides a world-class foundation for high-scale digital mobilization across all 37 states and the FCT.
