@@ -12,8 +12,9 @@ import {
     Shield,
     Zap,
     Loader2,
-    Megaphone,
     ShieldCheck,
+    Radio,
+    SignalHigh,
 } from "lucide-react";
 import NigeriaMap, { ZONE_LABELS } from "@/components/NigeriaMap";
 import { useState } from "react";
@@ -37,21 +38,31 @@ export default function Dashboard() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-display font-black text-forest leading-tight">
-                        Campaign <span className="text-leaf italic">Headquarters</span>
+                    <div className="flex items-center gap-2 mb-2">
+                        <div className="px-2 py-0.5 rounded bg-accent-red/10 border border-accent-red/20 flex items-center gap-1.5">
+                            <Radio className="w-2.5 h-2.5 text-accent-red animate-pulse" />
+                            <span className="text-[9px] font-black text-accent-red uppercase tracking-wider">Status: Tactical</span>
+                        </div>
+                        <div className="px-2 py-0.5 rounded bg-leaf/10 border border-leaf/20 flex items-center gap-1.5">
+                            <SignalHigh className="w-2.5 h-2.5 text-leaf" />
+                            <span className="text-[9px] font-black text-leaf uppercase tracking-wider">Live Intel Feed</span>
+                        </div>
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-display font-black text-forest leading-[0.9] tracking-tighter">
+                        Campaign <span className="text-leaf italic underline decoration-accent-red/30 underline-offset-8">Headquarters</span>
                     </h1>
-                    <p className="text-forest/60 font-medium">
-                        {user ? `Welcome back, ${user.user_metadata?.full_name || user.email?.split("@")[0]}. ` : ""}
-                        See how the movement is growing across Nigeria.
+                    <p className="text-forest/60 font-medium mt-4">
+                        {user ? `Operational Command established for ${user.user_metadata?.full_name || user.email?.split("@")[0]}. ` : ""}
+                        Strategic deployment analysis across all 37 States.
                     </p>
                 </div>
-                <div className="flex gap-4">
-                    <button className="glass px-6 py-3 rounded-xl font-bold text-forest hover:bg-white transition-all flex items-center gap-2 btn-accent">
-                        Export Report
+                <div className="flex gap-3">
+                    <button className="glass px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest text-forest/60 hover:text-forest hover:bg-white transition-all border border-forest/10">
+                        Operational Log
                     </button>
-                    <button className="forest-gradient text-ivory px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center gap-2 border border-accent-red/20">
-                        <Plus className="w-5 h-5 text-leaf" />
-                        New Mobilization
+                    <button className="forest-gradient text-ivory px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all flex items-center gap-2 border border-accent-red/20 group">
+                        <Plus className="w-4 h-4 text-leaf group-hover:rotate-90 transition-transform" />
+                        Initiate Mobilization
                     </button>
                 </div>
             </div>
@@ -245,11 +256,11 @@ export default function Dashboard() {
                         <div className="premium-card lg:col-span-2 border-leaf/10">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-sm font-bold text-forest/40 uppercase tracking-widest flex items-center gap-2">
-                                    <Megaphone className="w-4 h-4 text-leaf" />
-                                    Chapter Field Orders
+                                    <Radio className="w-4 h-4 text-accent-red" />
+                                    National Intelligence Stream
                                 </h3>
-                                <div className="text-[10px] font-black text-leaf px-2 py-1 rounded bg-leaf/5 uppercase">
-                                    {user?.user_metadata?.state || "National"}
+                                <div className="text-[10px] font-black text-accent-red px-2 py-1 rounded bg-accent-red/5 uppercase border border-accent-red/10">
+                                    Sector: {user?.user_metadata?.state || "National"}
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -268,7 +279,7 @@ export default function Dashboard() {
                                 )) : (
                                     <div className="col-span-2 flex flex-col items-center justify-center py-6 text-center">
                                         <div className="w-10 h-10 rounded-full bg-forest/5 flex items-center justify-center mb-2">
-                                            <Megaphone className="w-5 h-5 text-forest/10" />
+                                            <Radio className="w-5 h-5 text-forest/10" />
                                         </div>
                                         <p className="text-[10px] font-bold text-forest/30 uppercase italic">No active field orders for your chapter</p>
                                     </div>

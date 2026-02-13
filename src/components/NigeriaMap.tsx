@@ -105,10 +105,10 @@ function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
     return (
         <div className="relative w-full">
             {/* Zone Filter Pills */}
-            <div className="flex flex-wrap gap-2 mb-4 justify-center">
+            <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 justify-center">
                 <button
                     onClick={() => setSelectedZone(null)}
-                    className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${!selectedZone
+                    className={`px-2.5 py-1 md:px-3 md:py-1.5 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-wider transition-all ${!selectedZone
                         ? "forest-gradient text-ivory shadow-lg"
                         : "bg-forest/5 text-forest/60 hover:bg-forest/10"
                         }`}
@@ -119,7 +119,7 @@ function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
                     <button
                         key={key}
                         onClick={() => setSelectedZone(selectedZone === key ? null : key)}
-                        className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${selectedZone === key
+                        className={`px-2.5 py-1 md:px-3 md:py-1.5 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-wider transition-all ${selectedZone === key
                             ? "forest-gradient text-ivory shadow-lg"
                             : "bg-forest/5 text-forest/60 hover:bg-forest/10"
                             }`}
