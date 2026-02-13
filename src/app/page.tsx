@@ -76,7 +76,7 @@ export default function Home() {
           >
             <div className="relative group">
               {/* Main Image Container */}
-              <div className="relative z-10 rounded-[2.5rem] overflow-hidden border-[8px] border-ivory/50 shadow-2xl skew-y-1 group-hover:skew-y-0 transition-transform duration-700">
+              <div className="relative z-10 rounded-[2.5rem] overflow-hidden border-[4px] border-accent-red/30 shadow-2xl skew-y-1 group-hover:skew-y-0 transition-transform duration-700">
                 <Image
                   src="/president-tinubu.png"
                   alt="President Bola Ahmed Tinubu"

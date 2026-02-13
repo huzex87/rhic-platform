@@ -92,7 +92,10 @@ A comprehensive cascading location selection system covering Nigeria's full admi
 **Implementation**:
 - **Data Source**: `public/data/nigeria-geo.json` (117KB) — structured as `Zone → State → LGA → Wards[]`.
 - **LocationSelector Component**: Cascading dropdown with animated reveal (Zone → State → LGA → Ward), built-in search filtering for long lists, progress indicator, and RHIC branding.
-- **Onboarding Flow** (`/onboarding`): Post-signup page where users select their location through the cascading dropdowns, automatically assigning them to their state chapter.
+- **Onboarding Flow** (`/onboarding`): Post-signup page where users select their location and provide professional background (Occupation, Bio), automatically assigning them to their state chapter and generating a digital ID card.
+- **Settings & Profile Management** (`/settings`): Enables users to manage their full professional profile, update their location, and download/share their "world-class" Branded ID card.
+- **Dynamic Missions & Pipeline**: Real-time engagement systems for mobilization and policy innovation, powered by custom hooks (`useMissions`, `useProposals`) and secure Supabase RPCs.
+- **Chapter Command & Control**: Data-driven regional management interface with role-based access for coordinators.
 
 ### 9. Real-Time Dashboard
 The dashboard fetches live data from Supabase via the `useDashboardData` hook:

@@ -1,27 +1,48 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, Loader2, User, CheckCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Loader2, CheckCircle, Briefcase, FileText, Phone } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import LocationSelector, { type LocationSelection } from "@/components/LocationSelector";
+import BrandedIdCard from "@/components/BrandedIdCard";
 import { useAuth } from "@/components/AuthProvider";
 import { createClient } from "@/lib/supabase";
 
 export default function OnboardingPage() {
     const { user } = useAuth();
     const router = useRouter();
-    const [step, setStep] = useState<1 | 2>(1);
+    const [step, setStep] = useState<1 | 2 | 3>(1);
     const [location, setLocation] = useState<LocationSelection | null>(null);
+    const [profileData, setProfileData] = useState({
+        phone: "",
+        occupation: "",
+        bio: "",
+    });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    // Initial load from user metadata
+    useEffect(() => {
+        if (user) {
+            setProfileData(prev => ({
+                ...prev,
+                phone: user.user_metadata?.phone || "",
+            }));
+        }
+    }, [user]);
 
     const handleLocationSelect = (loc: LocationSelection) => {
         setLocation(loc);
     };
 
-    const handleComplete = async () => {
+    const handleLocationComplete = () => {
+        if (!location) return;
+        setStep(2);
+    };
+
+    const handleProfileComplete = async () => {
         if (!location || !user) return;
 
         setLoading(true);
@@ -30,7 +51,7 @@ export default function OnboardingPage() {
         try {
             const supabase = createClient();
 
-            // Update user profile with location
+            // 1. Update user profile with location and professional info
             const { error: profileError } = await supabase
                 .from("profiles")
                 .update({
@@ -38,13 +59,16 @@ export default function OnboardingPage() {
                     state: location.state,
                     lga: location.lga,
                     ward: location.ward,
+                    phone: profileData.phone,
+                    occupation: profileData.occupation,
+                    bio: profileData.bio,
                     updated_at: new Date().toISOString(),
                 })
                 .eq("id", user.id);
 
             if (profileError) throw profileError;
 
-            // Try to assign chapter based on state
+            // 2. Try to assign chapter based on state
             const { data: chapter } = await supabase
                 .from("chapters")
                 .select("id")
@@ -65,18 +89,21 @@ export default function OnboardingPage() {
                 }
             }
 
-            // Log activity
+            // 3. Log activity
             await supabase.from("activities").insert({
                 user_id: user.id,
                 chapter_id: chapter?.id || null,
                 type: "chapter_join",
-                title: `Joined ${location.state} chapter from ${location.ward} ward, ${location.lga} LGA`,
-                metadata: location,
+                title: `Joined ${location.state} chapter as ${profileData.occupation || "Supporter"}`,
+                metadata: {
+                    ...location,
+                    occupation: profileData.occupation,
+                },
             });
 
-            setStep(2);
+            setStep(3);
         } catch (err) {
-            const message = err instanceof Error ? err.message : "Failed to save location";
+            const message = err instanceof Error ? err.message : "Failed to save profile";
             setError(message);
         } finally {
             setLoading(false);
@@ -84,116 +111,213 @@ export default function OnboardingPage() {
     };
 
     if (!user) {
-        router.push("/auth");
+        if (typeof window !== "undefined") router.push("/auth");
         return null;
     }
 
+    const containerVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: -20 }
+    };
+
     return (
-        <div className="max-w-4xl mx-auto px-4 min-h-[80vh] flex items-center justify-center">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="w-full max-w-2xl"
-            >
-                {step === 1 ? (
-                    <div className="premium-card p-8 md:p-12 space-y-8">
-                        {/* Header */}
-                        <div className="text-center space-y-4">
-                            <div className="w-20 h-20 mx-auto relative">
-                                <Image src="/logo.png" alt="RHIC" fill className="object-contain" />
+        <div className="min-h-screen py-12 px-4 flex items-center justify-center bg-ivory">
+            <div className="w-full max-w-2xl">
+                <AnimatePresence mode="wait">
+                    {step === 1 && (
+                        <motion.div
+                            key="step1"
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                            className="premium-card p-8 md:p-12 space-y-8"
+                        >
+                            <OnboardingHeader
+                                title={`Welcome, ${user.user_metadata?.full_name?.split(' ')[0] || "Innovator"}`}
+                                subtitle="Select your location to join your local RHIC chapter"
+                            />
+
+                            <LocationSelector onChange={handleLocationSelect} />
+
+                            <button
+                                onClick={handleLocationComplete}
+                                disabled={!location}
+                                className="forest-gradient text-ivory w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 border border-accent-red/20 disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                                CONTINUE
+                                <ArrowRight className="w-6 h-6" />
+                            </button>
+
+                            <SkipButton onClick={() => router.push("/dashboard")} />
+                        </motion.div>
+                    )}
+
+                    {step === 2 && (
+                        <motion.div
+                            key="step2"
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                            className="premium-card p-8 md:p-12 space-y-8"
+                        >
+                            <OnboardingHeader
+                                title="Professional Profile"
+                                subtitle="Tell us a bit about yourself to help us coordinate better"
+                            />
+
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-forest/40 ml-2 uppercase tracking-widest flex items-center gap-2">
+                                        <Phone className="w-3 h-3" /> Phone Number
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        placeholder="0801 234 5678"
+                                        value={profileData.phone}
+                                        onChange={(e) => setProfileData(p => ({ ...p, phone: e.target.value }))}
+                                        className="w-full bg-forest/5 border border-forest/10 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-leaf/30 text-forest font-bold transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-forest/40 ml-2 uppercase tracking-widest flex items-center gap-2">
+                                        <Briefcase className="w-3 h-3" /> Occupation
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. Software Engineer, Farmer, Lawyer"
+                                        value={profileData.occupation}
+                                        onChange={(e) => setProfileData(p => ({ ...p, occupation: e.target.value }))}
+                                        className="w-full bg-forest/5 border border-forest/10 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-leaf/30 text-forest font-bold transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-forest/40 ml-2 uppercase tracking-widest flex items-center gap-2">
+                                        <FileText className="w-3 h-3" /> Professional Bio
+                                    </label>
+                                    <textarea
+                                        rows={4}
+                                        placeholder="A short description of your professional background and interests..."
+                                        value={profileData.bio}
+                                        onChange={(e) => setProfileData(p => ({ ...p, bio: e.target.value }))}
+                                        className="w-full bg-forest/5 border border-forest/10 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-leaf/30 text-forest font-bold transition-all resize-none"
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <h1 className="text-3xl font-display font-black text-forest">
-                                    Welcome, <span className="text-leaf italic">{user.user_metadata?.full_name || "Innovator"}</span>
-                                </h1>
-                                <p className="text-forest/60 font-medium mt-2">
-                                    Select your location to join your local RHIC chapter
+
+                            {error && <ErrorAlert message={error} />}
+
+                            <div className="flex flex-col gap-4">
+                                <button
+                                    onClick={handleProfileComplete}
+                                    disabled={loading}
+                                    className="forest-gradient text-ivory w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 border border-accent-red/20 disabled:opacity-40"
+                                >
+                                    {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                                        <>
+                                            FINALIZE PROFILE
+                                            <ArrowRight className="w-6 h-6" />
+                                        </>
+                                    )}
+                                </button>
+                                <button
+                                    onClick={() => setStep(1)}
+                                    className="text-sm font-bold text-forest/40 hover:text-forest transition-colors uppercase tracking-widest"
+                                >
+                                    Go Back
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {step === 3 && (
+                        <motion.div
+                            key="step3"
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                            className="premium-card p-8 md:p-12 text-center space-y-8"
+                        >
+                            <div className="space-y-2">
+                                <div className="w-16 h-16 mx-auto rounded-full bg-leaf/10 flex items-center justify-center mb-4">
+                                    <CheckCircle className="w-10 h-10 text-leaf" />
+                                </div>
+                                <h2 className="text-3xl font-display font-black text-forest">
+                                    Registration Complete!
+                                </h2>
+                                <p className="text-forest/60 font-medium">
+                                    Welcome to the <span className="text-forest font-bold">{location?.state}</span> Chapter.
                                 </p>
                             </div>
-                        </div>
 
-                        {/* Location Selector */}
-                        <LocationSelector
-                            onChange={handleLocationSelect}
-                        />
+                            <BrandedIdCard
+                                fullName={user.user_metadata?.full_name || "Innovator"}
+                                email={user.email || ""}
+                                zone={location?.zone || ""}
+                                state={location?.state || ""}
+                                lga={location?.lga || ""}
+                                ward={location?.ward || ""}
+                                role={profileData.occupation || "supporter"}
+                                memberId={user.id}
+                            />
 
-                        {/* Error */}
-                        {error && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="p-4 rounded-xl bg-accent-red/10 border border-accent-red/20 text-sm font-medium text-accent-red"
+                            <button
+                                onClick={() => router.push("/dashboard")}
+                                className="forest-gradient text-ivory w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all border border-accent-red/20 flex items-center justify-center gap-3"
                             >
-                                {error}
-                            </motion.div>
-                        )}
-
-                        {/* Submit */}
-                        <button
-                            onClick={handleComplete}
-                            disabled={!location || loading}
-                            className="forest-gradient text-ivory w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 border border-accent-red/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
-                        >
-                            {loading ? (
-                                <Loader2 className="w-6 h-6 animate-spin" />
-                            ) : (
-                                <>
-                                    JOIN MY CHAPTER
-                                    <ArrowRight className="w-6 h-6" />
-                                </>
-                            )}
-                        </button>
-
-                        {/* Skip */}
-                        <button
-                            onClick={() => router.push("/dashboard")}
-                            className="w-full text-center text-sm font-medium text-forest/30 hover:text-forest/60 transition-colors"
-                        >
-                            Skip for now
-                        </button>
-                    </div>
-                ) : (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="premium-card p-12 text-center space-y-8"
-                    >
-                        <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ type: "spring", delay: 0.2 }}
-                            className="w-24 h-24 mx-auto rounded-full bg-leaf/10 flex items-center justify-center"
-                        >
-                            <CheckCircle className="w-12 h-12 text-leaf" />
+                                GO TO DASHBOARD
+                                <ArrowRight className="w-6 h-6" />
+                            </button>
                         </motion.div>
-                        <div>
-                            <h2 className="text-3xl font-display font-black text-forest mb-2">
-                                You&apos;re All Set!
-                            </h2>
-                            <p className="text-forest/60 font-medium">
-                                You&apos;ve been assigned to the <span className="font-bold text-forest">{location?.state}</span> chapter.
-                            </p>
-                            <p className="text-forest/40 text-sm mt-1">
-                                {location?.ward} Ward • {location?.lga} LGA • {location?.zone}
-                            </p>
-                        </div>
-
-                        <div className="flex items-center justify-center gap-3 p-4 bg-forest/5 rounded-2xl border border-accent-red/10">
-                            <User className="w-5 h-5 text-leaf" />
-                            <span className="text-sm font-bold text-forest">
-                                You can update your location anytime from Settings
-                            </span>
-                        </div>
-
-                        <button
-                            onClick={() => router.push("/dashboard")}
-                            className="forest-gradient text-ivory w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all border border-accent-red/20"
-                        >
-                            GO TO DASHBOARD
-                        </button>
-                    </motion.div>
-                )}
-            </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
         </div>
+    );
+}
+
+function OnboardingHeader({ title, subtitle }: { title: string; subtitle: string }) {
+    return (
+        <div className="text-center space-y-4">
+            <div className="w-20 h-20 mx-auto relative mb-2">
+                <Image src="/logo.png" alt="RHIC" fill className="object-contain" />
+            </div>
+            <div>
+                <h1 className="text-3xl font-display font-black text-forest">
+                    {title}
+                </h1>
+                <p className="text-forest/60 font-medium mt-2">
+                    {subtitle}
+                </p>
+            </div>
+        </div>
+    );
+}
+
+function ErrorAlert({ message }: { message: string }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-4 rounded-xl bg-accent-red/10 border border-accent-red/20 text-sm font-medium text-accent-red"
+        >
+            {message}
+        </motion.div>
+    );
+}
+
+function SkipButton({ onClick }: { onClick: () => void }) {
+    return (
+        <button
+            onClick={onClick}
+            className="w-full text-center text-xs font-bold text-forest/20 hover:text-forest/40 transition-colors uppercase tracking-widest"
+        >
+            Skip for now
+        </button>
     );
 }

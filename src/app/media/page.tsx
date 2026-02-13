@@ -10,17 +10,23 @@ import {
     Sparkles,
     Search,
     ExternalLink,
-    ChevronRight
+    ChevronRight,
+    Loader2
 } from "lucide-react";
-
-const assets = [
-    { title: "Renewed Hope 2027 Main Logo", type: "Image", format: "PNG/SVG", size: "2.4MB" },
-    { title: "Youth Empowerment Success Stories", type: "Video", format: "MP4", size: "15MB" },
-    { title: "Social Media Carousel Pack #1", type: "Graphics", format: "ZIP", size: "8.5MB" },
-    { title: "Economic Achievement Brief 2026", type: "Document", format: "PDF", size: "1.2MB" },
-];
+import { useState } from "react";
+import { useMedia } from "@/hooks/useMedia";
+import { useAIAssistant } from "@/hooks/useAIAssistant";
 
 export default function MediaWarRoom() {
+    const [selectedCategory, setSelectedCategory] = useState('All');
+    const { assets, loading } = useMedia(selectedCategory);
+    const [focus, setFocus] = useState("Digital Economy Growth");
+    const { generateCaption, generating, lastResult } = useAIAssistant();
+
+    const handleGenerate = async () => {
+        await generateCaption(focus);
+    };
+
     return (
         <div className="max-w-7xl mx-auto px-4 space-y-12">
             {/* Header */}
@@ -51,54 +57,73 @@ export default function MediaWarRoom() {
                         <h2 className="text-xl font-display font-bold text-forest">Asset Library</h2>
                         <div className="flex gap-2">
                             {['All', 'Graphics', 'Video', 'Audio', 'Docs'].map(cat => (
-                                <button key={cat} className="px-4 py-2 rounded-lg text-xs font-bold bg-forest/5 text-forest hover:bg-forest/10 transition-all">
+                                <button
+                                    key={cat}
+                                    onClick={() => setSelectedCategory(cat)}
+                                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${selectedCategory === cat ? 'bg-forest text-ivory' : 'bg-forest/5 text-forest hover:bg-forest/10'}`}
+                                >
                                     {cat}
                                 </button>
                             ))}
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {assets.map((asset, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: i * 0.1 }}
-                                className="premium-card group cursor-pointer"
-                            >
-                                <div className="aspect-video bg-forest/5 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden">
-                                    {asset.type === 'Image' && <ImageIcon className="w-12 h-12 text-forest/10" />}
-                                    {asset.type === 'Video' && <Video className="w-12 h-12 text-forest/10" />}
-                                    {asset.type === 'Graphics' && <Sparkles className="w-12 h-12 text-forest/10" />}
-                                    {asset.type === 'Document' && <FileText className="w-12 h-12 text-forest/10" />}
+                    {loading ? (
+                        <div className="py-20 flex justify-center">
+                            <Loader2 className="w-8 h-8 animate-spin text-leaf" />
+                        </div>
+                    ) : (
+                        <>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {assets.map((asset, i) => (
+                                    <motion.div
+                                        key={asset.id}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: i * 0.1 }}
+                                        className="premium-card group cursor-pointer"
+                                    >
+                                        <div className="aspect-video bg-forest/5 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden">
+                                            {asset.type === 'Image' && <ImageIcon className="w-12 h-12 text-forest/10" />}
+                                            {asset.type === 'Video' && <Video className="w-12 h-12 text-forest/10" />}
+                                            {asset.type === 'Graphics' && <Sparkles className="w-12 h-12 text-forest/10" />}
+                                            {asset.type === 'Document' && <FileText className="w-12 h-12 text-forest/10" />}
 
-                                    <div className="absolute inset-0 bg-forest/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                        <button className="bg-leaf text-ivory p-3 rounded-full shadow-2xl scale-75 group-hover:scale-100 transition-transform">
-                                            <Download className="w-6 h-6" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <h3 className="font-bold text-forest mb-1 group-hover:text-leaf transition-colors">{asset.title}</h3>
-                                        <div className="flex gap-3 text-[10px] font-black text-forest/30 uppercase tracking-widest">
-                                            <span>{asset.type}</span>
-                                            <span>•</span>
-                                            <span>{asset.format}</span>
-                                            <span>•</span>
-                                            <span>{asset.size}</span>
+                                            <div className="absolute inset-0 bg-forest/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <button className="bg-leaf text-ivory p-3 rounded-full shadow-2xl scale-75 group-hover:scale-100 transition-transform">
+                                                    <Download className="w-6 h-6" />
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
 
-                    <button className="w-full py-6 rounded-2xl border-2 border-dashed border-forest/10 text-forest/40 font-bold hover:bg-forest/5 transition-all flex items-center justify-center gap-2">
-                        Load More Assets
-                    </button>
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <h3 className="font-bold text-forest mb-1 group-hover:text-leaf transition-colors">{asset.title}</h3>
+                                                <div className="flex gap-3 text-[10px] font-black text-forest/30 uppercase tracking-widest">
+                                                    <span>{asset.type}</span>
+                                                    <span>•</span>
+                                                    <span>{asset.format}</span>
+                                                    <span>•</span>
+                                                    <span>{asset.size}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                                {assets.length === 0 && (
+                                    <div className="col-span-full py-20 text-center text-forest/30 font-bold uppercase tracking-widest text-xs">
+                                        No assets found in this category.
+                                    </div>
+                                )}
+                            </div>
+
+                            {assets.length > 0 && (
+                                <button className="w-full py-6 rounded-2xl border-2 border-dashed border-forest/10 text-forest/40 font-bold hover:bg-forest/5 transition-all flex items-center justify-center gap-2">
+                                    Load More Assets
+                                </button>
+                            )}
+                        </>
+                    )}
                 </div>
 
                 {/* Right Col: AI Advocacy Assistant */}
@@ -119,16 +144,49 @@ export default function MediaWarRoom() {
                             <div className="space-y-4">
                                 <div className="glass bg-white/10 p-4 rounded-xl border-white/5">
                                     <span className="text-[10px] font-bold text-leaf uppercase tracking-widest block mb-2">Narrative Focus</span>
-                                    <select className="bg-transparent text-sm font-medium outline-none w-full cursor-pointer">
-                                        <option className="text-forest">Digital Economy Growth</option>
-                                        <option className="text-forest">Agriculture Modernization</option>
-                                        <option className="text-forest">Youth Employment</option>
+                                    <select
+                                        value={focus}
+                                        onChange={(e) => setFocus(e.target.value)}
+                                        className="bg-transparent text-sm font-medium outline-none w-full cursor-pointer appearance-none"
+                                    >
+                                        <option value="Digital Economy Growth" className="text-forest">Digital Economy Growth</option>
+                                        <option value="Agriculture Modernization" className="text-forest">Agriculture Modernization</option>
+                                        <option value="Youth Employment" className="text-forest">Youth Employment</option>
                                     </select>
                                 </div>
 
-                                <button className="leaf-gradient text-ivory w-full py-4 rounded-xl font-black shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
-                                    <Sparkles className="w-5 h-5" />
-                                    GENERATE CAPTION
+                                {lastResult && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="p-4 rounded-xl bg-leaf/10 border border-leaf/20 text-sm font-medium text-ivory/90 leading-relaxed relative group"
+                                    >
+                                        {lastResult}
+                                        <button
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(lastResult);
+                                                alert("Caption copied to clipboard!");
+                                            }}
+                                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-forest/40 p-1.5 rounded-lg"
+                                        >
+                                            <Download className="w-3 h-3 text-leaf" />
+                                        </button>
+                                    </motion.div>
+                                )}
+
+                                <button
+                                    onClick={handleGenerate}
+                                    disabled={generating}
+                                    className="leaf-gradient text-ivory w-full py-4 rounded-xl font-black shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:scale-100"
+                                >
+                                    {generating ? (
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                    ) : (
+                                        <>
+                                            <Sparkles className="w-5 h-5" />
+                                            {lastResult ? 'REGENERATE NARRATIVE' : 'GENERATE CAPTION'}
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </div>

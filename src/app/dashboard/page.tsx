@@ -15,12 +15,15 @@ import {
 } from "lucide-react";
 import NigeriaMap, { ZONE_LABELS } from "@/components/NigeriaMap";
 import { useState } from "react";
+import Link from "next/link";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { useAuth } from "@/components/AuthProvider";
+import { useActivities } from "@/hooks/useActivities";
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState<"map" | "zones">("map");
     const { stats, loading } = useDashboardData();
+    const { activities, loading: activitiesLoading } = useActivities(5);
     const { user } = useAuth();
 
     return (
@@ -189,15 +192,15 @@ export default function Dashboard() {
                                 Weekly Momentum
                             </h3>
                             <div className="h-40 flex items-end gap-2 px-2">
-                                {[40, 70, 45, 90, 65, 80, 55].map((h, i) => (
+                                {(stats?.momentum || [40, 70, 45, 90, 65, 80, 55]).map((h, i) => (
                                     <motion.div
                                         key={i}
                                         initial={{ height: 0 }}
-                                        animate={{ height: `${h}%` }}
+                                        animate={{ height: `${Math.max(h, 5)}%` }}
                                         className="flex-1 bg-forest/10 rounded-t-md hover:bg-leaf/40 transition-colors relative group"
                                     >
                                         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-forest text-ivory text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                            {h}k new supporters
+                                            {h} mobilization events
                                         </div>
                                     </motion.div>
                                 ))}
@@ -211,24 +214,54 @@ export default function Dashboard() {
                         <div className="premium-card">
                             <h3 className="text-sm font-bold text-forest/40 uppercase tracking-widest mb-6">Latest Activities</h3>
                             <div className="space-y-4">
-                                {[
-                                    { title: "Campus Meetup", state: "Oyo", date: "2h ago" },
-                                    { title: "Digital Mission #4", state: "Abuja", date: "5h ago" },
-                                    { title: "Chapter Lunch", state: "Imo", date: "1d ago" },
-                                ].map((item, i) => (
-                                    <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-forest/5 hover:bg-forest/10 transition-colors group cursor-pointer border border-accent-red/5">
+                                {activities.length > 0 ? activities.map((item) => (
+                                    <div key={item.id} className="flex items-center justify-between p-3 rounded-xl bg-forest/5 hover:bg-forest/10 transition-colors group cursor-pointer border border-accent-red/5">
                                         <div className="flex items-center gap-3">
                                             <div className="w-2 h-2 rounded-full bg-leaf" />
                                             <div>
                                                 <div className="text-sm font-bold text-forest">{item.title}</div>
-                                                <div className="text-[10px] text-forest/40 font-bold uppercase">{item.state}</div>
+                                                <div className="text-[10px] text-forest/40 font-bold uppercase">{item.profiles?.full_name || 'Anonymous'} • {item.profiles?.state || 'Nigeria'}</div>
                                             </div>
                                         </div>
-                                        <div className="text-[10px] font-bold text-forest/30 group-hover:text-forest transition-colors">{item.date}</div>
+                                        <div className="text-[10px] font-bold text-forest/30 group-hover:text-forest transition-colors">
+                                            {new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </div>
                                     </div>
-                                ))}
+                                )) : (
+                                    <div className="text-center py-8 text-forest/30 text-xs font-bold uppercase italic">
+                                        {activitiesLoading ? <Loader2 className="w-5 h-5 animate-spin mx-auto text-leaf" /> : "No recent activity recorded"}
+                                    </div>
+                                )}
                             </div>
                         </div>
+
+                        {/* Innovator Profile Section */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="premium-card border-leaf/30 bg-leaf/5"
+                        >
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-sm font-bold text-leaf uppercase tracking-widest">Your Profile</h3>
+                                <Link href="/settings" className="text-[10px] font-black text-forest/40 hover:text-forest transition-colors uppercase">Edit →</Link>
+                            </div>
+                            <div className="flex items-center gap-4 mb-4">
+                                <div className="w-12 h-12 rounded-xl forest-gradient flex items-center justify-center text-ivory font-black">
+                                    {user?.user_metadata?.full_name?.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2) || "RH"}
+                                </div>
+                                <div>
+                                    <div className="font-display font-bold text-forest leading-tight truncate max-w-[150px]">
+                                        {user?.user_metadata?.full_name || "Innovator"}
+                                    </div>
+                                    <div className="text-[10px] font-black text-leaf uppercase tracking-widest">
+                                        Verified Member
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="p-3 rounded-xl bg-white/50 border border-leaf/10 text-xs font-medium text-forest/70 leading-relaxed italic">
+                                &quot;The Renewed Hope mandate is the foundation of our collective progress.&quot;
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
 

@@ -67,12 +67,15 @@ export default function Navbar() {
                             <div className="w-28 h-10 rounded-xl bg-forest/10 animate-pulse" />
                         ) : user ? (
                             <div className="flex items-center gap-3">
-                                <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-forest/5 border border-accent-red/15">
-                                    <UserCircle className="w-5 h-5 text-leaf" />
+                                <Link
+                                    href="/settings"
+                                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-forest/5 border border-accent-red/15 hover:bg-forest/10 transition-all group/profile"
+                                >
+                                    <UserCircle className="w-5 h-5 text-leaf group-hover/profile:scale-110 transition-transform" />
                                     <span className="text-sm font-bold text-forest max-w-[100px] truncate">
                                         {user.user_metadata?.full_name || user.email?.split("@")[0]}
                                     </span>
-                                </div>
+                                </Link>
                                 <button
                                     onClick={handleSignOut}
                                     className="flex items-center gap-1 px-3 py-2 rounded-xl text-forest/50 hover:text-accent-red hover:bg-accent-red/5 transition-all text-sm font-bold"
@@ -119,15 +122,20 @@ export default function Navbar() {
                                 ))}
                                 {user ? (
                                     <>
-                                        <div className="flex items-center gap-2 p-2 border-t border-accent-red/10 pt-4">
+                                        <Link
+                                            href="/settings"
+                                            onClick={() => setIsOpen(false)}
+                                            className="flex items-center gap-2 p-2 border-t border-accent-red/10 pt-4 hover:bg-forest/5 rounded-lg transition-colors"
+                                        >
                                             <UserCircle className="w-5 h-5 text-leaf" />
                                             <span className="text-sm font-bold text-forest">
                                                 {user.user_metadata?.full_name || user.email?.split("@")[0]}
                                             </span>
-                                        </div>
+                                            <span className="ml-auto text-[10px] font-black text-leaf uppercase tracking-widest">Settings</span>
+                                        </Link>
                                         <button
                                             onClick={handleSignOut}
-                                            className="flex items-center gap-2 p-3 rounded-xl text-accent-red font-bold"
+                                            className="flex items-center gap-2 p-3 rounded-xl text-accent-red font-bold hover:bg-accent-red/5 transition-colors"
                                         >
                                             <LogOut className="w-5 h-5" />
                                             Sign Out

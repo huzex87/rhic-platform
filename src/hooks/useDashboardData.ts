@@ -19,6 +19,7 @@ export interface DashboardStats {
     zoneBreakdown: Record<string, { supporters: number; states: number; topState: string }>;
     topChapters: Chapter[];
     recentSignups: number;
+    momentum: number[];
 }
 
 export function useDashboardData() {
@@ -57,6 +58,11 @@ export function useDashboardData() {
                     }
                 });
 
+                // Fetch momentum data
+                const { data: momentumData } = await supabase
+                    .from("mobilization_momentum")
+                    .select("*");
+
                 setStats({
                     totalSupporters,
                     totalChapters: chaptersData.length,
@@ -64,6 +70,7 @@ export function useDashboardData() {
                     zoneBreakdown,
                     topChapters: chaptersData.slice(0, 5),
                     recentSignups: 0,
+                    momentum: momentumData?.map(m => m.activity_count) || [],
                 });
             }
 

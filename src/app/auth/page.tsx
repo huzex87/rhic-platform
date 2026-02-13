@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Mail, Lock, User, Phone, Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
+import { ArrowRight, Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -29,11 +29,9 @@ function AuthForm() {
     const searchParams = useSearchParams();
     const redirect = searchParams.get("redirect") || "/dashboard";
 
-    // Form state
-    const [fullName, setFullName] = useState("");
+    // Simplified form: just email + password (name collected at onboarding)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [phone, setPhone] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,19 +48,22 @@ function AuthForm() {
                 router.push(redirect);
                 router.refresh();
             } else {
-                const { error } = await supabase.auth.signUp({
+                const { data, error } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
-                        data: {
-                            full_name: fullName,
-                            phone: phone || undefined,
-                        },
-                        emailRedirectTo: `${window.location.origin}/auth/callback?redirect=${redirect}`,
+                        emailRedirectTo: `${window.location.origin}/auth/callback`,
                     },
                 });
                 if (error) throw error;
-                setSuccess("Check your email for a confirmation link to complete your registration.");
+
+                // If Supabase auto-confirms (no email verification), redirect immediately
+                if (data.session) {
+                    router.push("/onboarding");
+                    router.refresh();
+                } else {
+                    setSuccess("Check your email for a confirmation link — then you'll be redirected to set up your profile.");
+                }
             }
         } catch (err: unknown) {
             const message = err instanceof Error ? err.message : "An unexpected error occurred";
@@ -114,7 +115,7 @@ function AuthForm() {
                     </div>
                 </motion.div>
 
-                {/* Right Side: Auth Form */}
+                {/* Right Side: Simplified Auth Form */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -127,10 +128,10 @@ function AuthForm() {
 
                     <div className="space-y-2 mb-10 text-center lg:text-left">
                         <h2 className="text-3xl font-display font-black text-forest">
-                            {isLogin ? "Welcome Back" : "Create Account"}
+                            {isLogin ? "Welcome Back" : "Join in Seconds"}
                         </h2>
                         <p className="text-forest/60 font-medium">
-                            {isLogin ? "Sign in to continue your mission." : "Join the Renewed Hope Innovation movement."}
+                            {isLogin ? "Sign in to continue your mission." : "Just your email and a password — that's it."}
                         </p>
                     </div>
 
@@ -156,38 +157,6 @@ function AuthForm() {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        {!isLogin && (
-                            <>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-black text-forest/40 uppercase tracking-widest ml-1">Full Name</label>
-                                    <div className="relative">
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-forest/20 w-5 h-5" />
-                                        <input
-                                            type="text"
-                                            value={fullName}
-                                            onChange={(e) => setFullName(e.target.value)}
-                                            placeholder="Your full name"
-                                            required
-                                            className="w-full pl-12 pr-4 py-4 rounded-2xl bg-forest/5 border border-accent-red/15 focus:ring-2 focus:ring-leaf focus:border-leaf outline-none font-medium transition-all"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-black text-forest/40 uppercase tracking-widest ml-1">Phone (Optional)</label>
-                                    <div className="relative">
-                                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-forest/20 w-5 h-5" />
-                                        <input
-                                            type="tel"
-                                            value={phone}
-                                            onChange={(e) => setPhone(e.target.value)}
-                                            placeholder="+234 800 000 0000"
-                                            className="w-full pl-12 pr-4 py-4 rounded-2xl bg-forest/5 border border-accent-red/15 focus:ring-2 focus:ring-leaf focus:border-leaf outline-none font-medium transition-all"
-                                        />
-                                    </div>
-                                </div>
-                            </>
-                        )}
-
                         <div className="space-y-2">
                             <label className="text-xs font-black text-forest/40 uppercase tracking-widest ml-1">Email Address</label>
                             <div className="relative">
@@ -211,7 +180,7 @@ function AuthForm() {
                                     type={showPassword ? "text" : "password"}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="••••••••"
+                                    placeholder="Min 6 characters"
                                     required
                                     minLength={6}
                                     className="w-full pl-12 pr-12 py-4 rounded-2xl bg-forest/5 border border-accent-red/15 focus:ring-2 focus:ring-leaf focus:border-leaf outline-none font-medium transition-all"
@@ -235,12 +204,18 @@ function AuthForm() {
                                 <Loader2 className="w-6 h-6 animate-spin" />
                             ) : (
                                 <>
-                                    {isLogin ? "SIGN IN" : "CREATE ACCOUNT"}
+                                    {isLogin ? "SIGN IN" : "JOIN THE MOVEMENT"}
                                     <ArrowRight className="w-6 h-6" />
                                 </>
                             )}
                         </button>
                     </form>
+
+                    {!isLogin && (
+                        <p className="mt-5 text-center text-xs text-forest/30 font-medium">
+                            You&apos;ll set up your name, phone, and chapter location after joining.
+                        </p>
+                    )}
 
                     <div className="relative my-8">
                         <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-accent-red/10"></div></div>
@@ -253,7 +228,7 @@ function AuthForm() {
                             Google
                         </button>
                         <button className="flex items-center justify-center gap-2 py-4 rounded-xl border border-accent-red/15 hover:bg-forest/5 transition-all font-bold text-sm btn-accent">
-                            <Phone className="w-4 h-4" /> Phone OTP
+                            <Mail className="w-4 h-4" /> Phone OTP
                         </button>
                     </div>
 
