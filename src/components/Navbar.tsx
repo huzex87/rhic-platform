@@ -6,6 +6,7 @@ import { Menu, X, BarChart3, Rocket, MessageSquare, BookOpen, LogOut, UserCircle
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./AuthProvider";
+import { useNotifications } from "./NotificationProvider";
 
 const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
@@ -18,6 +19,7 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const { user, loading, signOut } = useAuth();
+    const { notifications } = useNotifications();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -62,6 +64,17 @@ export default function Navbar() {
                             </Link>
                         ))}
 
+                        {/* Strategy Room for Admins */}
+                        {(user?.user_metadata?.role === 'admin' || user?.user_metadata?.role === 'super_admin') && (
+                            <Link
+                                href="/admin/strategy"
+                                className="flex items-center gap-2 text-accent-red font-black text-[10px] uppercase tracking-wider bg-accent-red/5 px-3 py-1.5 rounded-full border border-accent-red/20 hover:bg-accent-red/10 transition-all group"
+                            >
+                                <Rocket className="w-3 h-3 group-hover:rotate-12 transition-transform" />
+                                <span>National Strategy</span>
+                            </Link>
+                        )}
+
                         {/* Auth Button */}
                         {loading ? (
                             <div className="w-28 h-10 rounded-xl bg-forest/10 animate-pulse" />
@@ -69,9 +82,15 @@ export default function Navbar() {
                             <div className="flex items-center gap-3">
                                 <Link
                                     href="/settings"
-                                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-forest/5 border border-accent-red/15 hover:bg-forest/10 transition-all group/profile"
+                                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-forest/5 border border-accent-red/15 hover:bg-forest/10 transition-all group/profile relative"
                                 >
                                     <UserCircle className="w-5 h-5 text-leaf group-hover/profile:scale-110 transition-transform" />
+                                    {notifications.length > 0 && (
+                                        <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-red opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-accent-red border-2 border-ivory"></span>
+                                        </span>
+                                    )}
                                     <span className="text-sm font-bold text-forest max-w-[100px] truncate">
                                         {user.user_metadata?.full_name || user.email?.split("@")[0]}
                                     </span>
@@ -120,6 +139,16 @@ export default function Navbar() {
                                         <span>{item.name}</span>
                                     </Link>
                                 ))}
+                                {(user?.user_metadata?.role === 'admin' || user?.user_metadata?.role === 'super_admin') && (
+                                    <Link
+                                        href="/admin/strategy"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center gap-3 text-accent-red font-black text-sm p-3 rounded-xl bg-accent-red/5 border border-accent-red/20"
+                                    >
+                                        <Rocket className="w-5 h-5" />
+                                        <span>NATIONAL STRATEGY</span>
+                                    </Link>
+                                )}
                                 {user ? (
                                     <>
                                         <Link

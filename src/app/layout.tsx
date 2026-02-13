@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import AIAssistant from "@/components/AIAssistant";
 import { AuthProvider } from "@/components/AuthProvider";
+import { NotificationProvider } from "@/components/NotificationProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,11 +30,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${outfit.variable} font-body bg-ivory text-forest antialiased`}>
         <AuthProvider>
-          <Navbar />
-          <main className="pt-28 md:pt-32 pb-12 min-h-screen">
-            {children}
-          </main>
-          <AIAssistant />
+          <NotificationProvider>
+            <Navbar />
+            <main className="pt-28 md:pt-32 pb-12 min-h-screen">
+              {children}
+            </main>
+            <AIAssistant />
+          </NotificationProvider>
           <footer className="py-12 border-t border-accent-red/10">
             <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
               <div className="flex items-center gap-2 grayscale opacity-50">

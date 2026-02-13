@@ -17,7 +17,10 @@ export interface ChapterMember {
     id: string;
     full_name: string;
     lga: string;
+    ward?: string;
     role: string;
+    is_volunteer: boolean;
+    volunteer_role?: string;
     created_at: string;
 }
 
@@ -61,7 +64,7 @@ export function useChapterData() {
             if (['coordinator', 'admin', 'super_admin'].includes(profile.role)) {
                 const { data: membersData } = await supabase
                     .from("profiles")
-                    .select("id, full_name, lga, role, created_at")
+                    .select("id, full_name, lga, ward, role, is_volunteer, volunteer_role, created_at")
                     .eq("state", profile.state)
                     .order("created_at", { ascending: false })
                     .limit(50);
@@ -76,5 +79,5 @@ export function useChapterData() {
         fetchData();
     }, [fetchData]);
 
-    return { chapter, members, loading };
+    return { chapter, members, loading, refreshData: fetchData };
 }

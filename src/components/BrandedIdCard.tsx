@@ -11,7 +11,10 @@ interface BrandedIdCardProps {
     lga: string | null;
     ward: string | null;
     role: string | null;
+    isVolunteer: boolean;
+    volunteerRole: string | null;
     memberId: string;
+    achievements?: { name: string; icon_type: string }[];
 }
 
 export default function BrandedIdCard({
@@ -22,7 +25,9 @@ export default function BrandedIdCard({
     lga,
     ward,
     role,
+    isVolunteer,
     memberId,
+    achievements = [],
 }: BrandedIdCardProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -149,6 +154,74 @@ export default function BrandedIdCard({
         ctx.fillStyle = "#00CC00";
         ctx.fillText(roleText, w / 2, 558);
 
+        // ── Volunteer Badge ──
+        if (isVolunteer) {
+            ctx.font = "bold 20px 'Inter', 'Helvetica', sans-serif";
+            const vText = "VERIFIED FIELD VOLUNTEER";
+            ctx.fillStyle = "#00CC00";
+            ctx.textAlign = "center";
+            ctx.fillText("★ " + vText + " ★", w / 2, 595);
+        }
+
+        // ── Achievement Badges ──
+        if (achievements.length > 0) {
+            const badgeW = 60;
+            const badgeGap = 20;
+            const totalWidth = achievements.length * badgeW + (achievements.length - 1) * badgeGap;
+            const startX = w / 2 - totalWidth / 2;
+            const badgeY = 340 + 120; // Radius + offset
+
+            achievements.slice(0, 5).forEach((ach, i) => {
+                const x = startX + i * (badgeW + badgeGap);
+                const centerX = x + badgeW / 2;
+                const centerY = badgeY;
+
+                // Create Gradient for the Medal
+                const badgeGrad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, badgeW / 2);
+                badgeGrad.addColorStop(0, "#00CC00");
+                badgeGrad.addColorStop(1, "#006600");
+
+                // Draw badge outer ring
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, badgeW / 2, 0, Math.PI * 2);
+                ctx.fillStyle = badgeGrad;
+                ctx.fill();
+
+                // Gold Rim
+                ctx.strokeStyle = "#FFD700";
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                // Draw a simple Vector Star instead of a placeholder emoji
+                const drawStar = (cx: number, cy: number, spikes: number, outerRadius: number, innerRadius: number) => {
+                    let rot = (Math.PI / 2) * 3;
+                    let x = cx;
+                    let y = cy;
+                    const step = Math.PI / spikes;
+
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy - outerRadius);
+                    for (let i = 0; i < spikes; i++) {
+                        x = cx + Math.cos(rot) * outerRadius;
+                        y = cy + Math.sin(rot) * outerRadius;
+                        ctx.lineTo(x, y);
+                        rot += step;
+
+                        x = cx + Math.cos(rot) * innerRadius;
+                        y = cy + Math.sin(rot) * innerRadius;
+                        ctx.lineTo(x, y);
+                        rot += step;
+                    }
+                    ctx.lineTo(cx, cy - outerRadius);
+                    ctx.closePath();
+                    ctx.fillStyle = "#FFD700";
+                    ctx.fill();
+                };
+
+                drawStar(centerX, centerY, 5, 12, 6);
+            });
+        }
+
         // ── Info grid ──
         const infoStartY = 630;
         const leftX = 120;
@@ -205,7 +278,7 @@ export default function BrandedIdCard({
         ctx.fillRect(w / 3, h - barH, w / 3, barH);
         ctx.fillStyle = "#008751";
         ctx.fillRect((w / 3) * 2, h - barH, w / 3, barH);
-    }, [fullName, email, zone, state, lga, ward, role, memberId]);
+    }, [fullName, email, zone, state, lga, ward, role, isVolunteer, memberId, achievements]);
 
     const handleDownload = () => {
         generateCard();

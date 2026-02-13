@@ -264,6 +264,8 @@ export default function OnboardingPage() {
                                 ward={location?.ward || ""}
                                 role={profileData.occupation || "supporter"}
                                 memberId={user.id}
+                                isVolunteer={false}
+                                volunteerRole={null}
                             />
 
                             <button

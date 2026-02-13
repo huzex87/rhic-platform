@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import LocationSelector, { type LocationSelection } from "@/components/LocationSelector";
 import BrandedIdCard from "@/components/BrandedIdCard";
 import { useAuth } from "@/components/AuthProvider";
+import { useAchievements } from "@/hooks/useAchievements";
 import { createClient } from "@/lib/supabase";
 
 interface Profile {
@@ -19,6 +20,8 @@ interface Profile {
     occupation: string | null;
     bio: string | null;
     role: string | null;
+    is_volunteer: boolean;
+    volunteer_role: string | null;
     created_at: string | null;
 }
 
@@ -31,6 +34,7 @@ export default function SettingsPage() {
     const [saved, setSaved] = useState(false);
     const [showLocationEditor, setShowLocationEditor] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { achievements } = useAchievements();
 
     // Editable fields
     const [fullName, setFullName] = useState("");
@@ -44,7 +48,7 @@ export default function SettingsPage() {
             const supabase = createClient();
             const { data, error } = await supabase
                 .from("profiles")
-                .select("full_name, phone, zone, state, lga, ward, occupation, bio, role, created_at")
+                .select("full_name, phone, zone, state, lga, ward, occupation, bio, role, is_volunteer, volunteer_role, created_at")
                 .eq("id", user!.id)
                 .single();
 
@@ -271,6 +275,9 @@ export default function SettingsPage() {
                     ward={profile?.ward || null}
                     role={occupation || profile?.role || "supporter"}
                     memberId={user.id}
+                    isVolunteer={profile?.is_volunteer || false}
+                    volunteerRole={profile?.volunteer_role || null}
+                    achievements={achievements}
                 />
             </motion.div>
 

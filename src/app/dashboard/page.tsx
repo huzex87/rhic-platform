@@ -12,6 +12,8 @@ import {
     Shield,
     Zap,
     Loader2,
+    Megaphone,
+    ShieldCheck,
 } from "lucide-react";
 import NigeriaMap, { ZONE_LABELS } from "@/components/NigeriaMap";
 import { useState } from "react";
@@ -19,12 +21,16 @@ import Link from "next/link";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { useAuth } from "@/components/AuthProvider";
 import { useActivities } from "@/hooks/useActivities";
+import { useFieldCommand } from "@/hooks/useFieldCommand";
+import { useChapterData } from "@/hooks/useChapterData";
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState<"map" | "zones">("map");
     const { stats, loading } = useDashboardData();
     const { activities, loading: activitiesLoading } = useActivities(5);
     const { user } = useAuth();
+    const { chapter } = useChapterData();
+    const { announcements } = useFieldCommand(chapter?.id);
 
     return (
         <div className="max-w-7xl mx-auto px-4 space-y-8">
@@ -235,6 +241,41 @@ export default function Dashboard() {
                             </div>
                         </div>
 
+                        {/* Chapter Announcements Widget */}
+                        <div className="premium-card lg:col-span-2 border-leaf/10">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-sm font-bold text-forest/40 uppercase tracking-widest flex items-center gap-2">
+                                    <Megaphone className="w-4 h-4 text-leaf" />
+                                    Chapter Field Orders
+                                </h3>
+                                <div className="text-[10px] font-black text-leaf px-2 py-1 rounded bg-leaf/5 uppercase">
+                                    {user?.user_metadata?.state || "National"}
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {announcements.length > 0 ? announcements.slice(0, 2).map((ann) => (
+                                    <div key={ann.id} className="p-4 rounded-2xl bg-forest/5 border border-forest/5 hover:border-leaf/20 transition-all">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <span className={`text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded ${ann.priority === 'High' || ann.priority === 'Urgent' ? 'bg-accent-red/10 text-accent-red' : 'bg-leaf/10 text-leaf'
+                                                }`}>
+                                                {ann.priority}
+                                            </span>
+                                            <span className="text-[9px] font-bold text-forest/20">{new Date(ann.created_at).toLocaleDateString()}</span>
+                                        </div>
+                                        <h4 className="text-sm font-black text-forest mb-1">{ann.title}</h4>
+                                        <p className="text-xs text-forest/60 line-clamp-2 font-medium">{ann.content}</p>
+                                    </div>
+                                )) : (
+                                    <div className="col-span-2 flex flex-col items-center justify-center py-6 text-center">
+                                        <div className="w-10 h-10 rounded-full bg-forest/5 flex items-center justify-center mb-2">
+                                            <Megaphone className="w-5 h-5 text-forest/10" />
+                                        </div>
+                                        <p className="text-[10px] font-bold text-forest/30 uppercase italic">No active field orders for your chapter</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
                         {/* Innovator Profile Section */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
@@ -249,13 +290,15 @@ export default function Dashboard() {
                                 <div className="w-12 h-12 rounded-xl forest-gradient flex items-center justify-center text-ivory font-black">
                                     {user?.user_metadata?.full_name?.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2) || "RH"}
                                 </div>
-                                <div>
-                                    <div className="font-display font-bold text-forest leading-tight truncate max-w-[150px]">
+                                <div className="flex flex-col">
+                                    <span className="font-display font-bold text-forest leading-tight truncate max-w-[150px]">
                                         {user?.user_metadata?.full_name || "Innovator"}
-                                    </div>
-                                    <div className="text-[10px] font-black text-leaf uppercase tracking-widest">
-                                        Verified Member
-                                    </div>
+                                    </span>
+                                    {user?.user_metadata?.is_volunteer && (
+                                        <span className="text-[8px] font-black text-leaf uppercase tracking-widest flex items-center gap-1 mt-0.5">
+                                            <ShieldCheck className="w-2.5 h-2.5" /> Verified Volunteer
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                             <div className="p-3 rounded-xl bg-white/50 border border-leaf/10 text-xs font-medium text-forest/70 leading-relaxed italic">
