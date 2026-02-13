@@ -14,7 +14,7 @@ export default function OnboardingPage() {
     const { user } = useAuth();
     const router = useRouter();
     const [step, setStep] = useState<1 | 2 | 3>(1);
-    const [location, setLocation] = useState<LocationSelection | null>(null);
+    const [loc, setLoc] = useState<LocationSelection | null>(null);
     const [profileData, setProfileData] = useState({
         phone: "",
         occupation: "",
@@ -34,16 +34,16 @@ export default function OnboardingPage() {
     }, [user]);
 
     const handleLocationSelect = (loc: LocationSelection) => {
-        setLocation(loc);
+        setLoc(loc);
     };
 
     const handleLocationComplete = () => {
-        if (!location) return;
+        if (!loc) return;
         setStep(2);
     };
 
     const handleProfileComplete = async () => {
-        if (!location || !user) return;
+        if (!loc || !user) return;
 
         setLoading(true);
         setError(null);
@@ -55,12 +55,12 @@ export default function OnboardingPage() {
             const { error: profileError } = await supabase
                 .from("profiles")
                 .update({
-                    zone: location.zone,
-                    state: location.state,
-                    lga: location.lga,
-                    ward: location.ward,
-                    polling_unit_id: location.polling_unit_id || null,
-                    polling_unit_code: location.polling_unit?.split('(')[1]?.replace(')', '') || null,
+                    zone: loc.zone,
+                    state: loc.state,
+                    lga: loc.lga,
+                    ward: loc.ward,
+                    polling_unit_id: loc.polling_unit_id || null,
+                    polling_unit_code: loc.polling_unit?.split('(')[1]?.replace(')', '') || null,
                     phone: profileData.phone,
                     occupation: profileData.occupation,
                     bio: profileData.bio,
@@ -74,7 +74,7 @@ export default function OnboardingPage() {
             const { data: chapter } = await supabase
                 .from("chapters")
                 .select("id")
-                .eq("state", location.state)
+                .eq("state", loc.state)
                 .single();
 
             if (chapter) {
@@ -96,9 +96,9 @@ export default function OnboardingPage() {
                 user_id: user.id,
                 chapter_id: chapter?.id || null,
                 type: "chapter_join",
-                title: `Joined ${location.state} chapter as ${profileData.occupation || "Supporter"}`,
+                title: `Joined ${loc.state} chapter as ${profileData.occupation || "Supporter"}`,
                 metadata: {
-                    ...location,
+                    ...loc,
                     occupation: profileData.occupation,
                 },
             });
@@ -112,8 +112,13 @@ export default function OnboardingPage() {
         }
     };
 
+    useEffect(() => {
+        if (!user && !loading) {
+            router.push("/auth");
+        }
+    }, [user, loading, router]);
+
     if (!user) {
-        if (typeof window !== "undefined") router.push("/auth");
         return null;
     }
 
@@ -145,7 +150,7 @@ export default function OnboardingPage() {
 
                             <button
                                 onClick={handleLocationComplete}
-                                disabled={!location}
+                                disabled={!loc}
                                 className="forest-gradient text-ivory w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 border border-accent-red/20 disabled:opacity-40 disabled:cursor-not-allowed"
                             >
                                 CONTINUE
@@ -253,22 +258,22 @@ export default function OnboardingPage() {
                                     Registration Complete!
                                 </h2>
                                 <p className="text-forest/60 font-medium">
-                                    Welcome to the <span className="text-forest font-bold">{location?.state}</span> Chapter.
+                                    Welcome to the <span className="text-forest font-bold">{loc?.state}</span> Chapter.
                                 </p>
                             </div>
 
                             <BrandedIdCard
                                 fullName={user.user_metadata?.full_name || "Innovator"}
                                 email={user.email || ""}
-                                zone={location?.zone || ""}
-                                state={location?.state || ""}
-                                lga={location?.lga || ""}
-                                ward={location?.ward || ""}
+                                zone={loc?.zone || ""}
+                                state={loc?.state || ""}
+                                lga={loc?.lga || ""}
+                                ward={loc?.ward || ""}
                                 role={profileData.occupation || "supporter"}
                                 memberId={user.id}
                                 isVolunteer={false}
                                 volunteerRole={null}
-                                pollingUnit={location?.polling_unit || null}
+                                pollingUnit={loc?.polling_unit || null}
                             />
 
                             <button

@@ -52,7 +52,7 @@ function AuthForm() {
                     email,
                     password,
                     options: {
-                        emailRedirectTo: `${window.location.origin}/auth/callback`,
+                        emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback`,
                     },
                 });
                 if (error) throw error;

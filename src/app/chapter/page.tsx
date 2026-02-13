@@ -17,6 +17,8 @@ import { useAuth } from "@/components/AuthProvider";
 import { useFieldCommand } from "@/hooks/useFieldCommand";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import FieldReportModal from "@/components/FieldReportModal";
+import IntelligenceFeed from "@/components/IntelligenceFeed";
 
 export default function CoordinatorPanel() {
     const { user } = useAuth();
@@ -29,6 +31,7 @@ export default function CoordinatorPanel() {
     const { announcements, postAnnouncement, promoteToVolunteer } = useFieldCommand(chapter?.id);
 
     const [showBroadcastModal, setShowBroadcastModal] = useState(false);
+    const [showReportModal, setShowReportModal] = useState(false);
     const [broadcastForm, setBroadcastForm] = useState({ title: '', content: '', priority: 'Normal' as 'Normal' | 'High' | 'Urgent' });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedLgaFilter, setSelectedLgaFilter] = useState<string | null>(null);
@@ -88,19 +91,32 @@ export default function CoordinatorPanel() {
                         Chapter <span className="text-leaf italic">Command Panel</span>
                     </h1>
                 </div>
-                {isCoordinator && (
+                {(isCoordinator || user?.user_metadata?.is_volunteer) && (
                     <div className="flex gap-4">
-                        <button
-                            onClick={() => setShowBroadcastModal(true)}
-                            className="glass px-6 py-3 rounded-xl font-bold text-forest flex items-center gap-2 border border-leaf/20 hover:bg-leaf/5 transition-colors"
-                        >
-                            <Megaphone className="w-4 h-4 text-leaf" />
-                            Command Broadcast
-                        </button>
-                        <button className="forest-gradient text-ivory px-6 py-3 rounded-xl font-bold shadow-lg flex items-center gap-2 group">
-                            <Plus className="w-4 h-4 text-leaf group-hover:rotate-90 transition-transform" />
-                            Add LGA Rep
-                        </button>
+                        {user?.user_metadata?.is_volunteer && (
+                            <button
+                                onClick={() => setShowReportModal(true)}
+                                className="glass px-6 py-3 rounded-xl font-bold text-leaf flex items-center gap-2 border border-leaf/20 hover:bg-leaf/5 transition-colors shadow-lg"
+                            >
+                                <Plus className="w-4 h-4" />
+                                Submit Field Intel
+                            </button>
+                        )}
+                        {isCoordinator && (
+                            <>
+                                <button
+                                    onClick={() => setShowBroadcastModal(true)}
+                                    className="glass px-6 py-3 rounded-xl font-bold text-forest flex items-center gap-2 border border-leaf/20 hover:bg-leaf/5 transition-colors"
+                                >
+                                    <Megaphone className="w-4 h-4 text-leaf" />
+                                    Command Broadcast
+                                </button>
+                                <button className="forest-gradient text-ivory px-6 py-3 rounded-xl font-bold shadow-lg flex items-center gap-2 group">
+                                    <Plus className="w-4 h-4 text-leaf group-hover:rotate-90 transition-transform" />
+                                    Add LGA Rep
+                                </button>
+                            </>
+                        )}
                     </div>
                 )}
             </div>
@@ -263,6 +279,14 @@ export default function CoordinatorPanel() {
                             </div>
                         </div>
                         <BarChart3 className="absolute -bottom-6 -right-6 w-32 h-32 text-ivory/5 group-hover:scale-110 transition-transform" />
+                    </div>
+
+                    <div className="space-y-4">
+                        <h3 className="text-sm font-black text-forest uppercase tracking-widest flex items-center gap-2 ml-2">
+                            <ShieldCheck className="w-4 h-4 text-leaf" />
+                            Live Intel Stream
+                        </h3>
+                        <IntelligenceFeed chapterId={chapter.id} />
                     </div>
                 </div>
             </div>
@@ -476,6 +500,13 @@ export default function CoordinatorPanel() {
                     </div>
                 )}
             </AnimatePresence>
+
+            <FieldReportModal
+                isOpen={showReportModal}
+                onClose={() => setShowReportModal(false)}
+                chapterId={chapter.id}
+                pollingUnitId={user?.user_metadata?.polling_unit_id}
+            />
         </div>
     );
 }

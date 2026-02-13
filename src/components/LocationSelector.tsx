@@ -20,7 +20,7 @@ export interface LocationSelection {
 
 interface LocationSelectorProps {
     value?: Partial<LocationSelection>;
-    onChange: (location: LocationSelection) => void;
+    onChange: (loc: LocationSelection) => void;
     className?: string;
 }
 

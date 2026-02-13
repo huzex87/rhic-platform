@@ -10,6 +10,7 @@ interface BrandedIdCardProps {
     state: string | null;
     lga: string | null;
     ward: string | null;
+    pollingUnit?: string | null;
     role: string | null;
     isVolunteer: boolean;
     volunteerRole: string | null;
@@ -19,11 +20,11 @@ interface BrandedIdCardProps {
 
 export default function BrandedIdCard({
     fullName,
-    email,
     zone,
     state,
     lga,
     ward,
+    pollingUnit,
     role,
     isVolunteer,
     memberId,
@@ -233,7 +234,7 @@ export default function BrandedIdCard({
             { label: "STATE", value: state || "Not Set", x: rightX },
             { label: "LOCAL GOVT. AREA", value: lga || "Not Set", x: leftX },
             { label: "WARD", value: ward || "Not Set", x: rightX },
-            { label: "EMAIL", value: email, x: leftX },
+            { label: "POLLING UNIT", value: pollingUnit || "Not Assigned", x: leftX },
             { label: "MEMBER ID", value: memberId.slice(0, 8).toUpperCase(), x: rightX },
         ];
 
@@ -261,7 +262,7 @@ export default function BrandedIdCard({
         ctx.fillRect(0, h - 120, w, 4);
 
         // ── Bottom section ──
-        ctx.fillStyle = "rgba(255.255,255,0.3)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
         ctx.font = "bold 16px 'Inter', 'Helvetica', sans-serif";
         ctx.textAlign = "center";
         ctx.fillText("rhic-platform.vercel.app", w / 2, h - 70);
@@ -278,7 +279,7 @@ export default function BrandedIdCard({
         ctx.fillRect(w / 3, h - barH, w / 3, barH);
         ctx.fillStyle = "#008751";
         ctx.fillRect((w / 3) * 2, h - barH, w / 3, barH);
-    }, [fullName, email, zone, state, lga, ward, role, isVolunteer, memberId, achievements]);
+    }, [fullName, zone, state, lga, ward, pollingUnit, role, isVolunteer, memberId, achievements]);
 
     const handleDownload = () => {
         generateCard();

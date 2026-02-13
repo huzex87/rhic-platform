@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import NigeriaMap from '@/components/NigeriaMap';
 import { useStrategyData } from '@/hooks/useStrategyData';
+import IntelligenceFeed from '@/components/IntelligenceFeed';
 
 // Strategy Room Component - Real-time aggregate visualization
 
@@ -163,6 +164,19 @@ export default function StrategyRoom() {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            {/* National Intelligence Stream */}
+            <div className="premium-card">
+                <div className="flex items-center justify-between mb-8">
+                    <div>
+                        <h3 className="text-xl font-black text-forest">National Intelligence <span className="text-leaf italic">Stream</span></h3>
+                        <p className="text-xs text-forest/40 font-bold uppercase tracking-widest mt-1">Real-time Verified Field Intelligence</p>
+                    </div>
+                </div>
+                <div className="max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                    <IntelligenceFeed isNational />
                 </div>
             </div>
         </div>

@@ -99,7 +99,7 @@ export default function SettingsPage() {
         setSaving(false);
     };
 
-    const handleLocationUpdate = async (location: LocationSelection) => {
+    const handleLocationUpdate = async (loc: LocationSelection) => {
         if (!user) return;
         setSaving(true);
         setError(null);
@@ -108,12 +108,12 @@ export default function SettingsPage() {
         const { error: updateError } = await supabase
             .from("profiles")
             .update({
-                zone: location.zone,
-                state: location.state,
-                lga: location.lga,
-                ward: location.ward,
-                polling_unit_id: location.polling_unit_id || null,
-                polling_unit_code: location.polling_unit?.split('(')[1]?.replace(')', '') || null,
+                zone: loc.zone,
+                state: loc.state,
+                lga: loc.lga,
+                ward: loc.ward,
+                polling_unit_id: loc.polling_unit_id || null,
+                polling_unit_code: loc.polling_unit?.split('(')[1]?.replace(')', '') || null,
                 updated_at: new Date().toISOString(),
             })
             .eq("id", user.id);
@@ -123,7 +123,7 @@ export default function SettingsPage() {
         } else {
             setSaved(true);
             setTimeout(() => setSaved(false), 3000);
-            setProfile((prev) => prev ? { ...prev, ...location } : prev);
+            setProfile((prev) => prev ? { ...prev, ...loc } : prev);
             setShowLocationEditor(false);
         }
         setSaving(false);
@@ -134,8 +134,13 @@ export default function SettingsPage() {
         router.push("/");
     };
 
+    useEffect(() => {
+        if (!user && !loading) {
+            router.push("/auth");
+        }
+    }, [user, loading, router]);
+
     if (!user) {
-        router.push("/auth");
         return null;
     }
 
@@ -277,6 +282,7 @@ export default function SettingsPage() {
                     state={profile?.state || null}
                     lga={profile?.lga || null}
                     ward={profile?.ward || null}
+                    pollingUnit={profile?.polling_unit_code || null}
                     role={occupation || profile?.role || "supporter"}
                     memberId={user.id}
                     isVolunteer={profile?.is_volunteer || false}
