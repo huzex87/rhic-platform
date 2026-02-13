@@ -1,4 +1,4 @@
-# RHIC Platform Branding Pivot: Forest Green Identity
+# RHIC Platform Strategic White Paper: National Mobilization Architecture
 
 ## Executive Summary
 This document outlines the strategic transition of the RHIC (Renewed Hope Innovation Centre) platform from its legacy Navy/Gold aesthetic to a modernized Forest Green, Leaf Green, and Accent Red identity. This pivot aligns the platform with national values of growth, renewal, and vibrant innovation while maintaining its "Political Prestige" and professional standard.
@@ -92,9 +92,10 @@ A comprehensive cascading location selection system covering Nigeria's full admi
 
 **Implementation**:
 - **Data Source**: `public/data/nigeria-geo.json` (117KB) — structured as `Zone → State → LGA → Wards[]`.
-- **LocationSelector Component**: Cascading dropdown with animated reveal (Zone → State → LGA → Ward), built-in search filtering for long lists, progress indicator, and RHIC branding.
-- **Onboarding Flow** (`/onboarding`): Post-signup page where users select their location and provide professional background (Occupation, Bio), automatically assigning them to their state chapter and generating a digital ID card.
-- **Settings & Profile Management** (`/settings`): Enables users to manage their full professional profile, update their location, and download/share their "world-class" Branded ID card.
+- **LocationSelector Component**: Cascading dropdown with animated reveal (Zone → State → LGA → Ward → Polling Unit), built-in search filtering for long lists, progress indicator, and RHIC branding.
+- **Polling Unit Infrastructure**: Dynamic high-performance lookup for 176,000+ Polling Units via Supabase, enabling molecular-level granularity for coordination and volunteer assignment.
+- **Onboarding Flow** (`/onboarding`): Post-signup page where users select their location down to the Polling Unit and provide professional background, automatically assigning them to their state chapter/PU and generating a digital ID card.
+- **Settings & Profile Management** (`/settings`): Enables users to manage their full professional profile, update their hyper-local location, and download/share their "world-class" Branded ID card.
 - **Dynamic Missions & Pipeline**: Real-time engagement systems for mobilization and policy innovation, powered by custom hooks (`useMissions`, `useProposals`) and secure Supabase RPCs.
 - **Chapter Command & Control**: Data-driven regional management interface with role-based access for coordinators.
 
@@ -137,7 +138,18 @@ The platform has achieved full status for national-level mobilization and operat
 
 ### 14. National Strategy Room
 - **Strategic Visualization**: A high-prestige interface for national leadership to monitor momentum, regional supporter density, and sentiment indices across all 6 geopolitical zones.
-- **Geospatial Intelligence**: Cross-state mobilization analysis integrated with a state-of-the-art interactive map.
+- **Geospatial Intelligence**: Cross-state mobilization analysis integrated with a state-of-the-art interactive map and "Molecular" drill-down.
+- **Molecular Saturation**: Real-time tracking of volunteer density at the Polling Unit level, identifying "Cold Zones" for immediate resource prioritization.
+
+## Phase 7: Field Intelligence & Verification Ops (Upcoming)
+The next evolution of the RHIC platform focuses on verifiable field intelligence:
+- **Media-Backed Field Reports**: Volunteers will upload verified media (photos/videos) from Polling Units to confirm mobilization activities.
+- **Real-time Command Feed**: A live intelligence stream in the Strategy Room featuring verified media from the field for executive situational awareness.
+
+## Phase 8: Elite Leaderboards & Gamification (Upcoming)
+Driving 1M+ volunteers through high-resolution competitive engagement:
+- **Verified Command Leaderboards**: Ranking mobile units based on actual, verified PU saturation vs. logged support.
+- **Elite Command Ranks**: Promotion-based tiers (Field Marshal, Unit Commander) with social ID card badges for top performing mobilizers.
 
 ## Production Status & Readiness
 The RHIC platform is now 100% production-ready, passing strict TypeScript enforcement and large-scale build optimizations. It stands as a world-class, professional tool for national digital mobilization, meeting the highest standards of security, design, and performance.

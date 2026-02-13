@@ -9,7 +9,6 @@ import {
     ShieldAlert,
     Zap,
     Globe,
-    PieChart,
     Radio,
     Terminal,
 } from 'lucide-react';

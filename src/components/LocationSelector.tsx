@@ -33,7 +33,6 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
     const [lga, setLga] = useState(value?.lga || "");
     const [ward, setWard] = useState(value?.ward || "");
     const [pollingUnit, setPollingUnit] = useState(value?.polling_unit || "");
-    const [pollingUnitId, setPollingUnitId] = useState(value?.polling_unit_id || "");
     const [pollingUnits, setPollingUnits] = useState<{ id: string; name: string; code: string }[]>([]);
     const [loadingPUs, setLoadingPUs] = useState(false);
 
@@ -113,7 +112,6 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
     const handleWardChange = useCallback((val: string) => {
         setWard(val);
         setPollingUnit("");
-        setPollingUnitId("");
         if (zone && state && lga && val) {
             onChange({ zone, state, lga, ward: val });
         }
@@ -123,7 +121,6 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
         const selected = pollingUnits.find(p => p.name === val);
         if (selected) {
             setPollingUnit(selected.name);
-            setPollingUnitId(selected.id);
             onChange({
                 zone,
                 state,
