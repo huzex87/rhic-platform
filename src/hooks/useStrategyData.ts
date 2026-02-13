@@ -16,6 +16,9 @@ export interface StrategyStats {
     active_volunteers: string;
     sentiment_score: number;
     top_zones: ZoneStat[];
+    pu_saturation: number;
+    pu_coverage: number; // Percent of PUs with at least 1 volunteer
+    total_pus: number;
 }
 
 export function useStrategyData() {
@@ -44,6 +47,19 @@ export function useStrategyData() {
                 .limit(1)
                 .single();
 
+            // 4. Fetch Polling Unit Stats
+            const { count: puCount } = await supabase
+                .from("polling_units")
+                .select("*", { count: 'exact', head: true });
+
+            // Count PUs with at least one volunteer
+            const { data: activePUs } = await supabase
+                .from("profiles")
+                .select("polling_unit_id")
+                .not("polling_unit_id", "is", null);
+
+            const uniqueActivePUs = new Set(activePUs?.map(p => p.polling_unit_id)).size;
+
             if (chaptersData) {
                 const totalSupporters = chaptersData.reduce((sum, c) => sum + (c.supporter_count || 0), 0);
 
@@ -70,8 +86,11 @@ export function useStrategyData() {
                     active_volunteers: volunteerCount
                         ? (volunteerCount > 1000 ? `${(volunteerCount / 1000).toFixed(1)}K` : volunteerCount.toString())
                         : "0",
-                    sentiment_score: 78, // Derived from activity analytics in a full scale-up
-                    top_zones
+                    sentiment_score: 78,
+                    top_zones,
+                    pu_saturation: puCount ? Math.floor((uniqueActivePUs / puCount) * 100) : 0,
+                    pu_coverage: uniqueActivePUs,
+                    total_pus: puCount || 0
                 });
             }
             setLoading(false);

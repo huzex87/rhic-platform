@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { ChevronDown, MapPin, Loader2, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { createClient } from "@/lib/supabase";
+
 // Type for the full geo data: Zone -> State -> LGA -> Ward[]
 type GeoData = Record<string, Record<string, Record<string, string[]>>>;
 
@@ -12,6 +14,8 @@ export interface LocationSelection {
     state: string;
     lga: string;
     ward: string;
+    polling_unit?: string;
+    polling_unit_id?: string;
 }
 
 interface LocationSelectorProps {
@@ -28,6 +32,10 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
     const [state, setState] = useState(value?.state || "");
     const [lga, setLga] = useState(value?.lga || "");
     const [ward, setWard] = useState(value?.ward || "");
+    const [pollingUnit, setPollingUnit] = useState(value?.polling_unit || "");
+    const [pollingUnitId, setPollingUnitId] = useState(value?.polling_unit_id || "");
+    const [pollingUnits, setPollingUnits] = useState<{ id: string; name: string; code: string }[]>([]);
+    const [loadingPUs, setLoadingPUs] = useState(false);
 
     // Load geo data on mount
     useEffect(() => {
@@ -39,6 +47,37 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
             })
             .catch(() => setLoading(false));
     }, []);
+
+    // Fetch Polling Units when ward changes
+    useEffect(() => {
+        if (!ward || !lga || !state) {
+            setPollingUnits([]);
+            return;
+        }
+
+        async function fetchPUs() {
+            setLoadingPUs(true);
+            const supabase = createClient();
+            const { data, error } = await supabase
+                .from("polling_units")
+                .select("id, pu_name, pu_code")
+                .eq("state", state)
+                .eq("lga", lga)
+                .eq("ward", ward)
+                .order("pu_name");
+
+            if (!error && data) {
+                setPollingUnits(data.map(d => ({
+                    id: d.id,
+                    name: `${d.pu_name} (${d.pu_code})`,
+                    code: d.pu_code
+                })));
+            }
+            setLoadingPUs(false);
+        }
+
+        fetchPUs();
+    }, [ward, lga, state]);
 
     // Derived options
     const zones = geoData ? Object.keys(geoData).sort() : [];
@@ -52,25 +91,49 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
         setState("");
         setLga("");
         setWard("");
+        setPollingUnit("");
+        setPollingUnitId("");
     }, []);
 
     const handleStateChange = useCallback((val: string) => {
         setState(val);
         setLga("");
         setWard("");
+        setPollingUnit("");
+        setPollingUnitId("");
     }, []);
 
     const handleLgaChange = useCallback((val: string) => {
         setLga(val);
         setWard("");
+        setPollingUnit("");
+        setPollingUnitId("");
     }, []);
 
     const handleWardChange = useCallback((val: string) => {
         setWard(val);
+        setPollingUnit("");
+        setPollingUnitId("");
         if (zone && state && lga && val) {
             onChange({ zone, state, lga, ward: val });
         }
     }, [zone, state, lga, onChange]);
+
+    const handlePUChange = useCallback((val: string) => {
+        const selected = pollingUnits.find(p => p.name === val);
+        if (selected) {
+            setPollingUnit(selected.name);
+            setPollingUnitId(selected.id);
+            onChange({
+                zone,
+                state,
+                lga,
+                ward,
+                polling_unit: selected.name,
+                polling_unit_id: selected.id
+            });
+        }
+    }, [zone, state, lga, ward, pollingUnits, onChange]);
 
     if (loading) {
         return (
@@ -86,6 +149,7 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
         { label: "State", done: !!state },
         { label: "LGA", done: !!lga },
         { label: "Ward", done: !!ward },
+        { label: "PU", done: !!pollingUnit },
     ];
 
     return (
@@ -95,8 +159,8 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
                 {completionSteps.map((step, i) => (
                     <div key={step.label} className="flex items-center gap-1">
                         <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black transition-all ${step.done
-                                ? "bg-leaf text-ivory"
-                                : "bg-forest/5 text-forest/30"
+                            ? "bg-leaf text-ivory"
+                            : "bg-forest/5 text-forest/30"
                             }`}>
                             {step.done ? <Check className="w-3 h-3" /> : i + 1}
                         </div>
@@ -104,7 +168,7 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
                             }`}>
                             {step.label}
                         </span>
-                        {i < 3 && <div className={`w-4 h-[2px] mx-1 ${step.done ? "bg-leaf" : "bg-forest/10"}`} />}
+                        {i < 4 && <div className={`w-4 h-[2px] mx-1 ${step.done ? "bg-leaf" : "bg-forest/10"}`} />}
                     </div>
                 ))}
             </div>
@@ -163,6 +227,22 @@ export default function LocationSelector({ value, onChange, className = "" }: Lo
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Polling Unit Selector */}
+            <AnimatePresence>
+                {ward && (
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
+                        <CascadeSelect
+                            label="Polling Unit"
+                            value={pollingUnit}
+                            options={pollingUnits.map(p => p.name)}
+                            onChange={handlePUChange}
+                            placeholder={loadingPUs ? "Decrypting Units..." : "Select Polling Unit"}
+                            loading={loadingPUs}
+                        />
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
@@ -175,6 +255,7 @@ function CascadeSelect({
     options,
     onChange,
     placeholder,
+    loading,
 }: {
     label: string;
     icon?: React.ReactNode;
@@ -182,6 +263,7 @@ function CascadeSelect({
     options: string[];
     onChange: (val: string) => void;
     placeholder: string;
+    loading?: boolean;
 }) {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
@@ -203,7 +285,14 @@ function CascadeSelect({
                     className={`w-full text-left pl-4 pr-10 py-4 rounded-2xl bg-forest/5 border font-medium transition-all ${open ? "border-leaf ring-2 ring-leaf/20" : "border-accent-red/15 hover:border-accent-red/30"
                         } ${value ? "text-forest" : "text-forest/40"}`}
                 >
-                    {value || placeholder}
+                    {loading ? (
+                        <div className="flex items-center gap-2">
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                            <span>{placeholder}</span>
+                        </div>
+                    ) : (
+                        value || placeholder
+                    )}
                     <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-forest/30 transition-transform ${open ? "rotate-180" : ""}`} />
                 </button>
 
@@ -243,8 +332,8 @@ function CascadeSelect({
                                             setSearch("");
                                         }}
                                         className={`w-full text-left px-4 py-3 text-sm font-medium transition-all hover:bg-leaf/5 ${value === option
-                                                ? "bg-leaf/10 text-forest font-bold"
-                                                : "text-forest/70"
+                                            ? "bg-leaf/10 text-forest font-bold"
+                                            : "text-forest/70"
                                             }`}
                                     >
                                         <div className="flex items-center justify-between">

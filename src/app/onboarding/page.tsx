@@ -59,6 +59,8 @@ export default function OnboardingPage() {
                     state: location.state,
                     lga: location.lga,
                     ward: location.ward,
+                    polling_unit_id: location.polling_unit_id || null,
+                    polling_unit_code: location.polling_unit?.split('(')[1]?.replace(')', '') || null,
                     phone: profileData.phone,
                     occupation: profileData.occupation,
                     bio: profileData.bio,
@@ -266,6 +268,7 @@ export default function OnboardingPage() {
                                 memberId={user.id}
                                 isVolunteer={false}
                                 volunteerRole={null}
+                                pollingUnit={location?.polling_unit || null}
                             />
 
                             <button

@@ -20,6 +20,8 @@ interface Profile {
     occupation: string | null;
     bio: string | null;
     role: string | null;
+    polling_unit_id: string | null;
+    polling_unit_code: string | null;
     is_volunteer: boolean;
     volunteer_role: string | null;
     created_at: string | null;
@@ -48,7 +50,7 @@ export default function SettingsPage() {
             const supabase = createClient();
             const { data, error } = await supabase
                 .from("profiles")
-                .select("full_name, phone, zone, state, lga, ward, occupation, bio, role, is_volunteer, volunteer_role, created_at")
+                .select("full_name, phone, zone, state, lga, ward, polling_unit_id, polling_unit_code, occupation, bio, role, is_volunteer, volunteer_role, created_at")
                 .eq("id", user!.id)
                 .single();
 
@@ -110,6 +112,8 @@ export default function SettingsPage() {
                 state: location.state,
                 lga: location.lga,
                 ward: location.ward,
+                polling_unit_id: location.polling_unit_id || null,
+                polling_unit_code: location.polling_unit?.split('(')[1]?.replace(')', '') || null,
                 updated_at: new Date().toISOString(),
             })
             .eq("id", user.id);
@@ -306,6 +310,7 @@ export default function SettingsPage() {
                                 { label: "State", value: profile.state },
                                 { label: "LGA", value: profile.lga },
                                 { label: "Ward", value: profile.ward },
+                                { label: "Polling Unit", value: profile.polling_unit_code ? `PU: ${profile.polling_unit_code}` : "Not Assigned" },
                             ].map((item) => (
                                 <div key={item.label} className="p-4 rounded-2xl bg-forest/5 border border-accent-red/10">
                                     <div className="text-[10px] font-black text-forest/30 uppercase tracking-widest">{item.label}</div>
@@ -340,7 +345,13 @@ export default function SettingsPage() {
                         className="pt-4 border-t border-accent-red/10 space-y-5"
                     >
                         <LocationSelector
-                            value={profile ? { zone: profile.zone || "", state: profile.state || "", lga: profile.lga || "", ward: profile.ward || "" } : undefined}
+                            value={profile ? {
+                                zone: profile.zone || "",
+                                state: profile.state || "",
+                                lga: profile.lga || "",
+                                ward: profile.ward || "",
+                                polling_unit_id: profile.polling_unit_id || ""
+                            } : undefined}
                             onChange={handleLocationUpdate}
                         />
                     </motion.div>

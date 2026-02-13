@@ -79,7 +79,14 @@ export default function StrategyRoom() {
                     <StatCard title="National Momentum" value={`${stats.national_momentum}%`} icon={Zap} color="text-leaf" trend="+4.2%" />
                     <StatCard title="Total Outreach" value={stats.total_reach} icon={Globe} color="text-forest" trend="+120k" />
                     <StatCard title="Verified Force" value={stats.active_volunteers} icon={ShieldAlert} color="text-accent-red" trend="+1.2k" />
-                    <StatCard title="Sentiment Index" value={`${stats.sentiment_score}/100`} icon={PieChart} color="text-leaf" trend="Stable" />
+                    <StatCard
+                        title="Molecular Saturation"
+                        value={`${stats.pu_saturation}%`}
+                        icon={TrendingUp}
+                        color="text-leaf"
+                        trend="Cold Zone Analysis"
+                        subtext={`${stats.pu_coverage} / ${stats.total_pus} PUs Covered`}
+                    />
                 </div>
             )}
 
@@ -163,7 +170,7 @@ export default function StrategyRoom() {
     );
 }
 
-function StatCard({ title, value, icon: Icon, trend }: { title: string; value: string; icon: React.ElementType; color?: string; trend: string }) {
+function StatCard({ title, value, icon: Icon, trend, subtext }: { title: string; value: string; icon: React.ElementType; color?: string; trend: string; subtext?: string }) {
     return (
         <div className="premium-card group hover:scale-[1.02] transition-all">
             <div className="flex justify-between items-start mb-4">
@@ -176,7 +183,10 @@ function StatCard({ title, value, icon: Icon, trend }: { title: string; value: s
             </div>
             <div>
                 <p className="text-xs font-bold text-forest/30 uppercase tracking-widest mb-1">{title}</p>
-                <p className={`text-3xl font-black text-forest tabular-nums tracking-tighter`}>{value}</p>
+                <div className="flex items-baseline gap-2">
+                    <p className={`text-3xl font-black text-forest tabular-nums tracking-tighter`}>{value}</p>
+                    {subtext && <span className="text-[10px] font-black text-forest/40 uppercase tracking-tighter">{subtext}</span>}
+                </div>
             </div>
         </div>
     );
