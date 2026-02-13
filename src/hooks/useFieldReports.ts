@@ -21,6 +21,7 @@ export interface FieldReport {
     profiles?: {
         full_name: string;
         role: string;
+        tier?: string;
     };
     polling_units?: {
         pu_name: string;
@@ -44,7 +45,7 @@ export function useFieldReports(chapterId?: string) {
             .from("field_reports")
             .select(`
                 *,
-                profiles (full_name, role),
+                profiles (full_name, role, tier),
                 polling_units (pu_name, pu_code, ward, lga)
             `)
             .order("created_at", { ascending: false });

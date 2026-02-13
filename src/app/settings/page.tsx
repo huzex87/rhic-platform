@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { User, MapPin, Save, Loader2, CheckCircle, LogOut, Shield, CreditCard } from "lucide-react";
+import { User, MapPin, Save, Loader2, CheckCircle, LogOut, Shield, CreditCard, Trophy, Star, Medal, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import LocationSelector, { type LocationSelection } from "@/components/LocationSelector";
 import BrandedIdCard from "@/components/BrandedIdCard";
 import { useAuth } from "@/components/AuthProvider";
 import { useAchievements } from "@/hooks/useAchievements";
 import { createClient } from "@/lib/supabase";
+import PrestigeBadge, { UserTier } from "@/components/PrestigeBadge";
 
 interface Profile {
     full_name: string | null;
@@ -25,6 +26,8 @@ interface Profile {
     is_volunteer: boolean;
     volunteer_role: string | null;
     created_at: string | null;
+    reputation_score: number;
+    tier: string;
 }
 
 export default function SettingsPage() {
@@ -50,7 +53,7 @@ export default function SettingsPage() {
             const supabase = createClient();
             const { data, error } = await supabase
                 .from("profiles")
-                .select("full_name, phone, zone, state, lga, ward, polling_unit_id, polling_unit_code, occupation, bio, role, is_volunteer, volunteer_role, created_at")
+                .select("full_name, phone, zone, state, lga, ward, polling_unit_id, polling_unit_code, occupation, bio, role, is_volunteer, volunteer_role, created_at, reputation_score, tier")
                 .eq("id", user!.id)
                 .single();
 
@@ -258,6 +261,72 @@ export default function SettingsPage() {
                 </button>
             </motion.div>
 
+            {/* Prestige & Gamification Card */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12 }}
+                className="premium-card p-8 space-y-6 overflow-hidden relative"
+            >
+                {/* Background Decoration */}
+                <div className="absolute top-0 right-0 p-8 opacity-5">
+                    <Trophy className="w-32 h-32 text-gold rotate-12" />
+                </div>
+
+                <div className="flex items-center gap-3 pb-4 border-b border-accent-red/10 relative z-10">
+                    <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center border border-gold/20">
+                        <Star className="w-5 h-5 text-gold" />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-display font-black text-forest italic uppercase tracking-tight">Your <span className="text-gold">Prestige</span></h2>
+                        <p className="text-xs text-forest/40 font-medium tracking-tight">Career rank and mobilization impact score</p>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                    {/* Rank Badge */}
+                    <div className="flex flex-col items-center justify-center p-6 rounded-3xl bg-forest-glass border border-accent-red/10 text-center space-y-3">
+                        <PrestigeBadge tier={profile?.tier as UserTier || 'Supporter'} size="lg" showLabel />
+                        <p className="text-[10px] font-black text-forest/30 uppercase tracking-[0.2em]">Current Tier</p>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="col-span-2 grid grid-cols-2 gap-4">
+                        <div className="p-4 rounded-2xl bg-forest/5 border border-forest/10">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Zap className="w-3 h-3 text-leaf" />
+                                <span className="text-[10px] font-black text-forest/40 uppercase tracking-widest">Reputation</span>
+                            </div>
+                            <p className="text-3xl font-black text-forest italic leading-none">{profile?.reputation_score?.toLocaleString() || 0}</p>
+                            <p className="text-[10px] font-bold text-leaf mt-2 uppercase tracking-tight">+50 more to next rank</p>
+                        </div>
+                        <div className="p-4 rounded-2xl bg-forest/5 border border-forest/10">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Medal className="w-3 h-3 text-accent-red" />
+                                <span className="text-[10px] font-black text-forest/40 uppercase tracking-widest">Global Rank</span>
+                            </div>
+                            <p className="text-3xl font-black text-forest italic leading-none">#1,402</p>
+                            <p className="text-[10px] font-bold text-forest/30 mt-2 uppercase tracking-tight">Across all states</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Progress Bar (Mock) */}
+                <div className="space-y-2 relative z-10">
+                    <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-forest/40">
+                        <span>Career Progress</span>
+                        <span>{Math.round(((profile?.reputation_score || 0) / 500) * 100)}% to Vanguard</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-forest/5 overflow-hidden border border-forest/10">
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${Math.min(((profile?.reputation_score || 0) / 500) * 100, 100)}%` }}
+                            className="h-full leaf-gradient"
+                        />
+                    </div>
+                </div>
+            </motion.div>
+
             {/* Branded ID Card */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -277,14 +346,14 @@ export default function SettingsPage() {
 
                 <BrandedIdCard
                     fullName={fullName || "RHIC Member"}
-                    email={user.email || ""}
+                    email={user?.email || ""}
                     zone={profile?.zone || null}
                     state={profile?.state || null}
                     lga={profile?.lga || null}
                     ward={profile?.ward || null}
                     pollingUnit={profile?.polling_unit_code || null}
                     role={occupation || profile?.role || "supporter"}
-                    memberId={user.id}
+                    memberId={user?.id || ""}
                     isVolunteer={profile?.is_volunteer || false}
                     volunteerRole={profile?.volunteer_role || null}
                     achievements={achievements}

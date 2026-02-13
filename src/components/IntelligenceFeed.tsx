@@ -5,6 +5,7 @@ import { ShieldCheck, ShieldAlert, Clock, MapPin, User, CheckCircle, XCircle } f
 import { formatDistanceToNow } from "date-fns";
 import { useFieldReports } from "@/hooks/useFieldReports";
 import { useAuth } from "@/components/AuthProvider";
+import PrestigeBadge, { UserTier } from "./PrestigeBadge";
 
 interface IntelligenceFeedProps {
     chapterId?: string;
@@ -86,9 +87,12 @@ export default function IntelligenceFeed({ chapterId }: IntelligenceFeedProps) {
                                             <User className="w-4 h-4 text-forest/40" />
                                         </div>
                                         <div>
-                                            <p className="text-[10px] font-black text-forest uppercase tracking-widest leading-none">
-                                                {report.profiles?.full_name || "Unknown Agent"}
-                                            </p>
+                                            <div className="flex items-center gap-2">
+                                                <p className="text-[10px] font-black text-forest uppercase tracking-widest leading-none">
+                                                    {report.profiles?.full_name || "Unknown Agent"}
+                                                </p>
+                                                <PrestigeBadge tier={report.profiles?.tier as UserTier || 'Supporter'} size="sm" />
+                                            </div>
                                             <p className="text-[9px] font-bold text-forest/30 uppercase tracking-widest mt-0.5">
                                                 {report.profiles?.role || "Field Volunteer"}
                                             </p>

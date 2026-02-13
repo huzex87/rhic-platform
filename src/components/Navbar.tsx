@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./AuthProvider";
 import { useNotifications } from "./NotificationProvider";
+import PrestigeBadge, { UserTier } from "./PrestigeBadge";
 
 const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
@@ -67,11 +68,11 @@ export default function Navbar() {
                         {/* Strategy Room for Admins */}
                         {(user?.user_metadata?.role === 'admin' || user?.user_metadata?.role === 'super_admin') && (
                             <Link
-                                href="/admin/strategy"
-                                className="flex items-center gap-2 text-accent-red font-black text-[10px] uppercase tracking-wider bg-accent-red/5 px-3 py-1.5 rounded-full border border-accent-red/20 hover:bg-accent-red/10 transition-all group"
+                                href="/situation-room"
+                                className="flex items-center gap-2 text-accent-red font-black text-[10px] uppercase tracking-widest bg-accent-red/5 px-4 py-2 rounded-xl border border-accent-red/20 hover:bg-accent-red/10 transition-all group"
                             >
-                                <Rocket className="w-3 h-3 group-hover:rotate-12 transition-transform" />
-                                <span>National Strategy</span>
+                                <Rocket className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
+                                <span>S-EAGLE COMMAND</span>
                             </Link>
                         )}
 
@@ -94,6 +95,7 @@ export default function Navbar() {
                                     <span className="text-sm font-bold text-forest max-w-[100px] truncate">
                                         {user.user_metadata?.full_name || user.email?.split("@")[0]}
                                     </span>
+                                    <PrestigeBadge tier={user.user_metadata?.tier as UserTier || 'Supporter'} size="sm" />
                                 </Link>
                                 <button
                                     onClick={handleSignOut}
@@ -160,7 +162,10 @@ export default function Navbar() {
                                             <span className="text-sm font-bold text-forest">
                                                 {user.user_metadata?.full_name || user.email?.split("@")[0]}
                                             </span>
-                                            <span className="ml-auto text-[10px] font-black text-leaf uppercase tracking-widest">Settings</span>
+                                            <div className="ml-auto flex items-center gap-2">
+                                                <PrestigeBadge tier={user.user_metadata?.tier as UserTier || 'Supporter'} size="sm" />
+                                                <span className="text-[10px] font-black text-leaf uppercase tracking-widest">Settings</span>
+                                            </div>
                                         </Link>
                                         <button
                                             onClick={handleSignOut}
