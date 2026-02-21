@@ -14,30 +14,30 @@ interface PrestigeBadgeProps {
 const tierConfig: Record<UserTier, { icon: LucideIcon; color: string; bg: string; border: string; label: string }> = {
     Supporter: {
         icon: Star,
-        color: "text-forest/40",
-        bg: "bg-forest/5",
-        border: "border-forest/10",
+        color: "text-foreground/40",
+        bg: "bg-foreground/5",
+        border: "border-foreground/10",
         label: "Supporter"
     },
     Vanguard: {
         icon: Medal,
-        color: "text-leaf",
-        bg: "bg-leaf/10",
-        border: "border-leaf/20",
+        color: "text-apc-green",
+        bg: "bg-apc-green/10",
+        border: "border-apc-green/20",
         label: "Vanguard"
     },
     Commander: {
         icon: Shield,
-        color: "text-accent-red",
-        bg: "bg-accent-red/10",
-        border: "border-accent-red/20",
+        color: "text-apc-red",
+        bg: "bg-apc-red/10",
+        border: "border-apc-red/20",
         label: "Commander"
     },
     Sentinel: {
         icon: Trophy,
-        color: "text-gold",
-        bg: "bg-gold/10",
-        border: "border-gold/30",
+        color: "text-apc-gold",
+        bg: "bg-apc-gold/10",
+        border: "border-apc-gold/30",
         label: "Sentinel"
     }
 };

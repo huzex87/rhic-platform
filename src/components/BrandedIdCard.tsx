@@ -46,9 +46,9 @@ export default function BrandedIdCard({
 
         // ── Background gradient ──
         const bg = ctx.createLinearGradient(0, 0, 0, h);
-        bg.addColorStop(0, "#003300");
-        bg.addColorStop(0.4, "#004400");
-        bg.addColorStop(1, "#001a00");
+        bg.addColorStop(0, "#001B3D"); // Dark Navy
+        bg.addColorStop(0.4, "#002D52");
+        bg.addColorStop(1, "#000B20");
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, w, h);
 
@@ -56,21 +56,21 @@ export default function BrandedIdCard({
         // Top-right accent circle
         ctx.beginPath();
         ctx.arc(w - 80, 80, 200, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(0, 204, 0, 0.08)";
+        ctx.fillStyle = "rgba(0, 173, 239, 0.08)";
         ctx.fill();
 
         // Bottom-left accent
         ctx.beginPath();
         ctx.arc(80, h - 80, 250, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 51, 51, 0.06)";
+        ctx.fillStyle = "rgba(227, 30, 36, 0.06)";
         ctx.fill();
 
         // ── Red accent stripe at top ──
-        ctx.fillStyle = "#FF3333";
+        ctx.fillStyle = "#E31E24";
         ctx.fillRect(0, 0, w, 8);
 
-        // ── Green accent stripe below red ──
-        ctx.fillStyle = "#00CC00";
+        // ── Cyan accent stripe below red ──
+        ctx.fillStyle = "#00AEEF";
         ctx.fillRect(0, 8, w, 4);
 
         // ── "RHIC" Header ──
@@ -86,7 +86,7 @@ export default function BrandedIdCard({
         ctx.fillText("OFFICIAL DIGITAL MOBILIZATION PLATFORM", w / 2, 130);
 
         // ── Divider line ──
-        ctx.strokeStyle = "rgba(0, 204, 0, 0.3)";
+        ctx.strokeStyle = "rgba(0, 173, 239, 0.3)";
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(100, 160);
@@ -94,7 +94,7 @@ export default function BrandedIdCard({
         ctx.stroke();
 
         // ── "MEMBER ID CARD" label ──
-        ctx.fillStyle = "#00CC00";
+        ctx.fillStyle = "#00AEEF";
         ctx.font = "900 28px 'Inter', 'Helvetica', sans-serif";
         ctx.textAlign = "center";
         ctx.fillText("— MEMBER ID CARD —", w / 2, 210);
@@ -103,9 +103,9 @@ export default function BrandedIdCard({
         const avatarY = 340;
         ctx.beginPath();
         ctx.arc(w / 2, avatarY, 100, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(0, 204, 0, 0.15)";
+        ctx.fillStyle = "rgba(0, 173, 239, 0.15)";
         ctx.fill();
-        ctx.strokeStyle = "#00CC00";
+        ctx.strokeStyle = "#00AEEF";
         ctx.lineWidth = 4;
         ctx.stroke();
 
@@ -116,7 +116,7 @@ export default function BrandedIdCard({
             .join("")
             .toUpperCase()
             .slice(0, 2);
-        ctx.fillStyle = "#00CC00";
+        ctx.fillStyle = "#00AEEF";
         ctx.font = "bold 64px 'Inter', 'Helvetica', sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
@@ -149,17 +149,17 @@ export default function BrandedIdCard({
 
         const roleWidth = ctx.measureText(roleText).width + 60;
         const roleX = w / 2 - roleWidth / 2;
-        ctx.fillStyle = "rgba(0, 204, 0, 0.15)";
+        ctx.fillStyle = "rgba(0, 173, 239, 0.15)";
         roundRect(ctx, roleX, 532, roleWidth, 40, 20);
         ctx.fill();
-        ctx.fillStyle = "#00CC00";
+        ctx.fillStyle = "#00AEEF";
         ctx.fillText(roleText, w / 2, 558);
 
         // ── Volunteer Badge ──
         if (isVolunteer) {
             ctx.font = "bold 20px 'Inter', 'Helvetica', sans-serif";
             const vText = "VERIFIED FIELD VOLUNTEER";
-            ctx.fillStyle = "#00CC00";
+            ctx.fillStyle = "#00AEEF";
             ctx.textAlign = "center";
             ctx.fillText("★ " + vText + " ★", w / 2, 595);
         }
@@ -179,8 +179,8 @@ export default function BrandedIdCard({
 
                 // Create Gradient for the Medal
                 const badgeGrad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, badgeW / 2);
-                badgeGrad.addColorStop(0, "#00CC00");
-                badgeGrad.addColorStop(1, "#006600");
+                badgeGrad.addColorStop(0, "#00AEEF");
+                badgeGrad.addColorStop(1, "#005696");
 
                 // Draw badge outer ring
                 ctx.beginPath();
@@ -258,7 +258,7 @@ export default function BrandedIdCard({
         });
 
         // ── Bottom red stripe ──
-        ctx.fillStyle = "#FF3333";
+        ctx.fillStyle = "#E31E24";
         ctx.fillRect(0, h - 120, w, 4);
 
         // ── Bottom section ──
@@ -277,7 +277,7 @@ export default function BrandedIdCard({
         ctx.fillRect(0, h - barH, w / 3, barH);
         ctx.fillStyle = "#FFFFFF";
         ctx.fillRect(w / 3, h - barH, w / 3, barH);
-        ctx.fillStyle = "#008751";
+        ctx.fillStyle = "#E31E24"; // Using APC Red for the third segment to brand it fully APC-Nigeria
         ctx.fillRect((w / 3) * 2, h - barH, w / 3, barH);
     }, [fullName, zone, state, lga, ward, pollingUnit, role, isVolunteer, memberId, achievements]);
 
@@ -322,7 +322,7 @@ export default function BrandedIdCard({
     return (
         <div className="space-y-6">
             {/* Preview */}
-            <div className="relative rounded-2xl overflow-hidden border border-accent-red/20 shadow-xl">
+            <div className="relative rounded-2xl overflow-hidden border border-apc-red/20 shadow-xl">
                 <canvas
                     ref={canvasRef}
                     className="w-full h-auto"
@@ -336,14 +336,14 @@ export default function BrandedIdCard({
             <div className="grid grid-cols-2 gap-4">
                 <button
                     onClick={handleDownload}
-                    className="forest-gradient text-ivory py-4 rounded-2xl font-black text-sm shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2 border border-accent-red/20"
+                    className="apc-cyan-gradient text-white py-4 rounded-2xl font-black text-sm shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2 border border-apc-red/20"
                 >
                     <Download className="w-5 h-5" />
                     DOWNLOAD PNG
                 </button>
                 <button
                     onClick={handleShare}
-                    className="py-4 rounded-2xl font-black text-sm border-2 border-leaf/30 text-forest hover:bg-leaf/5 transition-all flex items-center justify-center gap-2"
+                    className="py-4 rounded-2xl font-black text-sm border-2 border-apc-cyan/30 text-foreground hover:bg-apc-cyan/5 transition-all flex items-center justify-center gap-2"
                 >
                     <Share2 className="w-5 h-5" />
                     SHARE

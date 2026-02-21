@@ -38,7 +38,7 @@ export default function Navbar() {
     return (
         <nav className={`fixed top-0 left-0 right-0 z-50 px-4 py-4 transition-all duration-300 ${scrolled ? 'pt-2' : 'pt-4'}`}>
             <div className="max-w-7xl mx-auto">
-                <div className={`rounded-2xl px-6 py-3 flex items-center justify-between transition-all duration-300 ${scrolled ? 'glass shadow-2xl border-accent-red/15' : 'bg-transparent'}`}>
+                <div className={`rounded-2xl px-6 py-3 flex items-center justify-between transition-all duration-300 ${scrolled ? 'glass shadow-2xl border-apc-cyan/20' : 'bg-transparent'}`}>
                     <Link href="/" className="flex items-center gap-4 group">
                         <div className="relative">
                             <Image
@@ -58,7 +58,7 @@ export default function Navbar() {
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className="flex items-center gap-2 text-forest/70 hover:text-forest font-medium transition-colors group"
+                                className="flex items-center gap-2 text-foreground/70 hover:text-apc-cyan font-medium transition-colors group"
                             >
                                 <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
                                 <span>{item.name}</span>
@@ -69,7 +69,7 @@ export default function Navbar() {
                         {(user?.user_metadata?.role === 'admin' || user?.user_metadata?.role === 'super_admin') && (
                             <Link
                                 href="/situation-room"
-                                className="flex items-center gap-2 text-accent-red font-black text-[10px] uppercase tracking-widest bg-accent-red/5 px-4 py-2 rounded-xl border border-accent-red/20 hover:bg-accent-red/10 transition-all group"
+                                className="flex items-center gap-2 text-apc-red font-black text-[10px] uppercase tracking-widest bg-apc-red/5 px-4 py-2 rounded-xl border border-apc-red/20 hover:bg-apc-red/10 transition-all group"
                             >
                                 <Rocket className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
                                 <span>S-EAGLE COMMAND</span>
@@ -78,28 +78,28 @@ export default function Navbar() {
 
                         {/* Auth Button */}
                         {loading ? (
-                            <div className="w-28 h-10 rounded-xl bg-forest/10 animate-pulse" />
+                            <div className="w-28 h-10 rounded-xl bg-foreground/10 animate-pulse" />
                         ) : user ? (
                             <div className="flex items-center gap-3">
                                 <Link
                                     href="/settings"
-                                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-forest/5 border border-accent-red/15 hover:bg-forest/10 transition-all group/profile relative"
+                                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-foreground/5 border border-apc-cyan/20 hover:bg-foreground/10 transition-all group/profile relative"
                                 >
-                                    <UserCircle className="w-5 h-5 text-leaf group-hover/profile:scale-110 transition-transform" />
+                                    <UserCircle className="w-5 h-5 text-apc-green group-hover/profile:scale-110 transition-transform" />
                                     {notifications.length > 0 && (
                                         <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-red opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-accent-red border-2 border-ivory"></span>
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-apc-red opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-apc-red border-2 border-ivory"></span>
                                         </span>
                                     )}
-                                    <span className="text-sm font-bold text-forest max-w-[100px] truncate">
+                                    <span className="text-sm font-bold text-foreground max-w-[100px] truncate">
                                         {user.user_metadata?.full_name || user.email?.split("@")[0]}
                                     </span>
                                     <PrestigeBadge tier={user.user_metadata?.tier as UserTier || 'Supporter'} size="sm" />
                                 </Link>
                                 <button
                                     onClick={handleSignOut}
-                                    className="flex items-center gap-1 px-3 py-2 rounded-xl text-forest/50 hover:text-accent-red hover:bg-accent-red/5 transition-all text-sm font-bold"
+                                    className="flex items-center gap-1 px-3 py-2 rounded-xl text-foreground/50 hover:text-apc-red hover:bg-apc-red/5 transition-all text-sm font-bold"
                                 >
                                     <LogOut className="w-4 h-4" />
                                 </button>
@@ -107,7 +107,7 @@ export default function Navbar() {
                         ) : (
                             <Link
                                 href="/auth"
-                                className="forest-gradient text-ivory px-6 py-2 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all border border-accent-red/20"
+                                className="apc-cyan-gradient text-white px-6 py-2 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all border border-white/20"
                             >
                                 Join Movement
                             </Link>

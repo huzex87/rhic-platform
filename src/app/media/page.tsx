@@ -32,20 +32,20 @@ export default function MediaWarRoom() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="space-y-2">
-                    <h1 className="text-5xl font-display font-black text-forest leading-tight">
-                        Media <span className="text-leaf italic">War Room</span>
+                    <h1 className="text-5xl font-display font-black text-foreground leading-tight">
+                        Media <span className="text-apc-cyan italic">War Room</span>
                     </h1>
-                    <p className="text-forest/60 font-medium max-w-xl">
+                    <p className="text-foreground/60 font-medium max-w-xl">
                         Centralized hub for verified campaign assets, narrative toolkits,
                         and AI-powered digital advocacy generators.
                     </p>
                 </div>
                 <div className="relative w-full md:w-80">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-forest/30 w-5 h-5" />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/30 w-5 h-5" />
                     <input
                         type="text"
                         placeholder="Search assets..."
-                        className="w-full pl-12 pr-4 py-4 rounded-2xl glass border-none focus:ring-2 focus:ring-leaf outline-none text-forest font-medium"
+                        className="w-full pl-12 pr-4 py-4 rounded-2xl glass border-none focus:ring-2 focus:ring-apc-cyan outline-none text-foreground font-medium"
                     />
                 </div>
             </div>
@@ -54,13 +54,13 @@ export default function MediaWarRoom() {
                 {/* Left Col: Asset Library */}
                 <div className="lg:col-span-2 space-y-8">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-xl font-display font-bold text-forest">Asset Library</h2>
+                        <h2 className="text-xl font-display font-bold text-foreground">Asset Library</h2>
                         <div className="flex gap-2">
                             {['All', 'Graphics', 'Video', 'Audio', 'Docs'].map(cat => (
                                 <button
                                     key={cat}
                                     onClick={() => setSelectedCategory(cat)}
-                                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${selectedCategory === cat ? 'bg-forest text-ivory' : 'bg-forest/5 text-forest hover:bg-forest/10'}`}
+                                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${selectedCategory === cat ? 'apc-cyan-gradient text-white' : 'bg-foreground/5 text-foreground hover:bg-foreground/10'}`}
                                 >
                                     {cat}
                                 </button>
@@ -83,14 +83,14 @@ export default function MediaWarRoom() {
                                         transition={{ delay: i * 0.1 }}
                                         className="premium-card group cursor-pointer"
                                     >
-                                        <div className="aspect-video bg-forest/5 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden">
-                                            {asset.type === 'Image' && <ImageIcon className="w-12 h-12 text-forest/10" />}
-                                            {asset.type === 'Video' && <Video className="w-12 h-12 text-forest/10" />}
-                                            {asset.type === 'Graphics' && <Sparkles className="w-12 h-12 text-forest/10" />}
-                                            {asset.type === 'Document' && <FileText className="w-12 h-12 text-forest/10" />}
+                                        <div className="aspect-video bg-foreground/5 rounded-xl mb-6 flex items-center justify-center relative overflow-hidden">
+                                            {asset.type === 'Image' && <ImageIcon className="w-12 h-12 text-foreground/10" />}
+                                            {asset.type === 'Video' && <Video className="w-12 h-12 text-foreground/10" />}
+                                            {asset.type === 'Graphics' && <Sparkles className="w-12 h-12 text-foreground/10" />}
+                                            {asset.type === 'Document' && <FileText className="w-12 h-12 text-foreground/10" />}
 
-                                            <div className="absolute inset-0 bg-forest/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <button className="bg-leaf text-ivory p-3 rounded-full shadow-2xl scale-75 group-hover:scale-100 transition-transform">
+                                            <div className="absolute inset-0 bg-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <button className="bg-apc-cyan text-white p-3 rounded-full shadow-2xl scale-75 group-hover:scale-100 transition-transform">
                                                     <Download className="w-6 h-6" />
                                                 </button>
                                             </div>
@@ -98,8 +98,8 @@ export default function MediaWarRoom() {
 
                                         <div className="flex justify-between items-start">
                                             <div>
-                                                <h3 className="font-bold text-forest mb-1 group-hover:text-leaf transition-colors">{asset.title}</h3>
-                                                <div className="flex gap-3 text-[10px] font-black text-forest/30 uppercase tracking-widest">
+                                                <h3 className="font-bold text-foreground mb-1 group-hover:text-apc-cyan transition-colors">{asset.title}</h3>
+                                                <div className="flex gap-3 text-[10px] font-black text-foreground/30 uppercase tracking-widest">
                                                     <span>{asset.type}</span>
                                                     <span>•</span>
                                                     <span>{asset.format}</span>
@@ -118,7 +118,7 @@ export default function MediaWarRoom() {
                             </div>
 
                             {assets.length > 0 && (
-                                <button className="w-full py-6 rounded-2xl border-2 border-dashed border-forest/10 text-forest/40 font-bold hover:bg-forest/5 transition-all flex items-center justify-center gap-2">
+                                <button className="w-full py-6 rounded-2xl border-2 border-dashed border-foreground/10 text-foreground/40 font-bold hover:bg-foreground/5 transition-all flex items-center justify-center gap-2">
                                     Load More Assets
                                 </button>
                             )}
@@ -128,30 +128,30 @@ export default function MediaWarRoom() {
 
                 {/* Right Col: AI Advocacy Assistant */}
                 <div className="space-y-8">
-                    <div className="premium-card forest-gradient text-ivory relative overflow-hidden">
+                    <div className="premium-card apc-cyan-gradient text-white relative overflow-hidden">
                         <div className="relative z-10">
                             <div className="flex items-center gap-2 mb-6">
-                                <div className="p-2 bg-leaf/20 rounded-lg">
-                                    <Sparkles className="text-leaf w-5 h-5" />
+                                <div className="p-2 bg-white/20 rounded-lg">
+                                    <Sparkles className="text-white w-5 h-5" />
                                 </div>
-                                <span className="text-xs font-black uppercase tracking-[0.2em] text-leaf">AI Narrator</span>
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-white">AI Narrator</span>
                             </div>
                             <h3 className="text-2xl font-display font-black mb-4 leading-tight">Generate Campaign Copy</h3>
-                            <p className="text-ivory/50 text-sm font-medium mb-8">
+                            <p className="text-white/60 text-sm font-medium mb-8">
                                 Instantly create pro-Renewed Hope social media captions tailored for your audience.
                             </p>
 
                             <div className="space-y-4">
-                                <div className="glass bg-white/10 p-4 rounded-xl border-white/5">
-                                    <span className="text-[10px] font-bold text-leaf uppercase tracking-widest block mb-2">Narrative Focus</span>
+                                <div className="glass bg-white/20 p-4 rounded-xl border-white/5">
+                                    <span className="text-[10px] font-bold text-white uppercase tracking-widest block mb-2">Narrative Focus</span>
                                     <select
                                         value={focus}
                                         onChange={(e) => setFocus(e.target.value)}
-                                        className="bg-transparent text-sm font-medium outline-none w-full cursor-pointer appearance-none"
+                                        className="bg-transparent text-sm font-medium outline-none w-full cursor-pointer appearance-none text-white"
                                     >
-                                        <option value="Digital Economy Growth" className="text-forest">Digital Economy Growth</option>
-                                        <option value="Agriculture Modernization" className="text-forest">Agriculture Modernization</option>
-                                        <option value="Youth Employment" className="text-forest">Youth Employment</option>
+                                        <option value="Digital Economy Growth" className="text-foreground">Digital Economy Growth</option>
+                                        <option value="Agriculture Modernization" className="text-foreground">Agriculture Modernization</option>
+                                        <option value="Youth Employment" className="text-foreground">Youth Employment</option>
                                     </select>
                                 </div>
 
@@ -159,7 +159,7 @@ export default function MediaWarRoom() {
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
-                                        className="p-4 rounded-xl bg-leaf/10 border border-leaf/20 text-sm font-medium text-ivory/90 leading-relaxed relative group"
+                                        className="p-4 rounded-xl bg-white/10 border border-white/20 text-sm font-medium text-white/90 leading-relaxed relative group"
                                     >
                                         {lastResult}
                                         <button
@@ -167,9 +167,9 @@ export default function MediaWarRoom() {
                                                 navigator.clipboard.writeText(lastResult);
                                                 alert("Caption copied to clipboard!");
                                             }}
-                                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-forest/40 p-1.5 rounded-lg"
+                                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-foreground/40 p-1.5 rounded-lg"
                                         >
-                                            <Download className="w-3 h-3 text-leaf" />
+                                            <Download className="w-3 h-3 text-white" />
                                         </button>
                                     </motion.div>
                                 )}
@@ -177,7 +177,7 @@ export default function MediaWarRoom() {
                                 <button
                                     onClick={handleGenerate}
                                     disabled={generating}
-                                    className="leaf-gradient text-ivory w-full py-4 rounded-xl font-black shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:scale-100"
+                                    className="apc-red-gradient text-white w-full py-4 rounded-xl font-black shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:scale-100"
                                 >
                                     {generating ? (
                                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -202,28 +202,28 @@ export default function MediaWarRoom() {
                                 { tag: "#InnovatorsForNigeria", reach: "1.8M reach", trend: "up" },
                                 { tag: "#RHIC2027", reach: "900K reach", trend: "up" },
                             ].map((t, i) => (
-                                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-forest/5 hover:bg-forest/10 transition-colors group cursor-pointer">
+                                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-foreground/5 hover:bg-foreground/10 transition-colors group cursor-pointer">
                                     <div>
-                                        <div className="text-sm font-black text-forest">{t.tag}</div>
-                                        <div className="text-[10px] font-bold text-forest/30 uppercase tracking-widest">{t.reach}</div>
+                                        <div className="text-sm font-black text-foreground">{t.tag}</div>
+                                        <div className="text-[10px] font-bold text-foreground/30 uppercase tracking-widest">{t.reach}</div>
                                     </div>
-                                    <Share2 className="w-4 h-4 text-forest/20 group-hover:text-leaf transition-colors" />
+                                    <Share2 className="w-4 h-4 text-foreground/20 group-hover:text-apc-cyan transition-colors" />
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    <div className="premium-card bg-leaf/5 flex items-center justify-between group cursor-pointer border-leaf/20">
+                    <div className="premium-card bg-apc-cyan/5 flex items-center justify-between group cursor-pointer border-apc-cyan/20">
                         <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 bg-leaf/20 rounded-xl flex items-center justify-center">
-                                <ExternalLink className="w-5 h-5 text-leaf" />
+                            <div className="w-10 h-10 bg-apc-cyan/20 rounded-xl flex items-center justify-center">
+                                <ExternalLink className="w-5 h-5 text-apc-cyan" />
                             </div>
                             <div>
-                                <div className="text-sm font-bold text-forest">Media WhatsApp Group</div>
-                                <div className="text-[10px] text-forest/30 font-bold uppercase tracking-widest">Direct Broadcast</div>
+                                <div className="text-sm font-bold text-foreground">Media WhatsApp Group</div>
+                                <div className="text-[10px] text-foreground/30 font-bold uppercase tracking-widest">Direct Broadcast</div>
                             </div>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-forest/20 group-hover:text-forest transition-colors" />
+                        <ChevronRight className="w-4 h-4 text-foreground/20 group-hover:text-foreground transition-colors" />
                     </div>
                 </div>
             </div>

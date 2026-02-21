@@ -83,8 +83,8 @@ export const ZONE_LABELS: Record<string, string> = {
     SS: "South-South",
 };
 
-const DOT_COLOR = "#D32F2F";
-const DOT_HOVER = "#EF5350";
+const DOT_COLOR = "#E31E24"; // APC Red
+const DOT_HOVER = "#FF4D4D";
 
 interface NigeriaMapProps {
     variant?: "landing" | "dashboard";
@@ -109,8 +109,8 @@ function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
                 <button
                     onClick={() => setSelectedZone(null)}
                     className={`px-2.5 py-1 md:px-3 md:py-1.5 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-wider transition-all ${!selectedZone
-                        ? "forest-gradient text-ivory shadow-lg"
-                        : "bg-forest/5 text-forest/60 hover:bg-forest/10"
+                        ? "apc-cyan-gradient text-white shadow-lg"
+                        : "bg-apc-cyan/5 text-foreground/60 hover:bg-apc-cyan/10"
                         }`}
                 >
                     All Zones
@@ -120,8 +120,8 @@ function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
                         key={key}
                         onClick={() => setSelectedZone(selectedZone === key ? null : key)}
                         className={`px-2.5 py-1 md:px-3 md:py-1.5 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-wider transition-all ${selectedZone === key
-                            ? "forest-gradient text-ivory shadow-lg"
-                            : "bg-forest/5 text-forest/60 hover:bg-forest/10"
+                            ? "apc-cyan-gradient text-white shadow-lg"
+                            : "bg-apc-cyan/5 text-foreground/60 hover:bg-apc-cyan/10"
                             }`}
                     >
                         {label}
@@ -152,12 +152,12 @@ function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
                                         <Geography
                                             key={geo.rsmKey}
                                             geography={geo}
-                                            fill="rgba(8,72,36,0.06)"
-                                            stroke="rgba(8,72,36,0.25)"
+                                            fill="rgba(0,173,239,0.06)"
+                                            stroke="rgba(0,173,239,0.25)"
                                             strokeWidth={1}
                                             style={{
                                                 default: { outline: "none" },
-                                                hover: { outline: "none", fill: "rgba(8,72,36,0.09)" },
+                                                hover: { outline: "none", fill: "rgba(0,173,239,0.09)" },
                                                 pressed: { outline: "none" },
                                             }}
                                         />
@@ -210,7 +210,7 @@ function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
                                             style={{
                                                 fontSize: isHovered ? 9 : 6,
                                                 fontWeight: isHovered ? 900 : 700,
-                                                fill: "#084824",
+                                                fill: "#1A1A1A",
                                                 opacity: isHovered ? 1 : 0.5,
                                                 fontFamily: "var(--font-display), sans-serif",
                                                 pointerEvents: "none",
@@ -256,19 +256,19 @@ function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
                             transform: "translate(-50%, 0)",
                         }}
                     >
-                        <div className="bg-forest text-ivory px-4 py-3 rounded-xl shadow-2xl min-w-[160px]">
+                        <div className="bg-foreground text-white px-4 py-3 rounded-xl shadow-2xl min-w-[160px] border border-white/10">
                             <div className="font-display font-black text-sm">{hoveredState.name}</div>
-                            <div className="text-[10px] font-bold text-leaf uppercase tracking-wider mb-2">
+                            <div className="text-[10px] font-bold text-apc-cyan uppercase tracking-wider mb-2">
                                 {ZONE_LABELS[hoveredState.zone]}
                             </div>
                             <div className="flex items-center justify-between gap-4">
                                 <div>
-                                    <div className="text-ivory/50 text-[9px] font-bold uppercase">Supporters</div>
-                                    <div className="font-black text-base text-leaf">{hoveredState.supporters.toLocaleString()}</div>
+                                    <div className="text-white/50 text-[9px] font-bold uppercase">Supporters</div>
+                                    <div className="font-black text-base text-apc-cyan">{hoveredState.supporters.toLocaleString()}</div>
                                 </div>
                                 <div>
-                                    <div className="text-ivory/50 text-[9px] font-bold uppercase">Growth</div>
-                                    <div className="font-black text-base text-leaf">{hoveredState.growth}</div>
+                                    <div className="text-white/50 text-[9px] font-bold uppercase">Growth</div>
+                                    <div className="font-black text-base text-apc-green">{hoveredState.growth}</div>
                                 </div>
                             </div>
                         </div>
@@ -279,20 +279,20 @@ function NigeriaMap({ variant = "landing" }: NigeriaMapProps) {
             {/* Summary Stats */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-center">
                 <div>
-                    <div className="text-2xl md:text-3xl font-display font-black text-forest">
+                    <div className="text-2xl md:text-3xl font-display font-black text-apc-cyan">
                         {totalSupporters.toLocaleString()}
                     </div>
-                    <div className="text-[10px] font-bold text-forest/40 uppercase tracking-widest">Supporters Nationwide</div>
+                    <div className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">Supporters Nationwide</div>
                 </div>
-                <div className="w-px h-8 bg-forest/10 hidden md:block" />
+                <div className="w-px h-8 bg-foreground/10 hidden md:block" />
                 <div>
-                    <div className="text-2xl md:text-3xl font-display font-black text-leaf">37</div>
-                    <div className="text-[10px] font-bold text-forest/40 uppercase tracking-widest">States + FCT</div>
+                    <div className="text-2xl md:text-3xl font-display font-black text-apc-green">37</div>
+                    <div className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">States + FCT</div>
                 </div>
-                <div className="w-px h-8 bg-forest/10 hidden md:block" />
+                <div className="w-px h-8 bg-foreground/10 hidden md:block" />
                 <div>
-                    <div className="text-2xl md:text-3xl font-display font-black text-forest">6</div>
-                    <div className="text-[10px] font-bold text-forest/40 uppercase tracking-widest">Regions</div>
+                    <div className="text-2xl md:text-3xl font-display font-black text-apc-cyan">6</div>
+                    <div className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">Regions</div>
                 </div>
             </div>
         </div>

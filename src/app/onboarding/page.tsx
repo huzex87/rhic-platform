@@ -151,7 +151,7 @@ export default function OnboardingPage() {
                             <button
                                 onClick={handleLocationComplete}
                                 disabled={!loc}
-                                className="forest-gradient text-ivory w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 border border-accent-red/20 disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="apc-cyan-gradient text-white w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 border border-white/20 disabled:opacity-40 disabled:cursor-not-allowed"
                             >
                                 CONTINUE
                                 <ArrowRight className="w-6 h-6" />
@@ -177,7 +177,7 @@ export default function OnboardingPage() {
 
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-forest/40 ml-2 uppercase tracking-widest flex items-center gap-2">
+                                    <label className="text-xs font-bold text-foreground/40 ml-2 uppercase tracking-widest flex items-center gap-2">
                                         <Phone className="w-3 h-3" /> Phone Number
                                     </label>
                                     <input
@@ -185,12 +185,12 @@ export default function OnboardingPage() {
                                         placeholder="0801 234 5678"
                                         value={profileData.phone}
                                         onChange={(e) => setProfileData(p => ({ ...p, phone: e.target.value }))}
-                                        className="w-full bg-forest/5 border border-forest/10 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-leaf/30 text-forest font-bold transition-all"
+                                        className="w-full bg-foreground/5 border border-foreground/10 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-apc-cyan/30 text-foreground font-bold transition-all"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-forest/40 ml-2 uppercase tracking-widest flex items-center gap-2">
+                                    <label className="text-xs font-bold text-foreground/40 ml-2 uppercase tracking-widest flex items-center gap-2">
                                         <Briefcase className="w-3 h-3" /> Occupation
                                     </label>
                                     <input
@@ -198,12 +198,12 @@ export default function OnboardingPage() {
                                         placeholder="e.g. Software Engineer, Farmer, Lawyer"
                                         value={profileData.occupation}
                                         onChange={(e) => setProfileData(p => ({ ...p, occupation: e.target.value }))}
-                                        className="w-full bg-forest/5 border border-forest/10 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-leaf/30 text-forest font-bold transition-all"
+                                        className="w-full bg-foreground/5 border border-foreground/10 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-apc-cyan/30 text-foreground font-bold transition-all"
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-forest/40 ml-2 uppercase tracking-widest flex items-center gap-2">
+                                    <label className="text-xs font-bold text-foreground/40 ml-2 uppercase tracking-widest flex items-center gap-2">
                                         <FileText className="w-3 h-3" /> Professional Bio
                                     </label>
                                     <textarea
@@ -211,7 +211,7 @@ export default function OnboardingPage() {
                                         placeholder="A short description of your professional background and interests..."
                                         value={profileData.bio}
                                         onChange={(e) => setProfileData(p => ({ ...p, bio: e.target.value }))}
-                                        className="w-full bg-forest/5 border border-forest/10 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-leaf/30 text-forest font-bold transition-all resize-none"
+                                        className="w-full bg-foreground/5 border border-foreground/10 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-apc-cyan/30 text-foreground font-bold transition-all resize-none"
                                     />
                                 </div>
                             </div>
@@ -222,7 +222,7 @@ export default function OnboardingPage() {
                                 <button
                                     onClick={handleProfileComplete}
                                     disabled={loading}
-                                    className="forest-gradient text-ivory w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 border border-accent-red/20 disabled:opacity-40"
+                                    className="apc-cyan-gradient text-white w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 border border-white/20 disabled:opacity-40"
                                 >
                                     {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                                         <>
@@ -233,7 +233,7 @@ export default function OnboardingPage() {
                                 </button>
                                 <button
                                     onClick={() => setStep(1)}
-                                    className="text-sm font-bold text-forest/40 hover:text-forest transition-colors uppercase tracking-widest"
+                                    className="text-sm font-bold text-foreground/40 hover:text-apc-cyan transition-colors uppercase tracking-widest"
                                 >
                                     Go Back
                                 </button>
@@ -251,14 +251,14 @@ export default function OnboardingPage() {
                             className="premium-card p-8 md:p-12 text-center space-y-8"
                         >
                             <div className="space-y-2">
-                                <div className="w-16 h-16 mx-auto rounded-full bg-leaf/10 flex items-center justify-center mb-4">
-                                    <CheckCircle className="w-10 h-10 text-leaf" />
+                                <div className="w-16 h-16 mx-auto rounded-full bg-apc-green/10 flex items-center justify-center mb-4">
+                                    <CheckCircle className="w-10 h-10 text-apc-green" />
                                 </div>
-                                <h2 className="text-3xl font-display font-black text-forest">
+                                <h2 className="text-3xl font-display font-black text-foreground">
                                     Registration Complete!
                                 </h2>
-                                <p className="text-forest/60 font-medium">
-                                    Welcome to the <span className="text-forest font-bold">{loc?.state}</span> Chapter.
+                                <p className="text-foreground/60 font-medium">
+                                    Welcome to the <span className="text-foreground font-bold">{loc?.state}</span> Chapter.
                                 </p>
                             </div>
 
@@ -278,7 +278,7 @@ export default function OnboardingPage() {
 
                             <button
                                 onClick={() => router.push("/dashboard")}
-                                className="forest-gradient text-ivory w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all border border-accent-red/20 flex items-center justify-center gap-3"
+                                className="apc-cyan-gradient text-white w-full py-5 rounded-2xl font-black text-lg shadow-2xl hover:scale-[1.02] transition-all border border-white/20 flex items-center justify-center gap-3"
                             >
                                 GO TO DASHBOARD
                                 <ArrowRight className="w-6 h-6" />
@@ -298,10 +298,10 @@ function OnboardingHeader({ title, subtitle }: { title: string; subtitle: string
                 <Image src="/logo.png" alt="RHIC" fill className="object-contain" />
             </div>
             <div>
-                <h1 className="text-3xl font-display font-black text-forest">
+                <h1 className="text-3xl font-display font-black text-foreground">
                     {title}
                 </h1>
-                <p className="text-forest/60 font-medium mt-2">
+                <p className="text-foreground/60 font-medium mt-2">
                     {subtitle}
                 </p>
             </div>
@@ -314,7 +314,7 @@ function ErrorAlert({ message }: { message: string }) {
         <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-4 rounded-xl bg-accent-red/10 border border-accent-red/20 text-sm font-medium text-accent-red"
+            className="p-4 rounded-xl bg-apc-red/10 border border-apc-red/20 text-sm font-medium text-apc-red"
         >
             {message}
         </motion.div>
@@ -325,7 +325,7 @@ function SkipButton({ onClick }: { onClick: () => void }) {
     return (
         <button
             onClick={onClick}
-            className="w-full text-center text-xs font-bold text-forest/20 hover:text-forest/40 transition-colors uppercase tracking-widest"
+            className="w-full text-center text-xs font-bold text-foreground/20 hover:text-foreground/40 transition-colors uppercase tracking-widest"
         >
             Skip for now
         </button>
