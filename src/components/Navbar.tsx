@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, BarChart3, Rocket, MessageSquare, BookOpen, LogOut, UserCircle } from "lucide-react";
+import { Menu, X, BarChart3, Rocket, MessageSquare, BookOpen, LogOut, UserCircle, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./AuthProvider";
