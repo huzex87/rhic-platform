@@ -36,9 +36,9 @@ export default function Navbar() {
     };
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 px-4 py-4 transition-all duration-300 ${scrolled ? 'pt-2' : 'pt-4'}`}>
+        <nav className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-500 ${scrolled ? 'pt-4' : 'pt-6'}`}>
             <div className="max-w-7xl mx-auto">
-                <div className={`rounded-2xl px-6 py-3 flex items-center justify-between transition-all duration-300 ${scrolled ? 'glass shadow-2xl border-apc-cyan/20' : 'bg-transparent'}`}>
+                <div className={`rounded-3xl px-8 py-4 flex items-center justify-between transition-all duration-500 ${scrolled ? 'ultra-glass shadow-[0_20px_50px_-10px_rgba(0,173,239,0.2)]' : 'bg-white/5 backdrop-blur-md border border-white/10'}`}>
                     <Link href="/" className="flex items-center gap-4 group">
                         <div className="relative">
                             <Image
@@ -46,22 +46,23 @@ export default function Navbar() {
                                 alt="RHIC Logo"
                                 width={120}
                                 height={48}
-                                className="h-12 w-auto object-contain transition-transform group-hover:scale-110"
+                                className="h-10 w-auto object-contain transition-transform duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(0,173,239,0.3)]"
                                 priority
                             />
                         </div>
                     </Link>
 
                     {/* Desktop Nav */}
-                    <div className="hidden md:flex items-center gap-8">
+                    <div className="hidden md:flex items-center gap-10">
                         {navItems.map((item) => (
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className="flex items-center gap-2 text-foreground/70 hover:text-apc-cyan font-medium transition-colors group"
+                                className="flex items-center gap-2.5 text-foreground/60 hover:text-apc-cyan font-bold text-sm transition-all duration-300 group relative py-2"
                             >
-                                <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                                <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                                 <span>{item.name}</span>
+                                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-apc-cyan transition-all duration-300 group-hover:w-full rounded-full" />
                             </Link>
                         ))}
 
@@ -69,54 +70,62 @@ export default function Navbar() {
                         {(user?.user_metadata?.role === 'admin' || user?.user_metadata?.role === 'super_admin') && (
                             <Link
                                 href="/situation-room"
-                                className="flex items-center gap-2 text-apc-red font-black text-[10px] uppercase tracking-widest bg-apc-red/5 px-4 py-2 rounded-xl border border-apc-red/20 hover:bg-apc-red/10 transition-all group"
+                                className="flex items-center gap-2.5 text-apc-red font-black text-[11px] uppercase tracking-[0.2em] bg-apc-red/[0.03] px-5 py-2.5 rounded-2xl border border-apc-red/20 hover:bg-apc-red/10 transition-all duration-500 group overflow-hidden relative shadow-sm"
                             >
-                                <Rocket className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
+                                <div className="absolute inset-0 bg-gradient-to-r from-apc-red/0 via-apc-red/5 to-apc-red/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                <Rocket className="w-4 h-4 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500" />
                                 <span>S-EAGLE COMMAND</span>
                             </Link>
                         )}
 
                         {/* Auth Button */}
                         {loading ? (
-                            <div className="w-28 h-10 rounded-xl bg-foreground/10 animate-pulse" />
+                            <div className="w-32 h-11 rounded-2xl bg-foreground/5 animate-pulse" />
                         ) : user ? (
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-4">
                                 <Link
                                     href="/settings"
-                                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-foreground/5 border border-apc-cyan/20 hover:bg-foreground/10 transition-all group/profile relative"
+                                    className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-foreground/[0.02] border border-apc-cyan/10 hover:border-apc-cyan/30 hover:bg-foreground/[0.05] transition-all duration-500 group/profile relative shadow-sm"
                                 >
-                                    <UserCircle className="w-5 h-5 text-apc-green group-hover/profile:scale-110 transition-transform" />
-                                    {notifications.length > 0 && (
-                                        <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-apc-red opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-apc-red border-2 border-ivory"></span>
-                                        </span>
-                                    )}
-                                    <span className="text-sm font-bold text-foreground max-w-[100px] truncate">
+                                    <div className="relative">
+                                        <UserCircle className="w-6 h-6 text-apc-green group-hover/profile:scale-110 transition-transform duration-500" />
+                                        {notifications.length > 0 && (
+                                            <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-apc-red opacity-75" />
+                                                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-apc-red border-2 border-white shadow-sm" />
+                                            </span>
+                                        )}
+                                    </div>
+                                    <span className="text-sm font-black text-foreground max-w-[120px] truncate tracking-tight">
                                         {user.user_metadata?.full_name || user.email?.split("@")[0]}
                                     </span>
                                     <PrestigeBadge tier={user.user_metadata?.tier as UserTier || 'Supporter'} size="sm" />
                                 </Link>
                                 <button
                                     onClick={handleSignOut}
-                                    className="flex items-center gap-1 px-3 py-2 rounded-xl text-foreground/50 hover:text-apc-red hover:bg-apc-red/5 transition-all text-sm font-bold"
+                                    className="p-2.5 rounded-2xl text-foreground/40 hover:text-apc-red hover:bg-apc-red/5 transition-all duration-500 group"
+                                    title="Sign Out"
                                 >
-                                    <LogOut className="w-4 h-4" />
+                                    <LogOut className="w-5 h-5 group-hover:scale-110 transition-transform" />
                                 </button>
                             </div>
                         ) : (
                             <Link
                                 href="/auth"
-                                className="apc-cyan-gradient text-white px-6 py-2 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all border border-white/20"
+                                className="btn-apc px-8 py-3.5 rounded-2xl font-black text-sm shadow-[0_15px_30px_-10px_rgba(0,173,239,0.3)] hover:shadow-[0_20px_40px_-10px_rgba(0,173,239,0.5)] flex items-center gap-2 group border border-white/20"
                             >
                                 Join Movement
+                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </Link>
                         )}
                     </div>
 
                     {/* Mobile Toggle */}
-                    <button className="md:hidden text-forest p-2" onClick={() => setIsOpen(!isOpen)}>
-                        {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                    <button
+                        className="md:hidden p-3 rounded-2xl bg-foreground/5 hover:bg-foreground/10 transition-colors"
+                        onClick={() => setIsOpen(!isOpen)}
+                    >
+                        {isOpen ? <X className="w-6 h-6 text-apc-red" /> : <Menu className="w-6 h-6 text-apc-cyan" />}
                     </button>
                 </div>
 

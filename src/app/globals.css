@@ -49,10 +49,21 @@
 }
 
 @utility apc-glass {
-  background-color: rgba(0, 173, 239, 0.05);
-  backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(0, 173, 239, 0.15);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 4px 24px -1px rgba(0, 0, 0, 0.05),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+@utility ultra-glass {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 173, 239, 0.05);
 }
 
 @layer components {
@@ -96,5 +107,14 @@
 }
 
 @utility vibrant-apc-gradient {
-  background: linear-gradient(135deg, #00ADEF 0%, #008D43 50%, #E31E24 100%);
+  background: linear-gradient(135deg, #00ADEF, #008D43, #E31E24);
+  background-size: 200% 200%;
+}
+
+@utility text-glow {
+  text-shadow: 0 0 20px rgba(0, 173, 239, 0.3);
+}
+
+@utility premium-shadow {
+  box-shadow: 0 50px 100px -20px rgba(0, 173, 239, 0.15), 0 30px 60px -30px rgba(0, 0, 0, 0.2);
 }
