@@ -28,28 +28,52 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${outfit.variable} font-body bg-ivory text-forest antialiased`}>
+      <body className={`${inter.variable} ${outfit.variable} font-body bg-ivory text-forest antialiased selection:bg-leaf/20 selection:text-forest`}>
+        {/* Global Background Elements */}
+        <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-leaf/5 blur-[120px] rounded-full" />
+          <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[30%] bg-gold/5 blur-[100px] rounded-full" />
+          <div className="absolute top-[30%] right-[10%] w-[20%] h-[20%] bg-accent-red/5 blur-[80px] rounded-full" />
+        </div>
+
         <AuthProvider>
           <NotificationProvider>
             <Navbar />
-            <main className="pt-28 md:pt-32 pb-12 min-h-screen">
+            <main className="pt-28 md:pt-32 pb-12 min-h-screen relative">
               {children}
             </main>
             <AIAssistant />
           </NotificationProvider>
-          <footer className="py-12 border-t border-accent-red/10">
-            <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="flex items-center gap-2 grayscale opacity-50">
-                <span className="text-xl font-display font-bold text-forest">RHIC</span>
-                <span className="text-[10px] uppercase font-bold text-forest">Mobilize</span>
-              </div>
-              <div className="text-forest/40 text-sm font-medium">
-                © 2026 Renewed Hope Innovators Coalition. All Rights Reserved.
-              </div>
-              <div className="flex gap-6 text-sm font-bold text-forest/60">
-                <span className="hover:text-forest cursor-pointer transition-colors">Privacy</span>
-                <span className="hover:text-leaf cursor-pointer transition-colors">Terms</span>
-                <span className="hover:text-forest cursor-pointer transition-colors">Contact</span>
+
+          <footer className="py-20 border-t border-forest/5 relative overflow-hidden">
+            <div className="absolute inset-0 bg-forest/[0.02] -z-10" />
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-12">
+                <div className="flex flex-col items-center md:items-start gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-forest rounded-xl flex items-center justify-center">
+                      <span className="text-ivory font-display font-black text-xl italic">R</span>
+                    </div>
+                    <div>
+                      <span className="text-2xl font-display font-black text-forest tracking-tighter uppercase italic leading-none block">RHIC</span>
+                      <span className="text-[9px] uppercase font-black text-forest/40 tracking-[0.3em] block mt-1">Innovation Mobilize</span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-forest/60 font-medium max-w-xs text-center md:text-left">
+                    The national digital engine for high-impact innovation and strategic mobilization.
+                  </p>
+                </div>
+
+                <div className="flex flex-col items-center md:items-end gap-6">
+                  <div className="flex gap-10 text-[11px] font-black text-forest/40 uppercase tracking-[0.2em]">
+                    <span className="hover:text-forest cursor-pointer transition-colors duration-300">Privacy Protocols</span>
+                    <span className="hover:text-leaf cursor-pointer transition-colors duration-300">Terms of Engagement</span>
+                    <span className="hover:text-gold cursor-pointer transition-colors duration-300">Security Core</span>
+                  </div>
+                  <div className="text-forest/30 text-[10px] font-bold tracking-widest text-center md:text-right">
+                    © 2026 RENEWED HOPE INNOVATORS COALITION. ALL PROTOCOLS RESERVED.
+                  </div>
+                </div>
               </div>
             </div>
           </footer>
