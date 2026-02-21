@@ -46,8 +46,8 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="max-w-2xl text-xl md:text-2xl text-foreground/70 font-medium leading-relaxed mb-14 pl-8 border-l-8 border-apc-cyan ring-1 ring-apc-cyan/5 py-4 rounded-r-3xl bg-apc-cyan/5"
             >
-              Building the <strong>Digital Vanguard</strong> for Nigeria's progress.
-              An elite professional ecosystem scaling President Tinubu's vision through
+              Building the <strong>Digital Vanguard</strong> for Nigeria&apos;s progress.
+              An elite professional ecosystem scaling President Tinubu&apos;s vision through
               world-class innovation and molecular-level mobilization.
             </motion.p>
 
@@ -169,7 +169,7 @@ export default function Home() {
             </h2>
             <p className="max-w-2xl mx-auto text-xl text-foreground/60 leading-relaxed font-medium">
               Real-time intelligence and mobilization density across all 774 Local Government Areas.
-              A world-class tactical display of current "Renewed Hope" momentum.
+              A world-class tactical display of current &quot;Renewed Hope&quot; momentum.
             </p>
           </motion.div>
 

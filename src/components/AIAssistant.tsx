@@ -104,7 +104,6 @@ export default function AIAssistant() {
                                     onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                                     placeholder="Ask about your next mission..."
                                     className="w-full pl-4 pr-12 py-4 rounded-2xl glass border-none focus:ring-2 focus:ring-apc-cyan outline-none text-sm font-medium text-foreground"
-                                    Controls:true
                                 />
                                 <button
                                     onClick={handleSend}

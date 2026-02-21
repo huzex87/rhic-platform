@@ -16,9 +16,7 @@ import {
     Shield,
     Maximize2,
     Lock,
-    Cpu,
-    TrendingUp,
-    Rocket
+    TrendingUp
 } from 'lucide-react';
 import { useNationalStrategy } from "@/hooks/useNationalStrategy";
 import { useAuth } from "@/components/AuthProvider";
