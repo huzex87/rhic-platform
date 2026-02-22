@@ -6,21 +6,41 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 
 const TEMPLATES = [
-    { id: 'tech', name: 'Digital Economy', color: 'apc-cyan', bg: 'bg-apc-cyan/10' },
-    { id: 'jobs', name: 'Youth Employment', color: 'apc-red', bg: 'bg-apc-red/10' },
-    { id: 'growth', name: 'Economic Growth', color: 'apc-green', bg: 'bg-apc-green/10' },
+    { id: 'tech', name: 'Digital Economy', color: 'apc-cyan', bg: 'bg-apc-cyan/10', gradient: 'from-apc-cyan/20 via-transparent to-apc-green/10' },
+    { id: 'jobs', name: 'Youth Employment', color: 'apc-red', bg: 'bg-apc-red/10', gradient: 'from-apc-red/20 via-transparent to-apc-gold/10' },
+    { id: 'growth', name: 'Economic Growth', color: 'apc-green', bg: 'bg-apc-green/10', gradient: 'from-apc-green/20 via-transparent to-apc-cyan/10' },
+];
+
+const FORMATS = [
+    { id: 'flyer', name: 'A4 Flyer', aspect: 'aspect-[210/297]', icon: Layers },
+    { id: 'square', name: 'Square Post', aspect: 'aspect-square', icon: ImageIcon },
+    { id: 'sticker', name: 'Sticker', aspect: 'aspect-square rounded-full', icon: Sparkles },
 ];
 
 export default function FlyerGenerator() {
     const [selectedTemplate, setSelectedTemplate] = useState(TEMPLATES[0]);
+    const [selectedFormat, setSelectedFormat] = useState(FORMATS[0]);
     const [headline, setHeadline] = useState("Renewed Hope for a Digital Nigeria");
+    const [fontSize, setFontSize] = useState(64);
+    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
     const [generating, setGenerating] = useState(false);
     const flyerRef = useRef<HTMLDivElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleGenerate = () => {
         setGenerating(true);
-        // Simulate generation delay
         setTimeout(() => setGenerating(false), 2000);
+    };
+
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setUploadedImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     return (
@@ -50,25 +70,80 @@ export default function FlyerGenerator() {
                             />
                         </div>
 
-                        {/* Template Selection */}
+                        {/* Format Selection */}
                         <div className="space-y-3">
                             <label className="text-[10px] font-black text-foreground/30 uppercase tracking-widest flex items-center gap-2">
-                                <ImageIcon className="w-3 h-3" />
-                                Base Theme
+                                <Layers className="w-3 h-3" />
+                                Export Format
                             </label>
                             <div className="grid grid-cols-3 gap-3">
-                                {TEMPLATES.map((t) => (
+                                {FORMATS.map((f) => (
                                     <button
-                                        key={t.id}
-                                        onClick={() => setSelectedTemplate(t)}
-                                        className={`p-3 rounded-xl border-2 transition-all text-[10px] font-black uppercase tracking-wider ${selectedTemplate.id === t.id
-                                            ? `border-${t.color} bg-${t.color}/5 text-foreground`
+                                        key={f.id}
+                                        onClick={() => setSelectedFormat(f)}
+                                        className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${selectedFormat.id === f.id
+                                            ? 'border-apc-cyan bg-apc-cyan/5 text-foreground'
                                             : 'border-transparent bg-foreground/5 text-foreground/40 hover:bg-foreground/10'
                                             }`}
                                     >
-                                        {t.name}
+                                        <f.icon className="w-4 h-4" />
+                                        <span className="text-[9px] font-black uppercase tracking-wider">{f.name}</span>
                                     </button>
                                 ))}
+                            </div>
+                        </div>
+
+                        {/* Image Upload */}
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-foreground/30 uppercase tracking-widest flex items-center gap-2">
+                                <ImageIcon className="w-3 h-3" />
+                                Portrait / Asset
+                            </label>
+                            <div
+                                onClick={() => fileInputRef.current?.click()}
+                                className="w-full py-8 border-2 border-dashed border-foreground/10 rounded-2xl hover:bg-foreground/5 transition-all cursor-pointer flex flex-col items-center justify-center gap-2"
+                            >
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    className="hidden"
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                />
+                                <div className="p-3 bg-apc-cyan/10 rounded-xl">
+                                    <Sparkles className="w-5 h-5 text-apc-cyan" />
+                                </div>
+                                <span className="text-[10px] font-black text-foreground/40 uppercase tracking-widest">
+                                    {uploadedImage ? 'Change Image' : 'Click to Upload Portrait'}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Typography Controls */}
+                        <div className="grid grid-cols-2 gap-6">
+                            <div className="space-y-3">
+                                <label className="text-[10px] font-black text-foreground/30 uppercase tracking-widest block">Font Size</label>
+                                <input
+                                    type="range"
+                                    min="24"
+                                    max="120"
+                                    value={fontSize}
+                                    onChange={(e) => setFontSize(parseInt(e.target.value))}
+                                    className="w-full accent-apc-cyan"
+                                />
+                            </div>
+                            <div className="space-y-3">
+                                <label className="text-[10px] font-black text-foreground/30 uppercase tracking-widest block">Theme Color</label>
+                                <div className="flex gap-2">
+                                    {TEMPLATES.map(t => (
+                                        <button
+                                            key={t.id}
+                                            onClick={() => setSelectedTemplate(t)}
+                                            className={`w-6 h-6 rounded-full border-2 ${selectedTemplate.id === t.id ? 'border-foreground' : 'border-transparent'}`}
+                                            style={{ backgroundColor: `var(--color-${t.color})` }}
+                                        />
+                                    ))}
+                                </div>
                             </div>
                         </div>
 
@@ -115,57 +190,79 @@ export default function FlyerGenerator() {
 
                 <div
                     ref={flyerRef}
-                    className="aspect-[4/5] relative rounded-[3rem] overflow-hidden premium-shadow group bg-white"
+                    className={`${selectedFormat.aspect} relative overflow-hidden premium-shadow group bg-white shadow-2xl transition-all duration-700 ${selectedFormat.id === 'sticker' ? 'rounded-full' : 'rounded-[3rem]'}`}
                 >
-                    {/* Flyer Content */}
+                    {/* Background Layer */}
                     <div className={`absolute inset-0 ${selectedTemplate.bg} transition-colors duration-500`} />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${selectedTemplate.gradient} opacity-50`} />
 
-                    {/* Design Elements */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-apc-cyan/20 blur-[100px] rounded-full -mr-20 -mt-20" />
-                    <div className="absolute bottom-0 left-0 w-80 h-80 bg-apc-green/10 blur-[120px] rounded-full -ml-32 -mb-32" />
+                    {/* Dynamic Design Elements */}
+                    <div className="absolute top-0 right-0 w-full h-full pointer-events-none">
+                        <div className={`absolute top-0 right-0 w-[80%] h-[80%] bg-${selectedTemplate.color}/20 blur-[120px] rounded-full -mr-[20%] -mt-[20%] opacity-60`} />
+                        <div className="absolute bottom-0 left-0 w-[100%] h-[100%] bg-apc-green/10 blur-[150px] rounded-full -ml-[40%] -mb-[40%] opacity-40" />
+                    </div>
 
-                    <div className="relative h-full flex flex-col p-12 justify-between z-10">
+                    <div className="relative h-full flex flex-col p-8 md:p-12 justify-between z-10">
                         <div className="flex justify-between items-start">
-                            <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-2xl p-4 relative overflow-hidden">
+                            <div className="w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl flex items-center justify-center shadow-2xl p-4 relative overflow-hidden">
                                 <Image
                                     src="/logo.png"
                                     alt="Logo"
                                     fill
-                                    className="object-contain p-4"
+                                    className="object-contain p-3 md:p-4"
                                 />
                             </div>
-                            <div className="p-4 ultra-glass rounded-2xl border border-white/50 text-[10px] font-black uppercase tracking-[0.3em] text-apc-cyan">
-                                Official Template
-                            </div>
+                            {selectedFormat.id !== 'sticker' && (
+                                <div className="p-3 md:p-4 ultra-glass rounded-2xl border border-white/50 text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-apc-cyan">
+                                    Official Campaign Asset
+                                </div>
+                            )}
                         </div>
 
-                        <div className="space-y-8">
+                        {/* Portrait Placeholder / Upload */}
+                        {uploadedImage && (
+                            <div className="absolute inset-0 flex items-center justify-center opacity-40 pointer-events-none">
+                                <Image
+                                    src={uploadedImage}
+                                    alt="Uploaded"
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        )}
+
+                        <div className="space-y-6 md:space-y-8 max-w-[85%]">
                             <motion.h2
                                 key={headline}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="text-5xl md:text-6xl font-display font-black leading-[0.9] tracking-tighter text-foreground"
+                                style={{ fontSize: `${fontSize}px` }}
+                                className="font-display font-black leading-[0.9] tracking-tighter text-foreground drop-shadow-sm"
                             >
                                 {headline}
                             </motion.h2>
 
-                            <div className="flex items-center gap-6">
-                                <div className={`h-1.5 w-24 bg-${selectedTemplate.color} rounded-full`} />
-                                <div className="text-xs font-black uppercase tracking-[0.4em] text-foreground/40">
-                                    Renewed Hope 2027
+                            {selectedFormat.id !== 'sticker' && (
+                                <div className="flex items-center gap-4 md:gap-6">
+                                    <div className={`h-1 md:h-1.5 w-16 md:w-24 bg-${selectedTemplate.color} rounded-full`} />
+                                    <div className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-foreground/40">
+                                        Renewed Hope 2027
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
 
-                        <div className="bg-foreground text-white p-8 rounded-[2rem] flex items-center justify-between">
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Take Action Now</p>
-                                <p className="text-lg font-black italic">Join the Movement</p>
+                        {selectedFormat.id !== 'sticker' && (
+                            <div className="bg-foreground text-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] flex items-center justify-between">
+                                <div>
+                                    <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Take Action Now</p>
+                                    <p className="text-base md:text-lg font-black italic">Join the Movement</p>
+                                </div>
+                                <div className="w-10 h-10 md:w-12 md:h-12 bg-white/10 rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform">
+                                    <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                                </div>
                             </div>
-                            <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform">
-                                <ChevronRight className="w-6 h-6 text-white" />
-                            </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Overlay Grid */}
