@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import AIAssistant from "@/components/AIAssistant";
 import { AuthProvider } from "@/components/AuthProvider";
 import { NotificationProvider } from "@/components/NotificationProvider";
+import Link from 'next/link';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -66,8 +67,8 @@ export default function RootLayout({
 
                 <div className="flex flex-col items-center md:items-end gap-6">
                   <div className="flex gap-10 text-[11px] font-black text-forest/40 uppercase tracking-[0.2em]">
-                    <span className="hover:text-forest cursor-pointer transition-colors duration-300">Privacy Protocols</span>
-                    <span className="hover:text-leaf cursor-pointer transition-colors duration-300">Terms of Engagement</span>
+                    <Link href="/privacy" className="hover:text-forest transition-colors duration-300">Privacy Protocols</Link>
+                    <Link href="/terms" className="hover:text-leaf transition-colors duration-300">Terms of Engagement</Link>
                     <span className="hover:text-gold cursor-pointer transition-colors duration-300">Security Core</span>
                   </div>
                   <div className="text-forest/30 text-[10px] font-bold tracking-widest text-center md:text-right">

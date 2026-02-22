@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Shield, Medal, Trophy, Star, LucideIcon } from "lucide-react";
 
-export type UserTier = 'Supporter' | 'Vanguard' | 'Commander' | 'Sentinel';
+export type UserTier = 'Supporter' | 'Patriot' | 'Commander' | 'Sentinel';
 
 interface PrestigeBadgeProps {
     tier: UserTier;
@@ -19,12 +19,12 @@ const tierConfig: Record<UserTier, { icon: LucideIcon; color: string; bg: string
         border: "border-foreground/10",
         label: "Supporter"
     },
-    Vanguard: {
+    Patriot: {
         icon: Medal,
         color: "text-apc-green",
         bg: "bg-apc-green/10",
         border: "border-apc-green/20",
-        label: "Vanguard"
+        label: "Patriot"
     },
     Commander: {
         icon: Shield,

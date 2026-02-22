@@ -11,24 +11,26 @@ import {
     MessageSquare,
     Shield,
     Loader2,
-    ShieldCheck,
     Radio,
     SignalHigh,
+    Trophy,
 } from "lucide-react";
 import NigeriaMap, { ZONE_LABELS } from "@/components/NigeriaMap";
 import { useState } from "react";
 import Link from "next/link";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { useAuth } from "@/components/AuthProvider";
-import { useActivities } from "@/hooks/useActivities";
 import { useFieldCommand } from "@/hooks/useFieldCommand";
 import { useChapterData } from "@/hooks/useChapterData";
+import IntelligenceFeed from "@/components/IntelligenceFeed";
+import { useProfile } from "@/hooks/useProfile";
+import PrestigeBadge, { UserTier } from "@/components/PrestigeBadge";
 
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState<"map" | "zones">("map");
     const { stats, loading } = useDashboardData();
-    const { activities, loading: activitiesLoading } = useActivities(5);
     const { user } = useAuth();
+    const { profile, loading: profileLoading } = useProfile();
     const { chapter } = useChapterData();
     const { announcements } = useFieldCommand(chapter?.id);
 
@@ -230,26 +232,15 @@ export default function Dashboard() {
                         </div>
 
                         <div className="premium-card">
-                            <h3 className="text-sm font-bold text-foreground/40 uppercase tracking-widest mb-6">Latest Activities</h3>
-                            <div className="space-y-4">
-                                {activities.length > 0 ? activities.map((item) => (
-                                    <div key={item.id} className="flex items-center justify-between p-3 rounded-xl bg-foreground/5 hover:bg-foreground/10 transition-colors group cursor-pointer border border-apc-red/5">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-2 h-2 rounded-full bg-apc-green" />
-                                            <div>
-                                                <div className="text-sm font-bold text-foreground">{item.title}</div>
-                                                <div className="text-[10px] text-foreground/40 font-bold uppercase">{item.profiles?.full_name || 'Anonymous'} • {item.profiles?.state || 'Nigeria'}</div>
-                                            </div>
-                                        </div>
-                                        <div className="text-[10px] font-bold text-foreground/30 group-hover:text-foreground transition-colors">
-                                            {new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </div>
-                                    </div>
-                                )) : (
-                                    <div className="text-center py-8 text-foreground/30 text-xs font-bold uppercase italic">
-                                        {activitiesLoading ? <Loader2 className="w-5 h-5 animate-spin mx-auto text-apc-green" /> : "No recent activity recorded"}
-                                    </div>
-                                )}
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="text-sm font-bold text-foreground/40 uppercase tracking-widest flex items-center gap-2">
+                                    <SignalHigh className="w-4 h-4 text-apc-green" />
+                                    Verified Intel Stream
+                                </h3>
+                                <div className="text-[10px] font-black text-apc-green px-2 py-0.5 rounded bg-apc-green/5 border border-apc-green/10 uppercase">National</div>
+                            </div>
+                            <div className="max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                                <IntelligenceFeed />
                             </div>
                         </div>
 
@@ -288,33 +279,59 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        {/* Innovator Profile Section */}
+                        {/* Elite Rank Profile Section */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="premium-card border-apc-green/30 bg-apc-green/5"
+                            className="premium-card border-apc-cyan/30 bg-apc-cyan/5 relative overflow-hidden group"
                         >
-                            <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-sm font-bold text-apc-green uppercase tracking-widest">Your Profile</h3>
-                                <Link href="/settings" className="text-[10px] font-black text-foreground/40 hover:text-foreground transition-colors uppercase">Edit →</Link>
+                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <Trophy className="w-16 h-16 text-apc-cyan" />
                             </div>
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="w-12 h-12 rounded-xl apc-cyan-gradient flex items-center justify-center text-white font-black">
-                                    {user?.user_metadata?.full_name?.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2) || "RH"}
+
+                            <div className="flex items-center justify-between mb-4 relative z-10">
+                                <h3 className="text-sm font-bold text-apc-cyan uppercase tracking-widest flex items-center gap-2">
+                                    Elite Rank
+                                </h3>
+                                <Link href="/settings" className="text-[10px] font-black text-foreground/40 hover:text-foreground transition-colors uppercase">Profile Stats →</Link>
+                            </div>
+
+                            <div className="flex items-center gap-4 mb-6 relative z-10">
+                                <div className="relative">
+                                    <div className="w-14 h-14 rounded-2xl apc-cyan-gradient flex items-center justify-center text-white font-black text-xl shadow-lg">
+                                        {profile?.full_name?.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2) || "RH"}
+                                    </div>
+                                    <div className="absolute -bottom-1 -right-1">
+                                        <PrestigeBadge tier={(profile?.tier as UserTier) || 'Supporter'} size="sm" />
+                                    </div>
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="font-display font-bold text-foreground leading-tight truncate max-w-[150px]">
-                                        {user?.user_metadata?.full_name || "Innovator"}
+                                    <span className="font-display font-black text-foreground text-lg leading-none truncate max-w-[150px]">
+                                        {profileLoading ? "..." : (profile?.full_name || "Innovator")}
                                     </span>
-                                    {user?.user_metadata?.is_volunteer && (
-                                        <span className="text-[8px] font-black text-apc-green uppercase tracking-widest flex items-center gap-1 mt-0.5">
-                                            <ShieldCheck className="w-2.5 h-2.5" /> Verified Volunteer
-                                        </span>
-                                    )}
+                                    <span className="text-[9px] font-black text-apc-green uppercase tracking-widest flex items-center gap-1 mt-1.5 bg-apc-green/5 px-1.5 py-0.5 rounded border border-apc-green/10 w-fit">
+                                        {profile?.tier || 'Supporter'} Class
+                                    </span>
                                 </div>
                             </div>
-                            <div className="p-3 rounded-xl bg-white/50 border border-apc-green/10 text-xs font-medium text-foreground/70 leading-relaxed italic">
-                                &quot;The Renewed Hope mandate is the foundation of our collective progress.&quot;
+
+                            <div className="grid grid-cols-2 gap-3 mb-4 relative z-10">
+                                <div className="bg-white/40 p-3 rounded-2xl border border-apc-cyan/10">
+                                    <div className="text-[9px] font-black text-foreground/40 uppercase tracking-widest mb-1">Reputation</div>
+                                    <div className="text-lg font-black text-apc-cyan leading-none font-display italic">
+                                        {profile?.reputation_score?.toLocaleString() || 0}
+                                    </div>
+                                </div>
+                                <div className="bg-white/40 p-3 rounded-2xl border border-apc-cyan/10">
+                                    <div className="text-[9px] font-black text-foreground/40 uppercase tracking-widest mb-1">Status</div>
+                                    <div className="text-[10px] font-black text-apc-green leading-none uppercase mt-1">
+                                        Active Duty
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="p-3 rounded-xl bg-apc-cyan/10 border border-apc-cyan/20 text-[10px] font-bold text-apc-cyan/80 leading-relaxed italic text-center">
+                                &quot;Your dedication strengthens the movement.&quot;
                             </div>
                         </motion.div>
                     </div>

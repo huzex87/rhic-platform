@@ -122,8 +122,11 @@ export function useFieldReports(chapterId?: string) {
         return { error };
     };
 
+    const pendingReports = reports.filter(r => r.status === 'pending');
+
     return {
-        reports,
+        reports: reports.filter(r => r.status === 'verified'),
+        pendingReports,
         loading,
         error,
         submitReport,

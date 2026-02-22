@@ -44,7 +44,7 @@ export function useAIBrain() {
         const generalResponses = [
             `The Renewed Hope mandate in ${userState} is progressing. We've mapped ${metrics?.total_supporters.toLocaleString() || 'significant'} supporters nationwide.`,
             `Intelligence stream active. Regional coordination in the ${chapter?.zone || 'target'} zone is 85% synchronized.`,
-            `Vanguard Command established. I'm monitoring live feeds for any incident reports in ${chapter?.name || 'your area'}.`
+            `RHIC Command established. I'm monitoring live feeds for any incident reports in ${chapter?.name || 'your area'}.`
         ];
 
         return generalResponses[Math.floor(Math.random() * generalResponses.length)];

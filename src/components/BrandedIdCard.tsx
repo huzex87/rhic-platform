@@ -15,6 +15,8 @@ interface BrandedIdCardProps {
     isVolunteer: boolean;
     volunteerRole: string | null;
     memberId: string;
+    tier?: string;
+    reputationScore?: number;
     achievements?: { name: string; icon_type: string }[];
 }
 
@@ -28,6 +30,8 @@ export default function BrandedIdCard({
     role,
     isVolunteer,
     memberId,
+    tier = 'Supporter',
+    reputationScore = 0,
     achievements = [],
 }: BrandedIdCardProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -155,7 +159,7 @@ export default function BrandedIdCard({
         ctx.fillStyle = "#00AEEF";
         ctx.fillText(roleText, w / 2, 558);
 
-        // ── Volunteer Badge ──
+        // ── Volunteer & Rank Badge ──
         if (isVolunteer) {
             ctx.font = "bold 20px 'Inter', 'Helvetica', sans-serif";
             const vText = "VERIFIED FIELD VOLUNTEER";
@@ -163,6 +167,13 @@ export default function BrandedIdCard({
             ctx.textAlign = "center";
             ctx.fillText("★ " + vText + " ★", w / 2, 595);
         }
+
+        // Tier / Rank Visual (Sentinel, Commander, etc.)
+        const tierLabel = tier.toUpperCase();
+        ctx.font = "900 32px 'Inter', 'Helvetica', sans-serif";
+        ctx.fillStyle = tier === 'Sentinel' ? '#FFD700' : tier === 'Commander' ? '#E31E24' : tier === 'Vanguard' ? '#00AEEF' : 'rgba(255,255,255,0.4)';
+        ctx.textAlign = "center";
+        ctx.fillText(tierLabel + " RANK", w / 2, 640);
 
         // ── Achievement Badges ──
         if (achievements.length > 0) {
@@ -235,7 +246,9 @@ export default function BrandedIdCard({
             { label: "LOCAL GOVT. AREA", value: lga || "Not Set", x: leftX },
             { label: "WARD", value: ward || "Not Set", x: rightX },
             { label: "POLLING UNIT", value: pollingUnit || "Not Assigned", x: leftX },
-            { label: "MEMBER ID", value: memberId.slice(0, 8).toUpperCase(), x: rightX },
+            { label: "REPUTATION SCORE", value: reputationScore.toLocaleString() + " PTS", x: rightX },
+            { label: "MEMBER ID", value: memberId.slice(0, 8).toUpperCase(), x: leftX },
+            { label: "ISSUE DATE", value: new Date().toLocaleDateString(), x: rightX },
         ];
 
         fields.forEach((field, i) => {
@@ -279,7 +292,7 @@ export default function BrandedIdCard({
         ctx.fillRect(w / 3, h - barH, w / 3, barH);
         ctx.fillStyle = "#E31E24"; // Using APC Red for the third segment to brand it fully APC-Nigeria
         ctx.fillRect((w / 3) * 2, h - barH, w / 3, barH);
-    }, [fullName, zone, state, lga, ward, pollingUnit, role, isVolunteer, memberId, achievements]);
+    }, [fullName, zone, state, lga, ward, pollingUnit, role, isVolunteer, memberId, tier, reputationScore, achievements]);
 
     const handleDownload = () => {
         generateCard();

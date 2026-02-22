@@ -16,6 +16,7 @@ interface FieldReportData {
     type: 'Incident' | 'Status' | 'Result' | 'Logistics';
     content: string;
     urgency: 'Normal' | 'High' | 'Urgent';
+    media_url?: string;
 }
 
 export default function FieldReportModal({ isOpen, onClose, chapterId, pollingUnitId }: FieldReportModalProps) {
@@ -26,6 +27,7 @@ export default function FieldReportModal({ isOpen, onClose, chapterId, pollingUn
         type: 'Status',
         content: '',
         urgency: 'Normal',
+        media_url: '',
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -43,7 +45,7 @@ export default function FieldReportModal({ isOpen, onClose, chapterId, pollingUn
             setSuccess(true);
             setTimeout(() => {
                 setSuccess(false);
-                setReportData({ type: 'Status', content: '', urgency: 'Normal' });
+                setReportData({ type: 'Status', content: '', urgency: 'Normal', media_url: '' });
                 onClose();
             }, 2000);
         }
@@ -119,9 +121,23 @@ export default function FieldReportModal({ isOpen, onClose, chapterId, pollingUn
                                             value={reportData.content}
                                             onChange={(e) => setReportData(prev => ({ ...prev, content: e.target.value }))}
                                             placeholder="Provide clear, concise details of the situation or results..."
-                                            rows={5}
+                                            rows={4}
                                             className="w-full bg-forest/5 border border-forest/10 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-leaf/30 text-forest font-bold transition-all resize-none"
                                             required
+                                        />
+                                    </div>
+
+                                    {/* Media URL (Optional but encouraged for verification) */}
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-forest/40 uppercase tracking-widest ml-1">
+                                            Media Verification URL (Optional)
+                                        </label>
+                                        <input
+                                            type="url"
+                                            value={reportData.media_url}
+                                            onChange={(e) => setReportData(prev => ({ ...prev, media_url: e.target.value }))}
+                                            placeholder="Link to image/video for verification..."
+                                            className="w-full bg-forest/5 border border-forest/10 rounded-xl px-6 py-3 focus:outline-none focus:ring-2 focus:ring-leaf/30 text-forest font-bold transition-all text-sm"
                                         />
                                     </div>
 
