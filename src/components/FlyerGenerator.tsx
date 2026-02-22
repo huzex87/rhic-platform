@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, Download, Share2, Layers, Type, Image as ImageIcon, CheckCircle2, ChevronRight, Loader2 } from "lucide-react";
 import { useState, useRef } from "react";
+import Image from "next/image";
 
 const TEMPLATES = [
     { id: 'tech', name: 'Digital Economy', color: 'apc-cyan', bg: 'bg-apc-cyan/10' },
@@ -61,8 +62,8 @@ export default function FlyerGenerator() {
                                         key={t.id}
                                         onClick={() => setSelectedTemplate(t)}
                                         className={`p-3 rounded-xl border-2 transition-all text-[10px] font-black uppercase tracking-wider ${selectedTemplate.id === t.id
-                                                ? `border-${t.color} bg-${t.color}/5 text-foreground`
-                                                : 'border-transparent bg-foreground/5 text-foreground/40 hover:bg-foreground/10'
+                                            ? `border-${t.color} bg-${t.color}/5 text-foreground`
+                                            : 'border-transparent bg-foreground/5 text-foreground/40 hover:bg-foreground/10'
                                             }`}
                                     >
                                         {t.name}
@@ -125,8 +126,13 @@ export default function FlyerGenerator() {
 
                     <div className="relative h-full flex flex-col p-12 justify-between z-10">
                         <div className="flex justify-between items-start">
-                            <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-2xl p-4">
-                                <img src="/logo.png" alt="Logo" className="w-full h-auto object-contain" />
+                            <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-2xl p-4 relative overflow-hidden">
+                                <Image
+                                    src="/logo.png"
+                                    alt="Logo"
+                                    fill
+                                    className="object-contain p-4"
+                                />
                             </div>
                             <div className="p-4 ultra-glass rounded-2xl border border-white/50 text-[10px] font-black uppercase tracking-[0.3em] text-apc-cyan">
                                 Official Template

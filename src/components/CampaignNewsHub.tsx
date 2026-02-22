@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Twitter, Instagram, Facebook, Share2, MessageCircle, TrendingUp, Users, ExternalLink } from "lucide-react";
+import { Twitter, Instagram, Share2, MessageCircle, TrendingUp, Users, ExternalLink } from "lucide-react";
 
 const NEWS = [
     {

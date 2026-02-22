@@ -3,8 +3,7 @@
 import { motion } from "framer-motion";
 import {
     Download,
-    Share2,
-    Image as ImageIcon,
+    ImageIcon,
     Video,
     FileText,
     Sparkles,
