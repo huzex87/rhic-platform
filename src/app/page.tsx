@@ -64,7 +64,7 @@ export default function Home() {
                 href="/auth"
                 className="btn-apc flex items-center justify-center gap-4 group text-lg md:text-xl px-8 md:px-12 py-4 md:py-5 shadow-[0_25px_50px_-15px_rgba(0,173,239,0.4)] hover:shadow-[0_35px_60px_-15px_rgba(0,173,239,0.6)]"
               >
-                Join the Movement
+                Join Now
                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
@@ -256,14 +256,14 @@ export default function Home() {
                     href="/auth"
                     className="bg-white text-apc-cyan px-12 py-6 rounded-3xl font-black text-xl shadow-[0_30px_60px_-10px_rgba(0,0,0,0.3)] hover:scale-110 active:scale-95 transition-all flex items-center gap-4 w-full sm:w-auto justify-center"
                   >
-                    Enlist Now
+                    Join Now
                     <ChevronRight className="w-6 h-6" />
                   </Link>
                   <Link
                     href="/chapter"
                     className="px-12 py-6 rounded-3xl font-black text-xl text-white border-2 border-white/30 backdrop-blur-md hover:bg-white/10 transition-all w-full sm:w-auto text-center"
                   >
-                    Locate Command
+                    Find Chapter
                   </Link>
                 </div>
               </div>

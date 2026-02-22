@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Sparkles, Download, Share2, Layers, Type, Image as ImageIcon, CheckCircle2, ChevronRight, Loader2 } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
+import { toPng } from "html-to-image";
 
 const TEMPLATES = [
     { id: 'tech', name: 'Digital Economy', color: 'apc-cyan', bg: 'bg-apc-cyan/10', gradient: 'from-apc-cyan/20 via-transparent to-apc-green/10' },
@@ -24,6 +25,8 @@ export default function FlyerGenerator() {
     const [fontSize, setFontSize] = useState(64);
     const [uploadedImage, setUploadedImage] = useState<string | null>(null);
     const [generating, setGenerating] = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
+    const [exportStatus, setExportStatus] = useState<string | null>(null);
     const flyerRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,6 +34,68 @@ export default function FlyerGenerator() {
         setGenerating(true);
         setTimeout(() => setGenerating(false), 2000);
     };
+
+    const handleDownload = useCallback(async () => {
+        if (flyerRef.current === null) return;
+
+        setIsExporting(true);
+        setExportStatus("Generating High-Res Asset...");
+
+        try {
+            // Wait for a small delay to ensure rendering is stable
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const dataUrl = await toPng(flyerRef.current, {
+                cacheBust: true,
+                style: {
+                    borderRadius: selectedFormat.id === 'sticker' ? '9999px' : '0'
+                }
+            });
+
+            const link = document.createElement('a');
+            link.download = `APC_${selectedFormat.id}_${Date.now()}.png`;
+            link.href = dataUrl;
+            link.click();
+            setExportStatus("Download Complete!");
+            setTimeout(() => setExportStatus(null), 3000);
+        } catch (err) {
+            console.error('Export failed', err);
+            setExportStatus("Export Failed. Please try again.");
+        } finally {
+            setIsExporting(false);
+        }
+    }, [selectedFormat]);
+
+    const handleShare = useCallback(async () => {
+        if (flyerRef.current === null) return;
+
+        setIsExporting(true);
+        setExportStatus("Preparing for Sharing...");
+
+        try {
+            const dataUrl = await toPng(flyerRef.current, { cacheBust: true });
+            const blob = await (await fetch(dataUrl)).blob();
+            const file = new File([blob], `APC_Flyer.png`, { type: 'image/png' });
+
+            if (navigator.share && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: 'APC Campaign Asset',
+                    text: headline
+                });
+            } else {
+                // Fallback: Copy Image Data URL or just notify
+                await navigator.clipboard.writeText(window.location.href);
+                setExportStatus("Link Copied to Clipboard!");
+            }
+        } catch (err) {
+            console.error('Share failed', err);
+            setExportStatus("Sharing Unavailable.");
+        } finally {
+            setIsExporting(false);
+            setTimeout(() => setExportStatus(null), 3000);
+        }
+    }, [headline]);
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -177,12 +242,31 @@ export default function FlyerGenerator() {
             {/* Preview Area */}
             <div className="sticky top-32 space-y-6">
                 <div className="flex items-center justify-between px-2">
-                    <h4 className="text-[10px] font-black text-foreground/30 uppercase tracking-[0.2em]">Real-time Preview</h4>
+                    <div className="flex flex-col">
+                        <h4 className="text-[10px] font-black text-foreground/30 uppercase tracking-[0.2em]">Real-time Preview</h4>
+                        {exportStatus && (
+                            <motion.span
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="text-[9px] font-bold text-apc-cyan uppercase mt-1"
+                            >
+                                {exportStatus}
+                            </motion.span>
+                        )}
+                    </div>
                     <div className="flex gap-2">
-                        <button className="p-2.5 rounded-xl bg-foreground/5 hover:bg-foreground/10 text-foreground transition-all">
-                            <Download className="w-5 h-5" />
+                        <button
+                            onClick={handleDownload}
+                            disabled={isExporting}
+                            className="p-2.5 rounded-xl bg-foreground/5 hover:bg-foreground/10 text-foreground transition-all disabled:opacity-50"
+                        >
+                            {isExporting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
                         </button>
-                        <button className="p-2.5 rounded-xl bg-foreground/5 hover:bg-foreground/10 text-foreground transition-all">
+                        <button
+                            onClick={handleShare}
+                            disabled={isExporting}
+                            className="p-2.5 rounded-xl bg-foreground/5 hover:bg-foreground/10 text-foreground transition-all disabled:opacity-50"
+                        >
                             <Share2 className="w-5 h-5" />
                         </button>
                     </div>
