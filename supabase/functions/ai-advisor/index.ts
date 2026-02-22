@@ -6,7 +6,7 @@ const corsHeaders = {
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-Deno.serve(async (req) => {
+Deno.serve(async (req: Request) => {
     if (req.method === 'OPTIONS') {
         return new Response('ok', { headers: corsHeaders });
     }
@@ -27,11 +27,17 @@ Deno.serve(async (req) => {
 
         if (reportsError) throw reportsError;
 
+        if (!reports) {
+            return new Response(JSON.stringify({ analysis: [] }), {
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                status: 200,
+            });
+        }
+
         // 2. Format reports for LLM
-        const context = reports.map(r => `[${r.type}][${r.urgency}] ${r.chapters?.state}: ${r.content}`).join('\n');
+        const context = reports.map((r: any) => `[${r.type}][${r.urgency}] ${r.chapters?.state}: ${r.content}`).join('\n');
 
         // 3. Request synthesis from LLM (Mocked for now, to be integrated with Gemini/OpenAI API)
-        // In actual implementation, we would call an AI API here.
         const analysis = [
             `High activity detected in ${reports[0]?.chapters?.state || 'Northern'} regions.`,
             "Mobilization density reaching target thresholds in urban centers.",
@@ -42,8 +48,8 @@ Deno.serve(async (req) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 200,
         });
-    } catch (error) {
-        return new Response(JSON.stringify({ error: error.message }), {
+    } catch (error: any) {
+        return new Response(JSON.stringify({ error: error?.message || 'Internal Server Error' }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 400,
         });

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, BarChart3, Rocket, MessageSquare, BookOpen, LogOut, UserCircle, ArrowRight } from "lucide-react";
+import { Menu, X, BarChart3, Rocket, MessageSquare, BookOpen, LogOut, UserCircle, ArrowRight, Target } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./AuthProvider";
@@ -12,6 +12,7 @@ import PrestigeBadge, { UserTier } from "./PrestigeBadge";
 const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
     { name: "Missions", href: "/missions", icon: Rocket },
+    { name: "Mandates", href: "/mandate", icon: Target },
     { name: "Innovation", href: "/innovation", icon: BookOpen },
     { name: "Media", href: "/media", icon: MessageSquare },
 ];

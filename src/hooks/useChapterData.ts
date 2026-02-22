@@ -11,6 +11,7 @@ export interface Chapter {
     name: string;
     supporter_count: number;
     status: string;
+    momentum_score?: number;
 }
 
 export interface ChapterMember {

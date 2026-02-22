@@ -5,6 +5,8 @@ import { ArrowRight, Rocket, Users, Globe, MapPin, Handshake, Star, ChevronRight
 import Image from "next/image";
 import Link from "next/link";
 import NigeriaMap from "@/components/NigeriaMap";
+import LiveCommandTicker from "@/components/LiveCommandTicker";
+import ForceStrengthPreview from "@/components/ForceStrengthPreview";
 
 export default function Home() {
   return (
@@ -35,9 +37,9 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-7xl md:text-8xl lg:text-[10rem] font-display font-black leading-[0.85] tracking-tight mb-12 select-none"
             >
-              <span className="block mb-2">Renewed</span>
+              <span className="block mb-2">Renewed Hope</span>
               <span className="inline-block relative">
-                <span className="text-transparent bg-clip-text vibrant-apc-gradient italic pr-4">Hope</span>
+                <span className="text-transparent bg-clip-text vibrant-apc-gradient italic pr-4">Innovators</span>
               </span>
               <span className="block -mt-1">Coalition</span>
             </motion.h1>
@@ -49,8 +51,7 @@ export default function Home() {
               className="max-w-2xl text-xl md:text-2xl text-foreground/80 font-medium leading-relaxed mb-14 pl-10 border-l-[12px] border-apc-cyan ring-1 ring-apc-cyan/5 py-6 rounded-r-[2.5rem] bg-apc-cyan/[0.03] backdrop-blur-sm shadow-inner"
             >
               Building the <span className="text-apc-cyan font-black">Digital Vanguard</span> for Nigeria&apos;s progress.
-              An elite professional ecosystem scaling President Tinubu&apos;s vision through
-              world-class innovation and molecular-level mobilization.
+              Track our <Link href="/mandate" className="text-apc-cyan hover:underline decoration-apc-cyan/30">national mandates</Link> or join the elite vanguard scaling President Tinubu&apos;s vision.
             </motion.p>
 
             <motion.div
@@ -128,6 +129,8 @@ export default function Home() {
         </div>
       </section>
 
+      <LiveCommandTicker />
+
       {/* Elite Performance Metrics */}
       <section className="px-6 relative">
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
@@ -160,6 +163,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <ForceStrengthPreview />
 
       {/* Strategic Nationwide Footprint */}
       <section className="px-4">
