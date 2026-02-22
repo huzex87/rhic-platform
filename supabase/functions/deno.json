@@ -1,7 +1,7 @@
 {
     "imports": {
-        "jsr:@supabase/functions-js": "jsr:@supabase/functions-js@2.4.3",
-        "https://esm.sh/@supabase/supabase-js@2.39.3": "https://esm.sh/@supabase/supabase-js@2.39.3"
+        "jsr:@supabase/functions-js": "jsr:@supabase/functions-js@2.4.1",
+        "supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.3"
     },
     "compilerOptions": {
         "lib": [

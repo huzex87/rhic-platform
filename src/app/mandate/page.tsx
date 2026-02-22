@@ -49,8 +49,8 @@ export default function MandatePage() {
                                 key={cat}
                                 onClick={() => setFilter(cat)}
                                 className={`px-8 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all duration-300 border ${filter === cat
-                                        ? 'apc-cyan-gradient text-white shadow-lg border-white/20'
-                                        : 'bg-white/50 border-forest/10 text-forest/40 hover:border-apc-cyan/30'
+                                    ? 'apc-cyan-gradient text-white shadow-lg border-white/20'
+                                    : 'bg-white/50 border-forest/10 text-forest/40 hover:border-apc-cyan/30'
                                     }`}
                             >
                                 {cat}
@@ -91,7 +91,7 @@ export default function MandatePage() {
                                 mandates to every citizen. Your expertise is our national advantage.
                             </p>
                             <Link href="/auth" className="btn-apc inline-flex items-center gap-4 text-lg px-12 py-5 shadow-2xl">
-                                Enlist with the Vanguard
+                                Join the Movement
                                 <ChevronRight className="w-6 h-6" />
                             </Link>
                         </div>

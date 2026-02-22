@@ -10,11 +10,11 @@ import { useNotifications } from "./NotificationProvider";
 import PrestigeBadge, { UserTier } from "./PrestigeBadge";
 
 const navItems = [
-    { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
-    { name: "Missions", href: "/missions", icon: Rocket },
+    { name: "Overview", href: "/dashboard", icon: BarChart3 },
+    { name: "Action", href: "/missions", icon: Rocket },
     { name: "Mandates", href: "/mandate", icon: Target },
-    { name: "Innovation", href: "/innovation", icon: BookOpen },
-    { name: "Media", href: "/media", icon: MessageSquare },
+    { name: "Impact", href: "/innovation", icon: BookOpen },
+    { name: "Updates", href: "/media", icon: MessageSquare },
 ];
 
 export default function Navbar() {
@@ -75,7 +75,7 @@ export default function Navbar() {
                             >
                                 <div className="absolute inset-0 bg-gradient-to-r from-apc-red/0 via-apc-red/5 to-apc-red/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                                 <Rocket className="w-4 h-4 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500" />
-                                <span>S-EAGLE COMMAND</span>
+                                <span>STRATEGY ROOM</span>
                             </Link>
                         )}
 

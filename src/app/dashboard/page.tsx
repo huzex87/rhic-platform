@@ -40,7 +40,7 @@ export default function Dashboard() {
                     <div className="flex items-center gap-2 mb-2">
                         <div className="px-2 py-0.5 rounded bg-apc-red/10 border border-apc-red/20 flex items-center gap-1.5">
                             <Radio className="w-2.5 h-2.5 text-apc-red animate-pulse" />
-                            <span className="text-[9px] font-black text-apc-red uppercase tracking-wider">Status: Tactical</span>
+                            <span className="text-[9px] font-black text-apc-red uppercase tracking-wider">Status: Active</span>
                         </div>
                         <div className="px-2 py-0.5 rounded bg-apc-green/10 border border-apc-green/20 flex items-center gap-1.5">
                             <SignalHigh className="w-2.5 h-2.5 text-apc-green" />
@@ -48,20 +48,20 @@ export default function Dashboard() {
                         </div>
                     </div>
                     <h1 className="text-4xl md:text-5xl font-display font-black text-foreground leading-[0.9] tracking-tighter">
-                        Campaign <span className="text-apc-cyan italic underline decoration-apc-red/30 underline-offset-8">Headquarters</span>
+                        Campaign <span className="text-apc-cyan italic underline decoration-apc-red/30 underline-offset-8">Action Center</span>
                     </h1>
                     <p className="text-foreground/60 font-medium mt-4">
-                        {user ? `Operational Command established for ${user.user_metadata?.full_name || user.email?.split("@")[0]}. ` : ""}
-                        Strategic deployment analysis across all 37 States.
+                        {user ? `Welcome, ${user.user_metadata?.full_name || user.email?.split("@")[0]}. ` : ""}
+                        Reviewing our progress across all 37 States.
                     </p>
                 </div>
                 <div className="flex gap-3">
                     <button className="glass px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest text-foreground/60 hover:text-foreground hover:bg-white transition-all border border-foreground/10">
-                        Operational Log
+                        Activity Log
                     </button>
                     <button className="apc-cyan-gradient text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all flex items-center gap-2 border border-apc-red/20 group">
                         <Plus className="w-4 h-4 text-white group-hover:rotate-90 transition-transform" />
-                        Initiate Mobilization
+                        Start an Activity
                     </button>
                 </div>
             </div>
@@ -258,7 +258,7 @@ export default function Dashboard() {
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-sm font-bold text-foreground/40 uppercase tracking-widest flex items-center gap-2">
                                     <Radio className="w-4 h-4 text-apc-red" />
-                                    National Intelligence Stream
+                                    Community Updates
                                 </h3>
                                 <div className="text-[10px] font-black text-apc-red px-2 py-1 rounded bg-apc-red/5 uppercase border border-apc-red/10">
                                     Sector: {user?.user_metadata?.state || "National"}

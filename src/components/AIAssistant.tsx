@@ -9,7 +9,7 @@ export default function AIAssistant() {
     const [isOpen, setIsOpen] = useState(false);
     const { getStrategicAdvice } = useAIBrain();
     const [messages, setMessages] = useState([
-        { role: 'assistant', text: "Operational Command initialized. I am scanning live field streams for the Renewed Hope mandate. How can I assist your mobilization efforts?" }
+        { role: 'assistant', text: "Hello! I am here to support our community for the Renewed Hope mandate. How can I help you take action today?" }
     ]);
     const [input, setInput] = useState("");
     const [isTyping, setIsTyping] = useState(false);
@@ -69,10 +69,10 @@ export default function AIAssistant() {
                                     <Bot className="text-white w-6 h-6" />
                                 </div>
                                 <div>
-                                    <div className="font-display font-black text-xs tracking-[0.1em] uppercase">Vanguard Brain</div>
+                                    <div className="font-display font-black text-xs tracking-[0.1em] uppercase">Movement Advisor</div>
                                     <div className="flex items-center gap-1.5 text-[9px] font-black text-apc-gold uppercase">
                                         <span className="w-1.5 h-1.5 rounded-full bg-apc-green animate-pulse shadow-[0_0_8px_rgba(34,197,94,1)]" />
-                                        Encrypted Intel Stream
+                                        Live Activity Feed
                                     </div>
                                 </div>
                             </div>
@@ -93,10 +93,10 @@ export default function AIAssistant() {
                                         {m.role === 'assistant' && i === messages.length - 1 && !isTyping && (
                                             <div className="mt-4 flex gap-2">
                                                 <button className="bg-apc-red/10 hover:bg-apc-red/20 text-apc-red text-[9px] font-black px-3 py-1.5 rounded-lg border border-apc-red/20 transition-all uppercase tracking-wider">
-                                                    Initialize Mission
+                                                    Start Activity
                                                 </button>
                                                 <button className="bg-apc-cyan/10 hover:bg-apc-cyan/20 text-apc-cyan text-[9px] font-black px-3 py-1.5 rounded-lg border border-apc-cyan/10 transition-all uppercase tracking-wider">
-                                                    Tactical Brief
+                                                    Quick Update
                                                 </button>
                                             </div>
                                         )}
@@ -125,7 +125,7 @@ export default function AIAssistant() {
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                                    placeholder="Consult Vanguard Brain..."
+                                    placeholder="Ask our Movement Advisor..."
                                     className="w-full pl-4 pr-12 py-4 rounded-2xl bg-white/50 border border-white/50 focus:border-apc-cyan focus:ring-4 focus:ring-apc-cyan/10 outline-none text-[13px] font-medium text-forest transition-all placeholder:text-forest/30"
                                 />
                                 <button

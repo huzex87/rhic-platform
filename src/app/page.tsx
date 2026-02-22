@@ -27,7 +27,7 @@ export default function Home() {
             >
               <Zap className="w-4 h-4 text-apc-gold animate-bounce" />
               <span className="text-[10px] md:text-xs font-black text-apc-cyan tracking-[0.25em] uppercase">
-                Official National APC Support Group
+                National Support Group for Nigeria's Future
               </span>
             </motion.div>
 
@@ -35,11 +35,11 @@ export default function Home() {
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-7xl md:text-8xl lg:text-[10rem] font-display font-black leading-[0.85] tracking-tight mb-12 select-none"
+              className="text-6xl md:text-7xl lg:text-8xl font-display font-black leading-[0.9] tracking-tighter mb-10 select-none"
             >
-              <span className="block mb-2">Renewed Hope</span>
+              <span className="block mb-1">Renewed Hope</span>
               <span className="inline-block relative">
-                <span className="text-transparent bg-clip-text vibrant-apc-gradient italic pr-4">Innovators</span>
+                <span className="text-transparent bg-clip-text vibrant-apc-gradient italic pr-2">Innovators</span>
               </span>
               <span className="block -mt-1">Coalition</span>
             </motion.h1>
@@ -48,10 +48,10 @@ export default function Home() {
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="max-w-2xl text-xl md:text-2xl text-foreground/80 font-medium leading-relaxed mb-14 pl-10 border-l-[12px] border-apc-cyan ring-1 ring-apc-cyan/5 py-6 rounded-r-[2.5rem] bg-apc-cyan/[0.03] backdrop-blur-sm shadow-inner"
+              className="max-w-xl text-lg md:text-xl text-foreground/70 font-medium leading-relaxed mb-12 pl-8 border-l-8 border-apc-cyan py-4 rounded-r-3xl bg-apc-cyan/[0.02] backdrop-blur-sm"
             >
-              Building the <span className="text-apc-cyan font-black">Digital Vanguard</span> for Nigeria&apos;s progress.
-              Track our <Link href="/mandate" className="text-apc-cyan hover:underline decoration-apc-cyan/30">national mandates</Link> or join the elite vanguard scaling President Tinubu&apos;s vision.
+              Join the <span className="text-apc-cyan font-bold">community of innovators</span> building a better Nigeria.
+              See our <Link href="/mandate" className="text-apc-cyan hover:underline decoration-apc-cyan/30">progress updates</Link> or sign up to help scale our national vision.
             </motion.p>
 
             <motion.div
@@ -64,8 +64,8 @@ export default function Home() {
                 href="/auth"
                 className="btn-apc flex items-center gap-4 group text-xl px-12 py-5 shadow-[0_25px_50px_-15px_rgba(0,173,239,0.4)] hover:shadow-[0_35px_60px_-15px_rgba(0,173,239,0.6)]"
               >
-                Join the Vanguard
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                Join the Movement
+                <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="/innovation"
@@ -108,16 +108,26 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Presidential Quote Overlay */}
-              <div className="absolute bottom-12 left-12 right-12 p-10 ultra-glass rounded-[3rem] shadow-2xl z-30 transform transition-transform duration-700 group-hover:translate-y-2">
-                <p className="text-foreground font-display font-black italic text-3xl leading-[1.05] mb-6 tracking-tight">
-                  &ldquo;Our diversity is our strength; our innovation is our future.&rdquo;
-                </p>
-                <div className="flex items-center gap-4">
-                  <div className="h-[3px] w-16 bg-apc-red rounded-full" />
-                  <p className="text-apc-green font-black text-[10px] md:text-xs uppercase tracking-[0.5em]">
-                    President Bola Ahmed Tinubu
+              {/* Presidential Quote Overlay - Redesigned for high-prestige clarity */}
+              <div className="absolute bottom-10 left-10 right-10 p-10 ultra-glass rounded-[2.5rem] shadow-2xl z-30 transform transition-all duration-700 group-hover:translate-y-[-10px] border border-white/20">
+                <div className="flex flex-col gap-6">
+                  <p className="text-foreground font-display font-black italic text-2xl md:text-3xl leading-tight tracking-tight relative">
+                    <span className="absolute -top-4 -left-4 text-6xl text-apc-cyan/20 font-serif">&ldquo;</span>
+                    Our diversity is our strength; our innovation is our future.
+                    <span className="absolute -bottom-4 -right-2 text-6xl text-apc-cyan/20 font-serif">&rdquo;</span>
                   </p>
+
+                  <div className="flex items-center gap-4">
+                    <div className="h-[2px] w-12 bg-apc-red rounded-full" />
+                    <div className="flex flex-col">
+                      <p className="text-forest font-black text-[10px] uppercase tracking-[0.4em]">
+                        President Bola Ahmed Tinubu
+                      </p>
+                      <p className="text-[8px] font-bold text-apc-cyan/60 uppercase tracking-widest mt-0.5">
+                        Federal Republic of Nigeria
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -179,12 +189,12 @@ export default function Home() {
               <MapPin className="w-4 h-4 text-apc-red animate-pulse" />
               <span className="text-[10px] font-black text-apc-cyan tracking-[0.3em] uppercase">Molecular Saturation</span>
             </div>
-            <h2 className="text-5xl md:text-7xl font-display font-black tracking-tighter mb-6">
-              National <span className="text-apc-green">Command</span> Map
+            <h2 className="text-5xl md:text-6xl font-display font-black tracking-tighter mb-6">
+              Our <span className="text-apc-green">National</span> Impact
             </h2>
-            <p className="max-w-2xl mx-auto text-xl text-foreground/60 leading-relaxed font-medium">
-              Real-time intelligence and mobilization density across all 774 Local Government Areas.
-              A world-class tactical display of current &quot;Renewed Hope&quot; momentum.
+            <p className="max-w-2xl mx-auto text-lg text-foreground/60 leading-relaxed font-medium">
+              See how we are growing across Nigeria. From cities to villages,
+              we are working together for a renewed hope.
             </p>
           </motion.div>
 
