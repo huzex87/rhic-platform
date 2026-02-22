@@ -95,26 +95,26 @@ export default function Home() {
                 priority
               />
 
-              {/* Floating ID Card Teaser */}
-              <div className="absolute top-12 right-12 p-5 ultra-glass rounded-[2.5rem] shadow-2xl animate-float z-30">
-                <div className="flex items-center gap-5">
-                  <div className="w-14 h-14 rounded-full apc-cyan-gradient border-[3px] border-white shadow-lg overflow-hidden">
-                    <div className="w-full h-full bg-gradient-to-br from-white/20 to-transparent" />
+              {/* Floating ID Card Teaser - Moved to top-left to reveal face */}
+              <div className="absolute top-8 left-8 p-4 md:p-5 ultra-glass rounded-3xl md:rounded-[2.5rem] shadow-2xl animate-float z-30 border border-white/20">
+                <div className="flex items-center gap-3 md:gap-5">
+                  <div className="w-10 h-10 md:w-14 md:h-14 rounded-full apc-cyan-gradient border-2 md:border-[3px] border-white shadow-lg flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-5 h-5 md:w-8 md:h-8 text-white" />
                   </div>
                   <div>
-                    <div className="text-[10px] font-black text-apc-cyan uppercase tracking-widest mb-0.5">Verified Member</div>
-                    <div className="text-base font-black text-foreground">Digital Vanguard</div>
+                    <div className="text-[8px] md:text-[10px] font-black text-apc-cyan uppercase tracking-widest mb-0.5">Verified Member</div>
+                    <div className="text-sm md:text-base font-black text-foreground">Digital Vanguard</div>
                   </div>
                 </div>
               </div>
 
-              {/* Presidential Quote Overlay - Redesigned for high-prestige clarity */}
-              <div className="absolute bottom-10 left-10 right-10 p-10 ultra-glass rounded-[2.5rem] shadow-2xl z-30 transform transition-all duration-700 group-hover:translate-y-[-10px] border border-white/20">
-                <div className="flex flex-col gap-6">
-                  <p className="text-foreground font-display font-black italic text-2xl md:text-3xl leading-tight tracking-tight relative">
-                    <span className="absolute -top-4 -left-4 text-6xl text-apc-cyan/20 font-serif">&ldquo;</span>
+              {/* Presidential Quote Overlay - Optimized for portrait visibility */}
+              <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10 p-6 md:p-10 ultra-glass rounded-3xl md:rounded-[2.5rem] shadow-2xl z-30 transform transition-all duration-700 group-hover:translate-y-[-10px] border border-white/20">
+                <div className="flex flex-col gap-4 md:gap-6">
+                  <p className="text-foreground font-display font-black italic text-lg md:text-3xl leading-tight tracking-tight relative">
+                    <span className="absolute -top-3 -left-3 md:-top-4 md:-left-4 text-4xl md:text-6xl text-apc-cyan/20 font-serif">&ldquo;</span>
                     Our diversity is our strength; our innovation is our future.
-                    <span className="absolute -bottom-4 -right-2 text-6xl text-apc-cyan/20 font-serif">&rdquo;</span>
+                    <span className="absolute -bottom-3 -right-1 md:-bottom-4 md:-right-2 text-4xl md:text-6xl text-apc-cyan/20 font-serif">&rdquo;</span>
                   </p>
 
                   <div className="flex items-center gap-4">

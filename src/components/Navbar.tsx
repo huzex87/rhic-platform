@@ -137,25 +137,23 @@ export default function Navbar() {
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="md:hidden mt-2 glass rounded-2xl overflow-hidden border border-accent-red/15"
+                            className="md:hidden mt-2 ultra-glass rounded-3xl overflow-hidden border border-apc-cyan/15 shadow-2xl"
                         >
                             <div className="flex flex-col p-4 gap-4">
-                                {navItems.map((item) => (
-                                    <Link
-                                        key={item.name}
-                                        href={item.href}
-                                        onClick={() => setIsOpen(false)}
-                                        className="flex items-center gap-3 text-forest font-medium p-2 rounded-lg hover:bg-forest/5"
-                                    >
-                                        <item.icon className="w-5 h-5 text-leaf" />
-                                        <span>{item.name}</span>
-                                    </Link>
-                                ))}
+                                <Link
+                                    key={item.name}
+                                    href={item.href}
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center gap-3 text-foreground font-bold p-3 rounded-xl hover:bg-apc-cyan/5 transition-colors border border-transparent hover:border-apc-cyan/10"
+                                >
+                                    <item.icon className="w-5 h-5 text-apc-cyan" />
+                                    <span>{item.name}</span>
+                                </Link>
                                 {(user?.user_metadata?.role === 'admin' || user?.user_metadata?.role === 'super_admin') && (
                                     <Link
-                                        href="/admin/strategy"
+                                        href="/situation-room"
                                         onClick={() => setIsOpen(false)}
-                                        className="flex items-center gap-3 text-accent-red font-black text-sm p-3 rounded-xl bg-accent-red/5 border border-accent-red/20"
+                                        className="flex items-center gap-3 text-apc-red font-black text-xs p-4 rounded-2xl bg-apc-red/5 border border-apc-red/20"
                                     >
                                         <Rocket className="w-5 h-5" />
                                         <span>NATIONAL STRATEGY</span>
@@ -166,20 +164,20 @@ export default function Navbar() {
                                         <Link
                                             href="/settings"
                                             onClick={() => setIsOpen(false)}
-                                            className="flex items-center gap-2 p-2 border-t border-accent-red/10 pt-4 hover:bg-forest/5 rounded-lg transition-colors"
+                                            className="flex items-center gap-3 p-3 border-t border-apc-cyan/10 pt-6 hover:bg-apc-cyan/5 rounded-xl transition-colors"
                                         >
-                                            <UserCircle className="w-5 h-5 text-leaf" />
-                                            <span className="text-sm font-bold text-forest">
+                                            <UserCircle className="w-6 h-6 text-apc-green" />
+                                            <span className="text-sm font-black text-foreground">
                                                 {user.user_metadata?.full_name || user.email?.split("@")[0]}
                                             </span>
                                             <div className="ml-auto flex items-center gap-2">
                                                 <PrestigeBadge tier={user.user_metadata?.tier as UserTier || 'Supporter'} size="sm" />
-                                                <span className="text-[10px] font-black text-leaf uppercase tracking-widest">Settings</span>
+                                                <span className="text-[10px] font-black text-apc-green uppercase tracking-widest">Settings</span>
                                             </div>
                                         </Link>
                                         <button
                                             onClick={handleSignOut}
-                                            className="flex items-center gap-2 p-3 rounded-xl text-accent-red font-bold hover:bg-accent-red/5 transition-colors"
+                                            className="flex items-center gap-3 p-4 rounded-2xl text-apc-red font-black text-xs hover:bg-apc-red/5 transition-colors uppercase tracking-widest"
                                         >
                                             <LogOut className="w-5 h-5" />
                                             Sign Out
@@ -188,7 +186,7 @@ export default function Navbar() {
                                 ) : (
                                     <Link
                                         href="/auth"
-                                        className="forest-gradient text-ivory p-3 rounded-xl font-bold text-center shadow-lg border border-accent-red/20"
+                                        className="btn-apc p-4 rounded-2xl font-black text-center shadow-lg border border-white/20 uppercase text-xs tracking-widest"
                                     >
                                         Join Movement
                                     </Link>
