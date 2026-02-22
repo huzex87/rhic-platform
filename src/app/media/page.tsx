@@ -17,6 +17,9 @@ import { useState } from "react";
 import { useMedia } from "@/hooks/useMedia";
 import { useAIAssistant } from "@/hooks/useAIAssistant";
 
+import FlyerGenerator from "@/components/FlyerGenerator";
+import CampaignNewsHub from "@/components/CampaignNewsHub";
+
 export default function MediaWarRoom() {
     const [selectedCategory, setSelectedCategory] = useState('All');
     const { assets, loading } = useMedia(selectedCategory);
@@ -32,12 +35,12 @@ export default function MediaWarRoom() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="space-y-2">
-                    <h1 className="text-5xl font-display font-black text-foreground leading-tight">
-                        Media <span className="text-apc-cyan italic">War Room</span>
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-black text-foreground leading-tight">
+                        Digital <span className="text-apc-cyan italic">Campaign Center</span>
                     </h1>
-                    <p className="text-foreground/60 font-medium max-w-xl">
-                        Centralized hub for verified campaign assets, narrative toolkits,
-                        and AI-powered digital advocacy generators.
+                    <p className="text-foreground/60 font-medium max-w-xl text-sm md:text-base">
+                        Your unified hub for active advocacy. Generate campaign visual assets,
+                        access narrative toolkits, and track live movement updates.
                     </p>
                 </div>
                 <div className="relative w-full md:w-80">
@@ -48,6 +51,15 @@ export default function MediaWarRoom() {
                         className="w-full pl-12 pr-4 py-4 rounded-2xl glass border-none focus:ring-2 focus:ring-apc-cyan outline-none text-foreground font-medium"
                     />
                 </div>
+            </div>
+
+            {/* AI Generator Section - NEW HIGH POWERED FEATURE */}
+            <div className="space-y-8">
+                <div className="flex items-center gap-3">
+                    <div className="h-1 w-12 bg-apc-red rounded-full" />
+                    <h2 className="text-xl font-display font-black text-foreground uppercase tracking-wider">Advocacy Generators</h2>
+                </div>
+                <FlyerGenerator />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -195,22 +207,7 @@ export default function MediaWarRoom() {
                     </div>
 
                     <div className="premium-card">
-                        <h3 className="text-sm font-bold text-forest/40 uppercase tracking-widest mb-6">Trending Narratives</h3>
-                        <div className="space-y-4">
-                            {[
-                                { tag: "#RenewedHopeWorks", reach: "2.4M reach", trend: "up" },
-                                { tag: "#InnovatorsForNigeria", reach: "1.8M reach", trend: "up" },
-                                { tag: "#RHIC2027", reach: "900K reach", trend: "up" },
-                            ].map((t, i) => (
-                                <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-foreground/5 hover:bg-foreground/10 transition-colors group cursor-pointer">
-                                    <div>
-                                        <div className="text-sm font-black text-foreground">{t.tag}</div>
-                                        <div className="text-[10px] font-bold text-foreground/30 uppercase tracking-widest">{t.reach}</div>
-                                    </div>
-                                    <Share2 className="w-4 h-4 text-foreground/20 group-hover:text-apc-cyan transition-colors" />
-                                </div>
-                            ))}
-                        </div>
+                        <CampaignNewsHub />
                     </div>
 
                     <div className="premium-card bg-apc-cyan/5 flex items-center justify-between group cursor-pointer border-apc-cyan/20">
