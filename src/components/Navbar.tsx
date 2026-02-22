@@ -140,15 +140,17 @@ export default function Navbar() {
                             className="md:hidden mt-2 ultra-glass rounded-3xl overflow-hidden border border-apc-cyan/15 shadow-2xl"
                         >
                             <div className="flex flex-col p-4 gap-4">
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={() => setIsOpen(false)}
-                                    className="flex items-center gap-3 text-foreground font-bold p-3 rounded-xl hover:bg-apc-cyan/5 transition-colors border border-transparent hover:border-apc-cyan/10"
-                                >
-                                    <item.icon className="w-5 h-5 text-apc-cyan" />
-                                    <span>{item.name}</span>
-                                </Link>
+                                {navItems.map((item) => (
+                                    <Link
+                                        key={item.name}
+                                        href={item.href}
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center gap-3 text-foreground font-bold p-3 rounded-xl hover:bg-apc-cyan/5 transition-colors border border-transparent hover:border-apc-cyan/10"
+                                    >
+                                        <item.icon className="w-5 h-5 text-apc-cyan" />
+                                        <span>{item.name}</span>
+                                    </Link>
+                                ))}
                                 {(user?.user_metadata?.role === 'admin' || user?.user_metadata?.role === 'super_admin') && (
                                     <Link
                                         href="/situation-room"

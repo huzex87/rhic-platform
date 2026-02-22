@@ -35,7 +35,7 @@ export default function Home() {
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-6xl md:text-7xl lg:text-8xl font-display font-black leading-[0.9] tracking-tighter mb-10 select-none"
+              className="text-4xl md:text-7xl lg:text-8xl font-display font-black leading-[0.9] tracking-tighter mb-8 md:mb-10 select-none"
             >
               <span className="block mb-1">Renewed Hope</span>
               <span className="inline-block relative">
@@ -48,7 +48,7 @@ export default function Home() {
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="max-w-xl text-lg md:text-xl text-foreground/70 font-medium leading-relaxed mb-12 pl-8 border-l-8 border-apc-cyan py-4 rounded-r-3xl bg-apc-cyan/[0.02] backdrop-blur-sm"
+              className="max-w-xl text-base md:text-xl text-foreground/70 font-medium leading-relaxed mb-10 md:mb-12 pl-6 md:pl-8 border-l-4 md:border-l-8 border-apc-cyan py-3 md:py-4 rounded-r-2xl md:rounded-r-3xl bg-apc-cyan/[0.02] backdrop-blur-sm"
             >
               Join the <span className="text-apc-cyan font-bold">community of innovators</span> building a better Nigeria.
               See our <Link href="/mandate" className="text-apc-cyan hover:underline decoration-apc-cyan/30">progress updates</Link> or sign up to help scale our national vision.
@@ -58,21 +58,21 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center gap-8"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 md:gap-8"
             >
               <Link
                 href="/auth"
-                className="btn-apc flex items-center gap-4 group text-xl px-12 py-5 shadow-[0_25px_50px_-15px_rgba(0,173,239,0.4)] hover:shadow-[0_35px_60px_-15px_rgba(0,173,239,0.6)]"
+                className="btn-apc flex items-center justify-center gap-4 group text-lg md:text-xl px-8 md:px-12 py-4 md:py-5 shadow-[0_25px_50px_-15px_rgba(0,173,239,0.4)] hover:shadow-[0_35px_60px_-15px_rgba(0,173,239,0.6)]"
               >
                 Join the Movement
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="/innovation"
-                className="px-12 py-5 rounded-full font-bold text-xl apc-glass border border-apc-cyan/20 hover:bg-apc-cyan/5 hover:border-apc-cyan/40 transition-all flex items-center gap-3 backdrop-blur-xl"
+                className="px-8 md:px-12 py-4 md:py-5 rounded-full font-bold text-lg md:text-xl apc-glass border border-apc-cyan/20 hover:bg-apc-cyan/5 hover:border-apc-cyan/40 transition-all flex items-center justify-center gap-3 backdrop-blur-xl"
               >
                 Strategy Console
-                <ShieldCheck className="w-6 h-6 text-apc-cyan" />
+                <ShieldCheck className="w-5 h-5 md:w-6 md:h-6 text-apc-cyan" />
               </Link>
             </motion.div>
           </div>
