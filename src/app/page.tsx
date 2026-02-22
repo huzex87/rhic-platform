@@ -27,7 +27,7 @@ export default function Home() {
             >
               <Zap className="w-4 h-4 text-apc-gold animate-bounce" />
               <span className="text-[10px] md:text-xs font-black text-apc-cyan tracking-[0.25em] uppercase">
-                National Support Group for Nigeria's Future
+                National Support Group for Nigeria&apos;s Future
               </span>
             </motion.div>
 
