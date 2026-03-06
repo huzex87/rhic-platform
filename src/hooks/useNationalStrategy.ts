@@ -29,20 +29,17 @@ export function useNationalStrategy() {
         const supabase = createClient();
 
         try {
-            // 1. Fetch National Readiness
-            const { data: readiness, error: readinessError } = await supabase
-                .rpc("calculate_national_readiness");
+            // 1 & 2. Fetch National Readiness and Regional Matrix concurrently
+            const [readinessResult, regionalResult] = await Promise.all([
+                supabase.rpc("calculate_national_readiness"),
+                supabase.from("regional_strategy_matrix").select("*")
+            ]);
 
-            if (readinessError) throw readinessError;
-            setMetrics(readiness[0]);
+            if (readinessResult.error) throw readinessResult.error;
+            if (regionalResult.error) throw regionalResult.error;
 
-            // 2. Fetch Regional Matrix
-            const { data: regional, error: regionalError } = await supabase
-                .from("regional_strategy_matrix")
-                .select("*");
-
-            if (regionalError) throw regionalError;
-            setRegionalData(regional || []);
+            setMetrics(readinessResult.data[0]);
+            setRegionalData(regionalResult.data || []);
 
         } catch (err: unknown) {
             if (err instanceof Error) {

@@ -34,14 +34,21 @@ export async function middleware(request: NextRequest) {
         }
     )
 
-    // Refresh the auth token
-    const { data: { user } } = await supabase.auth.getUser()
-
-    // Redirect unauthenticated users away from protected routes
+    // Optimistic check: If no Supabase auth cookies exist, and it's not a protected route, 
+    // we can skip the heavy getUser() call to avoid middleware timeouts.
+    const hasAuthCookie = request.cookies.getAll().some(c => c.name.startsWith('sb-') || c.name.startsWith('supabase-auth'))
     const isProtected = PROTECTED_ROUTES.some(route =>
         request.nextUrl.pathname.startsWith(route)
     )
 
+    if (!hasAuthCookie && !isProtected) {
+        return supabaseResponse
+    }
+
+    // Refresh the auth token
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // Redirect unauthenticated users away from protected routes
     if (isProtected && !user) {
         const url = request.nextUrl.clone()
         url.pathname = '/auth'
@@ -61,6 +68,13 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         * - public assets (svg, png, jpg, jpeg, gif, webp, json)
+         */
         '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|json)$).*)',
     ],
 }
