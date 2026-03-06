@@ -1,4 +1,4 @@
-**Ref: RHIC/NITDA/INV/2026/01**
+# Ref: RHIC/NITDA/INV/2026/01
 
 **Date:** February 21, 2026
 
@@ -10,7 +10,7 @@ Abuja, FCT.
 
 Dear Sir,
 
-### **INVITATION TO SERVE AS PATRON TO THE RENEWED HOPE INNOVATION COALITION (RHIC)**
+## INVITATION TO SERVE AS PATRON TO THE RENEWED HOPE INNOVATION COALITION (RHIC)
 
 On behalf of the leadership and the entire membership of the **Renewed Hope Innovation Coalition (RHIC)**, we present our compliments to you and your esteemed office.
 
@@ -21,11 +21,13 @@ The Renewed Hope Innovation Coalition (RHIC) is a professional ecosystem of tech
 
 **Why Your Patronage is Critical**
 As a "World-Class" professional and a Cisco Certified Internetwork Expert (CCIE), your personal and professional journey serves as a beacon of excellence for our members. Your patronage would provide:
-1.  **Strategic Mentorship**: Guiding our coalition in aligning local innovations with national policy frameworks.
-2.  **A Showcase for Excellence**: RHIC serves as a primary vehicle to showcase your administrative achievements and the broader successes of the Tinubu administration within the ICT and digital economy sectors to the grassroots and the international community.
-3.  **Institutional Synergy**: Strengthening the link between the youth-led innovation ecosystem and NITDA’s regulatory and developmental objectives.
 
-**Our Core Objectives**
+1. **Strategic Mentorship**: Guiding our coalition in aligning local innovations with national policy frameworks.
+2. **A Showcase for Excellence**: RHIC serves as a primary vehicle to showcase your administrative achievements and the broader successes of the Tinubu administration within the ICT and digital economy sectors to the grassroots and the international community.
+3. **Institutional Synergy**: Strengthening the link between the youth-led innovation ecosystem and NITDA’s regulatory and developmental objectives.
+
+## Our Core Objectives
+
 - **Digital Inclusion**: Mobilizing grassroots support for national digital literacy programs.
 - **Innovation Advocacy**: Providing a platform for young Nigerians to contribute to policy discussions on emerging technologies.
 - **Administrative Transparency**: Deploying digital tools (like the RHIC Platform) to track and report the impact of government projects in the tech sector.
