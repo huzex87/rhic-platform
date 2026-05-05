@@ -6,36 +6,43 @@ import NigeriaMap from "@/components/NigeriaMap";
 
 export default function MapSection() {
     return (
-        <section className="px-4">
+        <section className="px-4 md:px-6">
             <div className="max-w-7xl mx-auto">
+                {/* Section header */}
                 <motion.div
-                    initial={{ opacity: 0, y: 40 }}
+                    initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center mb-20"
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    className="text-center mb-12 md:mb-16"
                 >
-                    <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass border border-apc-cyan/20 mb-8">
-                        <MapPin className="w-4 h-4 text-apc-red" aria-hidden="true" />
-                        <span className="text-xs font-black text-apc-cyan tracking-[0.25em] uppercase">Molecular Saturation</span>
+                    <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-apc-green/[0.08] border border-apc-green/15 mb-6">
+                        <MapPin className="w-3.5 h-3.5 text-apc-green" aria-hidden="true" />
+                        <span className="text-xs font-semibold text-apc-green tracking-[0.2em] uppercase">National Coverage</span>
                     </div>
-                    <h2 className="text-5xl md:text-6xl font-display font-black tracking-tighter mb-6">
-                        Our <span className="text-apc-green">National</span> Impact
+                    <h2 className="text-4xl md:text-5xl font-display font-black tracking-tighter leading-none mb-4">
+                        Our{" "}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-apc-green to-apc-cyan">
+                            National
+                        </span>{" "}
+                        Impact
                     </h2>
-                    <p className="max-w-2xl mx-auto text-lg text-foreground/60 leading-relaxed font-medium">
-                        See how we are growing across Nigeria. From cities to villages,
-                        we are working together for a renewed hope.
+                    <p className="max-w-lg mx-auto text-base md:text-lg text-foreground/50 font-normal leading-[1.75]">
+                        See how we are growing across Nigeria — from cities to villages,
+                        working together for a renewed hope.
                     </p>
                 </motion.div>
 
+                {/* Map container */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="relative p-1 rounded-[3rem] bg-gradient-to-tr from-apc-cyan/20 via-apc-gold/10 to-apc-red/20 shadow-2xl"
+                    transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+                    className="surface-card overflow-hidden p-0"
+                    style={{ borderRadius: "1.5rem" }}
                 >
-                    <div className="bg-white rounded-[2.9rem] overflow-hidden">
-                        <NigeriaMap variant="landing" />
-                    </div>
+                    <NigeriaMap variant="landing" />
                 </motion.div>
             </div>
         </section>

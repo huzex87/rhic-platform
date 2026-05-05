@@ -7,13 +7,22 @@ import CTASection from "@/components/landing/CTASection";
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-32 pb-24">
+    <div className="flex flex-col pb-20">
       <HeroSection />
-      <LiveCommandTicker />
-      <StatsSection />
+      <div className="mt-10">
+        <LiveCommandTicker />
+      </div>
+      <div className="mt-20 md:mt-28">
+        <StatsSection />
+      </div>
+      {/* ForceStrengthPreview has its own py-20 md:py-28 */}
       <ForceStrengthPreview />
-      <MapSection />
-      <CTASection />
+      <div className="mt-4 md:mt-8">
+        <MapSection />
+      </div>
+      <div className="mt-20 md:mt-28">
+        <CTASection />
+      </div>
     </div>
   );
 }

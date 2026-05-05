@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { MapPin, Users, Target, Rocket, ChevronRight } from "lucide-react";
+import { MapPin, Users, TrendingUp, ChevronRight } from "lucide-react";
 import { useNationalStrategy } from "@/hooks/useNationalStrategy";
 import Link from "next/link";
 
@@ -19,89 +19,139 @@ export default function ForceStrengthPreview() {
     const activeZone = regionalData.find(z => z.zone === selectedZone);
 
     return (
-        <section className="px-6 py-24 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-apc-cyan/20 to-transparent" />
+        <section className="px-4 md:px-6 py-20 md:py-28 relative overflow-hidden">
+            {/* Subtle separator */}
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-apc-cyan/15 to-transparent" aria-hidden="true" />
 
-            <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+            <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-14 lg:gap-20">
+
+                {/* ── Left: text + zone selector ── */}
                 <div className="flex-1">
-                    <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full glass border border-apc-cyan/20 mb-8">
-                        <Target className="w-4 h-4 text-apc-red" aria-hidden="true" />
-                        <span className="text-xs font-black text-apc-cyan tracking-[0.25em] uppercase">Tactical Intelligence</span>
+                    {/* Eyebrow */}
+                    <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-apc-red/[0.07] border border-apc-red/15 mb-7">
+                        <MapPin className="w-3.5 h-3.5 text-apc-red" aria-hidden="true" />
+                        <span className="text-xs font-semibold text-apc-red tracking-[0.18em] uppercase">Tactical Intelligence</span>
                     </div>
 
-                    <h2 className="text-5xl md:text-7xl font-display font-black tracking-tighter mb-8 leading-[0.9]">
-                        Real-Time <span className="text-apc-cyan">Force</span> <br />
+                    {/* Heading */}
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-black tracking-tighter leading-none mb-5">
+                        Real-Time{" "}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-apc-cyan to-apc-green">
+                            Force
+                        </span>{" "}
                         Saturation
                     </h2>
 
-                    <p className="text-xl text-foreground/60 font-medium leading-relaxed mb-12 max-w-xl">
-                        Select a region to view the current scale of the Renewed Hope Vanguard.
-                        Our molecular-level mobilization ensures coverage in every ward.
+                    <p className="text-base md:text-lg text-foreground/50 font-normal leading-[1.75] mb-10 max-w-md">
+                        Select a region to view the current scale of the Renewed Hope Vanguard across every ward.
                     </p>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-12">
-                        {regionalData.map((zone) => (
-                            <button
-                                key={zone.zone}
-                                onClick={() => setSelectedZone(zone.zone)}
-                                className={`px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all duration-300 border ${selectedZone === zone.zone
-                                        ? 'apc-cyan-gradient text-white shadow-lg border-white/20'
-                                        : 'bg-white/50 border-forest/10 text-forest/40 hover:border-apc-cyan/30'
-                                    }`}
-                            >
-                                {zone.zone}
-                            </button>
-                        ))}
+                    {/* Zone pill selector */}
+                    <div className="flex flex-wrap gap-2 mb-10" role="group" aria-label="Select geopolitical zone">
+                        {loading
+                            ? Array.from({ length: 6 }).map((_, i) => (
+                                <div key={i} className="skeleton h-9 w-24 rounded-full" />
+                            ))
+                            : regionalData.map((zone) => {
+                                const active = selectedZone === zone.zone;
+                                return (
+                                    <button
+                                        key={zone.zone}
+                                        onClick={() => setSelectedZone(zone.zone)}
+                                        aria-pressed={active}
+                                        className={`px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                                            active
+                                                ? "bg-apc-cyan text-white shadow-md shadow-apc-cyan/30"
+                                                : "bg-black/[0.04] text-foreground/50 border border-black/[0.08] hover:bg-apc-cyan/8 hover:text-apc-cyan hover:border-apc-cyan/20"
+                                        }`}
+                                    >
+                                        {zone.zone}
+                                    </button>
+                                );
+                            })
+                        }
                     </div>
 
+                    {/* Enlist CTA */}
                     <Link
                         href="/auth"
-                        className="btn-apc inline-flex items-center gap-4 text-lg px-10 py-5"
+                        className="btn-apc text-base px-8 py-4 rounded-xl group"
                     >
-                        Enlist in {selectedZone || 'Your Zone'}
-                        <ChevronRight className="w-5 h-5" />
+                        Enlist in {selectedZone || "Your Zone"}
+                        <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
                     </Link>
                 </div>
 
+                {/* ── Right: stats card ── */}
                 <div className="flex-1 w-full">
-                    <motion.div
-                        key={selectedZone}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="ultra-glass p-12 rounded-[4rem] relative overflow-hidden group border border-white/40 shadow-2xl"
-                    >
-                        <div className="absolute top-0 right-0 p-10">
-                            <MapPin className="w-12 h-12 text-apc-cyan/20 group-hover:text-apc-cyan/40 transition-colors duration-500" />
-                        </div>
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={selectedZone}
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -8 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            className="surface-card p-8 md:p-10 relative overflow-hidden"
+                        >
+                            {/* Top accent */}
+                            <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-apc-cyan via-apc-green to-apc-cyan" aria-hidden="true" />
 
-                        <div className="relative z-10">
-                            <div className="text-xs font-black text-apc-cyan uppercase tracking-[0.3em] mb-4">Current Strength</div>
-                            <div className="text-7xl md:text-8xl font-display font-black tracking-tighter mb-10 text-forest">
-                                {loading ? '---' : activeZone?.total_supporters.toLocaleString() || '0'}
+                            {/* Zone label */}
+                            <div className="text-xs font-semibold text-apc-cyan uppercase tracking-[0.25em] mb-3">
+                                {selectedZone || "Select a Zone"}
                             </div>
 
-                            <div className="grid grid-cols-2 gap-10">
-                                <div>
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <Users className="w-5 h-5 text-apc-green" aria-hidden="true" />
-                                        <div className="text-xs font-black text-forest/40 uppercase tracking-widest">Active Chapters</div>
+                            {/* Main number */}
+                            <div className="font-display font-black tracking-tighter tabular-nums text-foreground leading-none mb-8">
+                                {loading ? (
+                                    <div className="skeleton h-16 w-48 rounded-xl" />
+                                ) : (
+                                    <span className="text-6xl md:text-7xl">
+                                        {activeZone?.total_supporters.toLocaleString() ?? "0"}
+                                    </span>
+                                )}
+                                <span className="block text-sm font-semibold text-foreground/35 tracking-wide mt-2">
+                                    Total Supporters
+                                </span>
+                            </div>
+
+                            {/* Sub-stats */}
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="surface-card p-4">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Users className="w-4 h-4 text-apc-green" aria-hidden="true" />
+                                        <span className="text-[11px] font-semibold text-foreground/40 uppercase tracking-widest">Chapters</span>
                                     </div>
-                                    <div className="text-3xl font-display font-black">{activeZone?.chapter_count || 0}</div>
+                                    {loading ? (
+                                        <div className="skeleton h-8 w-16 rounded-lg" />
+                                    ) : (
+                                        <div className="text-3xl font-display font-black tabular-nums">
+                                            {activeZone?.chapter_count ?? 0}
+                                        </div>
+                                    )}
                                 </div>
-                                <div>
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <Rocket className="w-5 h-5 text-apc-gold" aria-hidden="true" />
-                                        <div className="text-xs font-black text-forest/40 uppercase tracking-widest">Momentum</div>
+                                <div className="surface-card p-4">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <TrendingUp className="w-4 h-4 text-apc-gold" aria-hidden="true" />
+                                        <span className="text-[11px] font-semibold text-foreground/40 uppercase tracking-widest">Momentum</span>
                                     </div>
-                                    <div className="text-3xl font-display font-black">{Math.round(activeZone?.avg_momentum || 0)}%</div>
+                                    {loading ? (
+                                        <div className="skeleton h-8 w-16 rounded-lg" />
+                                    ) : (
+                                        <div className="text-3xl font-display font-black tabular-nums">
+                                            {Math.round(activeZone?.avg_momentum ?? 0)}
+                                            <span className="text-xl font-bold text-foreground/40">%</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Background Decoration */}
-                        <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-apc-cyan/5 rounded-full blur-3xl" />
-                    </motion.div>
+                            {/* Decorative blob */}
+                            <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-apc-cyan/[0.04] rounded-full blur-2xl pointer-events-none" aria-hidden="true" />
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
+
             </div>
         </section>
     );

@@ -3,52 +3,97 @@
 import { motion } from "framer-motion";
 import { Users, Globe, Rocket, Star } from "lucide-react";
 
+const stats = [
+    {
+        label: "Elite Vanguard",
+        value: "250K+",
+        icon: Users,
+        trend: "+12% this month",
+        featured: true,
+        accentBg: "bg-apc-cyan",
+        iconCls: "text-apc-cyan",
+        iconBg: "bg-apc-cyan/10",
+        trendCls: "text-apc-cyan bg-apc-cyan/8",
+    },
+    {
+        label: "State Commands",
+        value: "37",
+        icon: Globe,
+        trend: "Full Coverage",
+        featured: false,
+        accentBg: "bg-apc-green",
+        iconCls: "text-apc-green",
+        iconBg: "bg-apc-green/10",
+        trendCls: "text-apc-green bg-apc-green/8",
+    },
+    {
+        label: "Digital Assets",
+        value: "1.2K+",
+        icon: Rocket,
+        trend: "+85%",
+        featured: false,
+        accentBg: "bg-apc-red",
+        iconCls: "text-apc-red",
+        iconBg: "bg-apc-red/10",
+        trendCls: "text-apc-red bg-apc-red/8",
+    },
+    {
+        label: "Field Missions",
+        value: "500K+",
+        icon: Star,
+        trend: "Active",
+        featured: false,
+        accentBg: "bg-apc-gold",
+        iconCls: "text-apc-gold",
+        iconBg: "bg-apc-gold/10",
+        trendCls: "text-apc-gold bg-apc-gold/8",
+    },
+] as const;
+
 export default function StatsSection() {
     return (
-        <section className="px-6 relative">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
-                {[
-                    {
-                        label: "Elite Vanguard", value: "250K+", icon: Users, trend: "+12%",
-                        iconCls: "text-apc-cyan", iconBg: "from-apc-cyan/5", iconBorder: "border-apc-cyan/10 group-hover:border-apc-cyan/30",
-                        trendCls: "text-apc-cyan bg-apc-cyan/10", valueCls: "group-hover:text-apc-cyan", bar: "via-apc-cyan/20",
-                    },
-                    {
-                        label: "State Commands", value: "37", icon: Globe, trend: "Full Coverage",
-                        iconCls: "text-apc-green", iconBg: "from-apc-green/5", iconBorder: "border-apc-green/10 group-hover:border-apc-green/30",
-                        trendCls: "text-apc-green bg-apc-green/10", valueCls: "group-hover:text-apc-green", bar: "via-apc-green/20",
-                    },
-                    {
-                        label: "Digital Assets", value: "1.2K+", icon: Rocket, trend: "+85%",
-                        iconCls: "text-apc-red", iconBg: "from-apc-red/5", iconBorder: "border-apc-red/10 group-hover:border-apc-red/30",
-                        trendCls: "text-apc-red bg-apc-red/10", valueCls: "group-hover:text-apc-red", bar: "via-apc-red/20",
-                    },
-                    {
-                        label: "Field Missions", value: "500K+", icon: Star, trend: "Active",
-                        iconCls: "text-apc-gold", iconBg: "from-apc-gold/5", iconBorder: "border-apc-gold/10 group-hover:border-apc-gold/30",
-                        trendCls: "text-apc-gold bg-apc-gold/10", valueCls: "group-hover:text-apc-gold", bar: "via-apc-gold/20",
-                    },
-                ].map((stat, idx) => (
-                    <motion.div
+        <section className="px-4 md:px-6" aria-label="Platform statistics">
+            <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {stats.map((stat, idx) => (
+                    <motion.article
                         key={stat.label}
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: idx * 0.1, duration: 0.6 }}
-                        className="premium-card group relative overflow-hidden"
+                        transition={{ delay: idx * 0.07, duration: 0.5, ease: "easeOut" }}
+                        className={`surface-card relative overflow-hidden ${stat.featured ? "col-span-2 lg:col-span-2" : "col-span-1"}`}
                     >
-                        <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className={`text-xs font-black uppercase tracking-widest px-2 py-1 rounded-full ${stat.trendCls}`}>{stat.trend}</span>
-                        </div>
+                        {/* Top accent line */}
+                        <div className={`absolute top-0 left-0 right-0 h-[3px] ${stat.accentBg}`} aria-hidden="true" />
 
-                        <div className={`w-16 h-16 rounded-3xl mb-8 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 bg-gradient-to-br ${stat.iconBg} to-transparent border ${stat.iconBorder} shadow-inner`}>
-                            <stat.icon className={`w-8 h-8 ${stat.iconCls}`} aria-hidden="true" />
-                        </div>
-                        <div className={`text-5xl font-display font-black tracking-tighter mb-3 transition-colors duration-300 ${stat.valueCls}`}>{stat.value}</div>
-                        <div className="text-xs font-black text-foreground/50 uppercase tracking-[0.25em]">{stat.label}</div>
+                        <div className={`p-5 md:p-7 flex flex-col h-full ${stat.featured ? "md:p-8" : ""}`}>
+                            {/* Icon + trend row */}
+                            <div className="flex items-center justify-between mb-5 md:mb-7">
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${stat.iconBg}`}>
+                                    <stat.icon className={`w-4.5 h-4.5 ${stat.iconCls}`} aria-hidden="true" />
+                                </div>
+                                <span className={`text-[11px] font-semibold tracking-wide px-2.5 py-1 rounded-full ${stat.trendCls}`}>
+                                    {stat.trend}
+                                </span>
+                            </div>
 
-                        <div className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent ${stat.bar} to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500`} aria-hidden="true" />
-                    </motion.div>
+                            {/* Value */}
+                            <div
+                                className={`font-display font-black tracking-tighter tabular-nums text-foreground leading-none ${
+                                    stat.featured
+                                        ? "text-5xl md:text-6xl lg:text-7xl mb-2"
+                                        : "text-3xl md:text-4xl lg:text-5xl mb-2"
+                                }`}
+                            >
+                                {stat.value}
+                            </div>
+
+                            {/* Label */}
+                            <div className="text-[11px] font-semibold text-foreground/40 uppercase tracking-[0.22em] mt-auto">
+                                {stat.label}
+                            </div>
+                        </div>
+                    </motion.article>
                 ))}
             </div>
         </section>
