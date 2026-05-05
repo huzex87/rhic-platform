@@ -15,8 +15,8 @@ export default function MapSection() {
                     className="text-center mb-20"
                 >
                     <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass border border-apc-cyan/20 mb-8">
-                        <MapPin className="w-4 h-4 text-apc-red animate-pulse" />
-                        <span className="text-[10px] font-black text-apc-cyan tracking-[0.3em] uppercase">Molecular Saturation</span>
+                        <MapPin className="w-4 h-4 text-apc-red" aria-hidden="true" />
+                        <span className="text-xs font-black text-apc-cyan tracking-[0.25em] uppercase">Molecular Saturation</span>
                     </div>
                     <h2 className="text-5xl md:text-6xl font-display font-black tracking-tighter mb-6">
                         Our <span className="text-apc-green">National</span> Impact

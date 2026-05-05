@@ -25,8 +25,8 @@ export default function ForceStrengthPreview() {
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
                 <div className="flex-1">
                     <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full glass border border-apc-cyan/20 mb-8">
-                        <Target className="w-4 h-4 text-apc-red animate-pulse" />
-                        <span className="text-[10px] font-black text-apc-cyan tracking-[0.3em] uppercase">Tactical Intelligence</span>
+                        <Target className="w-4 h-4 text-apc-red" aria-hidden="true" />
+                        <span className="text-xs font-black text-apc-cyan tracking-[0.25em] uppercase">Tactical Intelligence</span>
                     </div>
 
                     <h2 className="text-5xl md:text-7xl font-display font-black tracking-tighter mb-8 leading-[0.9]">
@@ -75,7 +75,7 @@ export default function ForceStrengthPreview() {
                         </div>
 
                         <div className="relative z-10">
-                            <div className="text-[11px] font-black text-apc-cyan uppercase tracking-[0.4em] mb-4">Current Strength</div>
+                            <div className="text-xs font-black text-apc-cyan uppercase tracking-[0.3em] mb-4">Current Strength</div>
                             <div className="text-7xl md:text-8xl font-display font-black tracking-tighter mb-10 text-forest">
                                 {loading ? '---' : activeZone?.total_supporters.toLocaleString() || '0'}
                             </div>
@@ -83,15 +83,15 @@ export default function ForceStrengthPreview() {
                             <div className="grid grid-cols-2 gap-10">
                                 <div>
                                     <div className="flex items-center gap-3 mb-2">
-                                        <Users className="w-5 h-5 text-apc-green" />
-                                        <div className="text-[10px] font-black text-forest/40 uppercase tracking-widest">Active Chapters</div>
+                                        <Users className="w-5 h-5 text-apc-green" aria-hidden="true" />
+                                        <div className="text-xs font-black text-forest/40 uppercase tracking-widest">Active Chapters</div>
                                     </div>
                                     <div className="text-3xl font-display font-black">{activeZone?.chapter_count || 0}</div>
                                 </div>
                                 <div>
                                     <div className="flex items-center gap-3 mb-2">
-                                        <Rocket className="w-5 h-5 text-apc-gold" />
-                                        <div className="text-[10px] font-black text-forest/40 uppercase tracking-widest">Momentum</div>
+                                        <Rocket className="w-5 h-5 text-apc-gold" aria-hidden="true" />
+                                        <div className="text-xs font-black text-forest/40 uppercase tracking-widest">Momentum</div>
                                     </div>
                                     <div className="text-3xl font-display font-black">{Math.round(activeZone?.avg_momentum || 0)}%</div>
                                 </div>

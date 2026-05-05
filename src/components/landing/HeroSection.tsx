@@ -8,9 +8,9 @@ import Link from "next/link";
 export default function HeroSection() {
     return (
         <section className="relative px-4 overflow-hidden pt-20 md:pt-32">
-            {/* Animated Background Blobs */}
-            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-apc-cyan/10 rounded-full blur-[120px] -z-10 animate-pulse" />
-            <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-apc-green/10 rounded-full blur-[140px] -z-10 animate-pulse delay-700" />
+            {/* Background Blobs */}
+            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-apc-cyan/10 rounded-full blur-[120px] -z-10 pointer-events-none" aria-hidden="true" />
+            <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-apc-green/10 rounded-full blur-[140px] -z-10 pointer-events-none" aria-hidden="true" />
 
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
                 <div className="flex-1 text-left z-10">
@@ -20,8 +20,8 @@ export default function HeroSection() {
                         transition={{ duration: 0.6 }}
                         className="inline-flex items-center gap-3 px-6 py-2 rounded-full glass mb-10 border border-apc-cyan/30"
                     >
-                        <Zap className="w-4 h-4 text-apc-gold animate-bounce" />
-                        <span className="text-[10px] md:text-xs font-black text-apc-cyan tracking-[0.25em] uppercase">
+                        <Zap className="w-4 h-4 text-apc-gold" aria-hidden="true" />
+                        <span className="text-xs font-black text-apc-cyan tracking-[0.2em] uppercase">
                             National Support Group for Nigeria&apos;s Future
                         </span>
                     </motion.div>
@@ -89,13 +89,13 @@ export default function HeroSection() {
                             priority
                         />
 
-                        <div className="absolute top-8 left-8 p-4 md:p-5 ultra-glass rounded-3xl md:rounded-[2.5rem] shadow-2xl animate-float z-30 border border-white/20">
+                        <div className="absolute top-8 left-8 p-4 md:p-5 ultra-glass rounded-3xl md:rounded-[2.5rem] shadow-2xl [animation:var(--animate-float)] z-30 border border-white/20">
                             <div className="flex items-center gap-3 md:gap-5">
                                 <div className="w-10 h-10 md:w-14 md:h-14 rounded-full apc-cyan-gradient border-2 md:border-[3px] border-white shadow-lg flex items-center justify-center shrink-0">
-                                    <ShieldCheck className="w-5 h-5 md:w-8 md:h-8 text-white" />
+                                    <ShieldCheck className="w-5 h-5 md:w-8 md:h-8 text-white" aria-hidden="true" />
                                 </div>
                                 <div>
-                                    <div className="text-[8px] md:text-[10px] font-black text-apc-cyan uppercase tracking-widest mb-0.5">Verified Member</div>
+                                    <div className="text-[11px] font-black text-apc-cyan uppercase tracking-widest mb-0.5">Verified Member</div>
                                     <div className="text-sm md:text-base font-black text-foreground">Digital Vanguard</div>
                                 </div>
                             </div>
@@ -110,12 +110,12 @@ export default function HeroSection() {
                                 </p>
 
                                 <div className="flex items-center gap-4">
-                                    <div className="h-[2px] w-12 bg-apc-red rounded-full" />
+                                    <div className="h-[2px] w-12 bg-apc-red rounded-full" aria-hidden="true" />
                                     <div className="flex flex-col">
-                                        <p className="text-forest font-black text-[10px] uppercase tracking-[0.4em]">
+                                        <p className="text-forest font-black text-[11px] uppercase tracking-[0.3em]">
                                             President Bola Ahmed Tinubu
                                         </p>
-                                        <p className="text-[8px] font-bold text-apc-cyan/60 uppercase tracking-widest mt-0.5">
+                                        <p className="text-[10px] font-bold text-apc-cyan/60 uppercase tracking-widest mt-0.5">
                                             Federal Republic of Nigeria
                                         </p>
                                     </div>
@@ -124,8 +124,8 @@ export default function HeroSection() {
                         </div>
                     </div>
 
-                    <div className="absolute -top-20 -right-20 w-[400px] h-[400px] bg-apc-cyan/20 rounded-full blur-[120px] -z-10 group-hover:bg-apc-cyan/30 transition-all duration-1000" />
-                    <div className="absolute -bottom-20 -left-20 w-[450px] h-[450px] bg-apc-gold/15 rounded-full blur-[140px] -z-10 group-hover:bg-apc-gold/25 transition-all duration-1000" />
+                    <div className="absolute -top-20 -right-20 w-[400px] h-[400px] bg-apc-cyan/20 rounded-full blur-[120px] -z-10 group-hover:bg-apc-cyan/30 transition-colors duration-700 pointer-events-none" aria-hidden="true" />
+                    <div className="absolute -bottom-20 -left-20 w-[450px] h-[450px] bg-apc-gold/15 rounded-full blur-[140px] -z-10 group-hover:bg-apc-gold/25 transition-colors duration-700 pointer-events-none" aria-hidden="true" />
                 </motion.div>
             </div>
         </section>

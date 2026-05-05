@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, BarChart3, Rocket, MessageSquare, BookOpen, LogOut, UserCircle, ArrowRight, Target } from "lucide-react";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./AuthProvider";
 import { useNotifications } from "./NotificationProvider";
@@ -22,6 +23,7 @@ export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const { user, loading, signOut } = useAuth();
     const { notifications } = useNotifications();
+    const pathname = usePathname();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -54,18 +56,22 @@ export default function Navbar() {
                     </Link>
 
                     {/* Desktop Nav */}
-                    <div className="hidden md:flex items-center gap-10">
-                        {navItems.map((item) => (
+                    <nav aria-label="Main navigation" className="hidden md:flex items-center gap-10">
+                        {navItems.map((item) => {
+                            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+                            return (
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className="flex items-center gap-2.5 text-foreground/60 hover:text-apc-cyan font-bold text-sm transition-all duration-300 group relative py-2"
+                                aria-current={isActive ? "page" : undefined}
+                                className={`flex items-center gap-2.5 font-bold text-sm transition-all duration-300 group relative py-2 ${isActive ? "text-apc-cyan" : "text-foreground/60 hover:text-apc-cyan"}`}
                             >
                                 <item.icon className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                                 <span>{item.name}</span>
-                                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-apc-cyan transition-all duration-300 group-hover:w-full rounded-full" />
+                                <span className={`absolute bottom-0 left-0 h-[2px] bg-apc-cyan transition-all duration-300 rounded-full ${isActive ? "w-full" : "w-0 group-hover:w-full"}`} />
                             </Link>
-                        ))}
+                            );
+                        })}
 
                         {/* Strategy Room for Admins */}
                         {(user?.user_metadata?.role === 'admin' || user?.user_metadata?.role === 'super_admin') && (
@@ -86,12 +92,13 @@ export default function Navbar() {
                             <div className="flex items-center gap-4">
                                 <Link
                                     href="/settings"
+                                    aria-label={`Profile settings for ${user.user_metadata?.full_name || user.email?.split("@")[0]}`}
                                     className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-foreground/[0.02] border border-apc-cyan/10 hover:border-apc-cyan/30 hover:bg-foreground/[0.05] transition-all duration-500 group/profile relative shadow-sm"
                                 >
                                     <div className="relative">
                                         <UserCircle className="w-6 h-6 text-apc-green group-hover/profile:scale-110 transition-transform duration-500" />
                                         {notifications.length > 0 && (
-                                            <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                                            <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5" aria-hidden="true">
                                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-apc-red opacity-75" />
                                                 <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-apc-red border-2 border-white shadow-sm" />
                                             </span>
@@ -104,10 +111,10 @@ export default function Navbar() {
                                 </Link>
                                 <button
                                     onClick={handleSignOut}
+                                    aria-label="Sign out"
                                     className="p-2.5 rounded-2xl text-foreground/40 hover:text-apc-red hover:bg-apc-red/5 transition-all duration-500 group"
-                                    title="Sign Out"
                                 >
-                                    <LogOut className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                    <LogOut className="w-5 h-5 group-hover:scale-110 transition-transform" aria-hidden="true" />
                                 </button>
                             </div>
                         ) : (
@@ -116,17 +123,20 @@ export default function Navbar() {
                                 className="btn-apc px-8 py-3.5 rounded-2xl font-black text-sm shadow-[0_15px_30px_-10px_rgba(0,173,239,0.3)] hover:shadow-[0_20px_40px_-10px_rgba(0,173,239,0.5)] flex items-center gap-2 group border border-white/20"
                             >
                                 Join Movement
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                             </Link>
                         )}
-                    </div>
+                    </nav>
 
                     {/* Mobile Toggle */}
                     <button
                         className="md:hidden p-3 rounded-2xl bg-foreground/5 hover:bg-foreground/10 transition-colors"
                         onClick={() => setIsOpen(!isOpen)}
+                        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+                        aria-expanded={isOpen}
+                        aria-controls="mobile-menu"
                     >
-                        {isOpen ? <X className="w-6 h-6 text-apc-red" /> : <Menu className="w-6 h-6 text-apc-cyan" />}
+                        {isOpen ? <X className="w-6 h-6 text-apc-red" aria-hidden="true" /> : <Menu className="w-6 h-6 text-apc-cyan" aria-hidden="true" />}
                     </button>
                 </div>
 
@@ -134,23 +144,29 @@ export default function Navbar() {
                 <AnimatePresence>
                     {isOpen && (
                         <motion.div
+                            id="mobile-menu"
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             className="md:hidden mt-2 ultra-glass rounded-3xl overflow-hidden border border-apc-cyan/15 shadow-2xl"
                         >
+                            <nav aria-label="Mobile navigation">
                             <div className="flex flex-col p-4 gap-4">
-                                {navItems.map((item) => (
+                                {navItems.map((item) => {
+                                    const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+                                    return (
                                     <Link
                                         key={item.name}
                                         href={item.href}
                                         onClick={() => setIsOpen(false)}
-                                        className="flex items-center gap-3 text-foreground font-bold p-3 rounded-xl hover:bg-apc-cyan/5 transition-colors border border-transparent hover:border-apc-cyan/10"
+                                        aria-current={isActive ? "page" : undefined}
+                                        className={`flex items-center gap-3 font-bold p-3 rounded-xl transition-colors border ${isActive ? "text-apc-cyan bg-apc-cyan/5 border-apc-cyan/20" : "text-foreground hover:bg-apc-cyan/5 border-transparent hover:border-apc-cyan/10"}`}
                                     >
-                                        <item.icon className="w-5 h-5 text-apc-cyan" />
+                                        <item.icon className="w-5 h-5 text-apc-cyan" aria-hidden="true" />
                                         <span>{item.name}</span>
                                     </Link>
-                                ))}
+                                    );
+                                })}
                                 {(user?.user_metadata?.role === 'admin' || user?.user_metadata?.role === 'super_admin') && (
                                     <Link
                                         href="/situation-room"
@@ -174,7 +190,7 @@ export default function Navbar() {
                                             </span>
                                             <div className="ml-auto flex items-center gap-2">
                                                 <PrestigeBadge tier={user.user_metadata?.tier as UserTier || 'Supporter'} size="sm" />
-                                                <span className="text-[10px] font-black text-apc-green uppercase tracking-widest">Settings</span>
+                                                <span className="text-xs font-black text-apc-green uppercase tracking-widest">Settings</span>
                                             </div>
                                         </Link>
                                         <button
@@ -194,6 +210,7 @@ export default function Navbar() {
                                     </Link>
                                 )}
                             </div>
+                            </nav>
                         </motion.div>
                     )}
                 </AnimatePresence>

@@ -15,10 +15,11 @@ export default function CTASection() {
                     className="relative rounded-[4rem] overflow-hidden shadow-[0_50px_100px_-30px_rgba(0,173,239,0.4)]"
                 >
                     <div className="absolute inset-0 vibrant-apc-gradient opacity-95" />
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+                    {/* Subtle dot-grid texture — no external network request */}
+                    <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "24px 24px" }} aria-hidden="true" />
 
-                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-                    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-apc-gold/20 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" aria-hidden="true" />
+                    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-apc-gold/20 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2 pointer-events-none" aria-hidden="true" />
 
                     <div className="relative z-10 px-10 py-24 md:px-24 md:py-32 flex flex-col lg:flex-row items-center gap-20">
                         <div className="flex-1 text-center lg:text-left">
@@ -46,10 +47,10 @@ export default function CTASection() {
                             <div className="flex flex-col sm:flex-row items-center gap-6">
                                 <Link
                                     href="/auth"
-                                    className="bg-white text-apc-cyan px-12 py-6 rounded-3xl font-black text-xl shadow-[0_30px_60px_-10px_rgba(0,0,0,0.3)] hover:scale-110 active:scale-95 transition-all flex items-center gap-4 w-full sm:w-auto justify-center"
+                                    className="bg-white text-apc-cyan px-12 py-6 rounded-3xl font-black text-xl shadow-[0_30px_60px_-10px_rgba(0,0,0,0.3)] hover:scale-[1.04] active:scale-95 transition-transform duration-200 flex items-center gap-4 w-full sm:w-auto justify-center"
                                 >
                                     Join Now
-                                    <ChevronRight className="w-6 h-6" />
+                                    <ChevronRight className="w-6 h-6" aria-hidden="true" />
                                 </Link>
                                 <Link
                                     href="/chapter"

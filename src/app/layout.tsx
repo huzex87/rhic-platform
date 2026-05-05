@@ -39,8 +39,9 @@ export default function RootLayout({
 
         <AuthProvider>
           <NotificationProvider>
+            <a href="#main-content" className="skip-link">Skip to main content</a>
             <Navbar />
-            <main className="pt-28 md:pt-32 pb-12 min-h-screen relative">
+            <main id="main-content" className="pt-28 md:pt-32 pb-12 min-h-dvh relative">
               {children}
             </main>
             <AIAssistant />
@@ -57,7 +58,7 @@ export default function RootLayout({
                     </div>
                     <div>
                       <span className="text-2xl font-display font-black text-forest tracking-tighter uppercase italic leading-none block">RHIC</span>
-                      <span className="text-[9px] uppercase font-black text-forest/40 tracking-[0.3em] block mt-1">Innovation Mobilize</span>
+                      <span className="text-[11px] uppercase font-black text-forest/40 tracking-[0.3em] block mt-1">Innovation Mobilize</span>
                     </div>
                   </div>
                   <p className="text-sm text-forest/60 font-medium max-w-xs text-center md:text-left">
@@ -66,12 +67,12 @@ export default function RootLayout({
                 </div>
 
                 <div className="flex flex-col items-center md:items-end gap-6">
-                  <div className="flex gap-10 text-[11px] font-black text-forest/40 uppercase tracking-[0.2em]">
+                  <div className="flex gap-10 text-xs font-black text-forest/50 uppercase tracking-[0.2em]">
                     <Link href="/privacy" className="hover:text-forest transition-colors duration-300">Privacy Protocols</Link>
                     <Link href="/terms" className="hover:text-leaf transition-colors duration-300">Terms of Engagement</Link>
                     <span className="hover:text-gold cursor-pointer transition-colors duration-300">Security Core</span>
                   </div>
-                  <div className="text-forest/30 text-[10px] font-bold tracking-widest text-center md:text-right">
+                  <div className="text-forest/40 text-[11px] font-bold tracking-widest text-center md:text-right">
                     © 2026 RENEWED HOPE INNOVATORS COALITION. ALL PROTOCOLS RESERVED.
                   </div>
                 </div>
